@@ -38,9 +38,17 @@ public class Person extends BaseEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @NotEmpty
+    @Column(name = "patronymic", nullable = false)
+    private String patronymic;
+
     @PastOrPresent
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @NotEmpty
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @ElementCollection
     @Enumerated(STRING)
