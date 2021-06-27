@@ -1,5 +1,6 @@
 package com.sbo.entity;
 
+import com.sbo.common.time.LocalDateTimeInterval;
 import com.sbo.entity.enums.PersonRole;
 import lombok.Builder;
 import lombok.Data;
@@ -45,5 +46,9 @@ public class PeopleOnDuty extends BaseEntity {
         this.duty = duty;
         this.onDutyFrom = onDutyFrom;
         this.onDutyTo = onDutyTo;
+    }
+
+    public LocalDateTimeInterval getWorkInterval(){
+        return new LocalDateTimeInterval(onDutyFrom, onDutyFrom);
     }
 }
