@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
@@ -22,6 +25,11 @@ import static javax.persistence.EnumType.STRING;
 public class ExchangeRequest extends BaseEntity {
 
     private DutyIntervalData authorIntervalData;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "from", column = @Column(name = "from_recipient")),
+            @AttributeOverride(name = "to", column = @Column(name = "to_recipient"))
+    })
     private DutyIntervalData recipientIntervalData;
 
     @Enumerated(STRING)
