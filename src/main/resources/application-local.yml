@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://postgresdb:5432/duty_helper_app_db}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/duty_helper_app_db}
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:root}
     driver-class-name: org.postgresql.Driver

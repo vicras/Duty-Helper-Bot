@@ -22,8 +22,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: duty_helper_app_db
 
-    volumes:
-      - ./db:/var/lib/postgresql/data
+
 
     restart: always
     networks:

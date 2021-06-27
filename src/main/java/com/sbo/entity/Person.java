@@ -42,6 +42,10 @@ public class Person extends BaseEntity {
     @Column(name = "patronymic", nullable = false)
     private String patronymic;
 
+    @NotEmpty
+    @Column(name = "telegram_id", nullable = false)
+    private Long telegramId;
+
     @PastOrPresent
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -52,6 +56,7 @@ public class Person extends BaseEntity {
 
     @ElementCollection
     @Enumerated(STRING)
+    @BatchSize(size = 50)
     @CollectionTable(name = "roles")
     private Set<PersonRole> roles;
 

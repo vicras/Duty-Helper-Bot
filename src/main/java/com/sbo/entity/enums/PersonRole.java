@@ -6,5 +6,6 @@ package com.sbo.entity.enums;
 public enum PersonRole {
     ADMIN,
     USER,
-    WATCHER
+    WATCHER,
+    UNAUTHORIZED
 }
