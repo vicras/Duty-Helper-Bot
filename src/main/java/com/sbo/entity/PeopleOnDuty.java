@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
@@ -21,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Table(name = "people_on_duty")
 @EqualsAndHashCode(callSuper = true)
-public class PeopleOnDuty extends BaseEntity{
+public class PeopleOnDuty extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     private Person person;

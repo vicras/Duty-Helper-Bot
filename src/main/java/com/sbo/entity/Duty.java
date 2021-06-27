@@ -1,13 +1,11 @@
 package com.sbo.entity;
 
 import com.sbo.entity.enums.DutyTypes;
-import com.sbo.entity.enums.PersonRole;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -43,7 +41,7 @@ public class Duty extends BaseEntity {
 
     @ElementCollection
     @Enumerated(STRING)
-    @CollectionTable(name ="duty_type")
+    @CollectionTable(name = "duty_type")
     private Set<DutyTypes> dutyTypes;
 
     @OneToMany(mappedBy = "duty", cascade = REMOVE)

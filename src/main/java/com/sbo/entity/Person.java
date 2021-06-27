@@ -10,10 +10,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
@@ -30,7 +28,7 @@ import static javax.persistence.EnumType.STRING;
 @NoArgsConstructor
 @Table(name = "person")
 @EqualsAndHashCode(callSuper = true)
-public class Person extends BaseEntity{
+public class Person extends BaseEntity {
 
     @NotEmpty
     @Column(name = "first_name", nullable = false)
@@ -46,7 +44,7 @@ public class Person extends BaseEntity{
 
     @ElementCollection
     @Enumerated(STRING)
-    @CollectionTable(name ="roles")
+    @CollectionTable(name = "roles")
     private Set<PersonRole> roles;
 
     @Builder
