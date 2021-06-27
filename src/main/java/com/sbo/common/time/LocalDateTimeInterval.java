@@ -1,4 +1,4 @@
-package com.sbo.entity.time;
+package com.sbo.common.time;
 
 
 import com.sbo.entity.DutyIntervalData;

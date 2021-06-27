@@ -1,7 +1,7 @@
 package com.sbo.entity;
 
 
-import com.sbo.entity.time.LocalDateTimeInterval;
+import com.sbo.common.time.LocalDateTimeInterval;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +13,9 @@ import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Data
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
 public class DutyIntervalData {
     @ManyToOne
     private PeopleOnDuty peopleOnDuty;

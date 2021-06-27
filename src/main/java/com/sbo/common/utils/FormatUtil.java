@@ -1,4 +1,4 @@
-package com.sbo.utils;
+package com.sbo.common.utils;
 
 
 import lombok.AccessLevel;

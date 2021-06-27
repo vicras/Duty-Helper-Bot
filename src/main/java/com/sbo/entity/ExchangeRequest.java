@@ -5,10 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.CollectionTable;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static java.util.Objects.hash;
 import static javax.persistence.EnumType.STRING;
 
 @Data
@@ -41,12 +45,13 @@ public class ExchangeRequest extends BaseEntity {
                 exchangeRequest.getAuthorIntervalData().getPeopleOnDuty()) &&
                 Objects.equals(
                         recipientIntervalData.getPeopleOnDuty(),
-                        exchangeRequest.getRecipientIntervalData().getPeopleOnDuty());
+                        exchangeRequest.getRecipientIntervalData().getPeopleOnDuty()
+                );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
+        return hash(
                 super.hashCode(),
                 authorIntervalData.getPeopleOnDuty(),
                 recipientIntervalData.getPeopleOnDuty()

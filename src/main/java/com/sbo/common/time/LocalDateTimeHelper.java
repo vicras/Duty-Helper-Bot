@@ -1,4 +1,4 @@
-package com.sbo.entity.time;
+package com.sbo.common.time;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

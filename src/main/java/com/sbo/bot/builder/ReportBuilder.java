@@ -7,8 +7,8 @@ import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static com.sbo.utils.FormatUtil.COLLECTOR_NEW_LINE;
-import static com.sbo.utils.StreamUtil.collectToString;
+import static com.sbo.common.utils.FormatUtil.COLLECTOR_NEW_LINE;
+import static com.sbo.common.utils.StreamUtil.collectToString;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReportBuilder {
