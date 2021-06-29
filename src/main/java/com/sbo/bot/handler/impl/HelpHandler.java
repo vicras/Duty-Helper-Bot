@@ -6,7 +6,6 @@ import com.sbo.bot.enums.Command;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.entity.Person;
-import com.sbo.entity.enums.PersonRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,9 +23,9 @@ import static com.sbo.bot.enums.Command.HELP;
 @BotCommand(command = {HELP})
 public class HelpHandler extends AbstractBaseHandler {
 
+    private final List<AbstractBaseHandler> handlers;
     @Value("${telegram.bot.name}")
     private String botUsername;
-    private final List<AbstractBaseHandler> handlers;
 
     public HelpHandler(AuthorizationService authorizationService,
                        ApplicationEventPublisher publisher,

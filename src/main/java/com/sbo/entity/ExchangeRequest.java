@@ -1,5 +1,6 @@
 package com.sbo.entity;
 
+import com.sbo.entity.enums.EntityStatus;
 import com.sbo.entity.enums.ExchangeRequestState;
 import lombok.Builder;
 import lombok.Data;
@@ -37,10 +38,11 @@ public class ExchangeRequest extends BaseEntity {
     private ExchangeRequestState exchangeRequestState = ExchangeRequestState.SENT;
 
     @Builder
-    public ExchangeRequest(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, DutyIntervalData authorIntervalData, DutyIntervalData recipientIntervalData) {
-        super(id, createdAt, updatedAt);
+    public ExchangeRequest(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, DutyIntervalData authorIntervalData, DutyIntervalData recipientIntervalData, ExchangeRequestState exchangeRequestState) {
+        super(id, createdAt, updatedAt, entityStatus);
         this.authorIntervalData = authorIntervalData;
         this.recipientIntervalData = recipientIntervalData;
+        this.exchangeRequestState = exchangeRequestState;
     }
 
     @Override

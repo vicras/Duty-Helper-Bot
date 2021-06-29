@@ -17,10 +17,10 @@ import java.util.List;
  * MessageBuilder provides useful methods that simplify creation of bot replies
  */
 public final class MessageBuilder {
-    @Setter
-    private String chatId;
     private final StringBuilder sb = new StringBuilder();
     private final List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    @Setter
+    private String chatId;
     private List<InlineKeyboardButton> row = null;
 
     private MessageBuilder() {
@@ -100,7 +100,7 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text         button text
+     * @param text    button text
      * @param command on click callback
      * @return this
      */
@@ -111,7 +111,7 @@ public final class MessageBuilder {
     /**
      * Creates new {@link InlineKeyboardButton}
      *
-     * @param text         button text (and callback argument)
+     * @param text    button text (and callback argument)
      * @param command on click callback
      * @return this
      */

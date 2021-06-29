@@ -16,23 +16,23 @@ public class LocalDateTimeInterval {
     @Getter
     LocalDateTime end;
 
-    public boolean intersects(LocalDateTimeInterval anotherInterval) {
-        return anotherInterval.contains(start)
-                || anotherInterval.contains(end)
-                || contains(anotherInterval.start.plusMinutes(1))
-                || contains(anotherInterval.end.minusMinutes(1));
-    }
-
     public static LocalDateTimeInterval of(DutyIntervalData dutyIntervalData) {
         var from = dutyIntervalData.getFrom();
         var to = dutyIntervalData.getTo();
         return new LocalDateTimeInterval(from, to);
     }
 
-    public static LocalDateTimeInterval of(PeopleOnDuty peopleOnDuty){
+    public static LocalDateTimeInterval of(PeopleOnDuty peopleOnDuty) {
         var from = peopleOnDuty.getOnDutyFrom();
         var to = peopleOnDuty.getOnDutyTo();
         return new LocalDateTimeInterval(from, to);
+    }
+
+    public boolean intersects(LocalDateTimeInterval anotherInterval) {
+        return anotherInterval.contains(start)
+                || anotherInterval.contains(end)
+                || contains(anotherInterval.start.plusMinutes(1))
+                || contains(anotherInterval.end.minusMinutes(1));
     }
 
     public int getHoursBetween() {

@@ -1,7 +1,6 @@
 package com.sbo.bot.events;
 
 import com.sbo.common.CreationEvent;
-import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 

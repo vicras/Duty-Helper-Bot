@@ -1,5 +1,6 @@
 package com.sbo.entity;
 
+import com.sbo.entity.enums.EntityStatus;
 import com.sbo.entity.enums.PersonRole;
 import lombok.Builder;
 import lombok.Data;
@@ -34,7 +35,7 @@ import static javax.persistence.EnumType.STRING;
 public class Person extends BaseEntity {
 
     @NotEmpty
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
     @NotEmpty
@@ -62,8 +63,8 @@ public class Person extends BaseEntity {
     private String mail;
 
     @NotEmpty
-    @Column(name = "address", nullable = false)
-    private String address;
+    @Column(name = "home_address")
+    private String homeAddress;
 
     @ElementCollection
     @Enumerated(STRING)
@@ -72,11 +73,16 @@ public class Person extends BaseEntity {
     private Set<PersonRole> roles;
 
     @Builder
-    public Person(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, String firstName, String lastName, LocalDate birthDate, Set<PersonRole> roles) {
-        super(id, createdAt, updatedAt);
+    public Person(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, String firstName, String lastName, String patronymic, Long telegramId, LocalDate birthDate, Long tel, String mail, String homeAddress, Set<PersonRole> roles) {
+        super(id, createdAt, updatedAt, entityStatus);
         this.firstName = firstName;
         this.lastName = lastName;
+        this.patronymic = patronymic;
+        this.telegramId = telegramId;
         this.birthDate = birthDate;
+        this.tel = tel;
+        this.mail = mail;
+        this.homeAddress = homeAddress;
         this.roles = roles;
     }
 }

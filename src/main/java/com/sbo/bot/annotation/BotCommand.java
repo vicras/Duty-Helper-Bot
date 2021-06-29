@@ -15,9 +15,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Indicates that a component is a valid handler for bot command
  * <p>
-// * Used on inheritors of {@link com.sbo.bot.handler.AbstractBaseHandler}
- *
-// * @see DebtHandler example of implementation
+ * // * Used on inheritors of {@link com.sbo.bot.handler.AbstractBaseHandler}
+ * <p>
+ * // * @see DebtHandler example of implementation
  */
 
 @Profile("telegram-common")

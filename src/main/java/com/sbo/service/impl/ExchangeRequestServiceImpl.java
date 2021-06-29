@@ -7,10 +7,11 @@ import com.sbo.entity.DutyIntervalData;
 import com.sbo.entity.ExchangeRequest;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.ExchangeRequestState;
+import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.repository.ExchangeRequestRepository;
 import com.sbo.service.ExchangeRequestService;
 import com.sbo.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,16 +21,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ExchangeRequestServiceImpl implements ExchangeRequestService {
-    @Autowired
-    private ExchangeRequestRepository repository;
 
-    @Autowired
-    private PersonService personService;
+    private final CurrentPersonProvider userProvider;
+    private final ExchangeRequestRepository repository;
+    private final PersonService personService;
 
     @Override
     public boolean equalsExchangeExists(ExchangeRequest exchangeRequest) {
-        var currentPerson = personService.getCurrentPerson();
+        var currentPerson = userProvider.getCurrentPerson();
         var currentPersonRequests = getPersonToOtherRequests(currentPerson);
         return currentPersonRequests.stream()
                 .anyMatch(existedRequest -> existedRequest.equals(exchangeRequest));
@@ -37,7 +38,7 @@ public class ExchangeRequestServiceImpl implements ExchangeRequestService {
 
     @Override
     public boolean currentPersonIsAuthorOf(ExchangeRequest exchangeRequest) {
-        var currentPerson = personService.getCurrentPerson();
+        var currentPerson = userProvider.getCurrentPerson();
         return exchangeRequest.getAuthorIntervalData().getPeopleOnDuty().getPerson().equals(currentPerson);
     }
 
@@ -96,7 +97,7 @@ public class ExchangeRequestServiceImpl implements ExchangeRequestService {
 
     private List<ExchangeRequest> selectExchangesForInterval(List<ExchangeRequest> requests,
                                                              DutyIntervalData dutyIntervalData) {
-        return StreamUtil.filter(requests,exchangeRequest -> messageIsForInterval(exchangeRequest, dutyIntervalData));
+        return StreamUtil.filter(requests, exchangeRequest -> messageIsForInterval(exchangeRequest, dutyIntervalData));
     }
 
     private boolean messageIsForInterval(ExchangeRequest request, DutyIntervalData dutyIntervalData) {

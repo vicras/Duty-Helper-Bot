@@ -1,5 +1,6 @@
 package com.sbo.entity;
 
+import com.sbo.entity.enums.EntityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,9 @@ public abstract class BaseEntity {
     @Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "entity_status")
+    private EntityStatus entityStatus;
 
     @PrePersist
     private void setCreationDate() {

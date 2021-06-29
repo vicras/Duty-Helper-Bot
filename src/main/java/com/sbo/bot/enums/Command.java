@@ -17,7 +17,7 @@ public enum Command {
         return commandDescription;
     }
 
-    public boolean equalsIgnoreCase(String command){
+    public boolean equalsIgnoreCase(String command) {
         return toString().equalsIgnoreCase(command);
     }
 }

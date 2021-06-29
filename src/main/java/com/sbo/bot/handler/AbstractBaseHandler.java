@@ -22,11 +22,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractBaseHandler {
-    @Value("${telegram.bot.admin}")
-    protected String botAdmin;
-
     protected final AuthorizationService authorizationService;
     protected final ApplicationEventPublisher publisher;
+    @Value("${telegram.bot.admin}")
+    protected String botAdmin;
 
     public final void publish(SendMessage message) {
         this.publisher.publishEvent(SendMessageCreationEvent.of(message));

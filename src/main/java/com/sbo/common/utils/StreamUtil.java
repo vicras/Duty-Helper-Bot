@@ -67,7 +67,7 @@ public final class StreamUtil {
     }
 
 
-    public static <T,R> List<R> map(List<T> list, Function<? super T, ? extends R> func) {
+    public static <T, R> List<R> map(List<T> list, Function<? super T, ? extends R> func) {
         return list.stream().map(func).collect(toList());
     }
 

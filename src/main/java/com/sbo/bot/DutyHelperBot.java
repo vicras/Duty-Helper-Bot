@@ -22,10 +22,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 public class DutyHelperBot extends TelegramLongPollingBot {
 
+    private final ApplicationEventPublisher publisher;
     @Value("${telegram.bot.token}")
     private String botToken;
-
-    private final ApplicationEventPublisher publisher;
 
     @Override
     public void onUpdateReceived(Update update) {

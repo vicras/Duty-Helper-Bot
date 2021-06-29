@@ -1,6 +1,7 @@
 package com.sbo.entity;
 
 import com.sbo.entity.enums.DutyTypes;
+import com.sbo.entity.enums.EntityStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,11 +52,13 @@ public class Duty extends BaseEntity {
     private Collection<PeopleOnDuty> peopleOnDuties;
 
     @Builder
-    public Duty(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime dutyFrom, LocalDateTime dutyTo, Long maxPeopleOnDuty, Set<DutyTypes> dutyTypes) {
-        super(id, createdAt, updatedAt);
+    public Duty(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, LocalDateTime dutyFrom, LocalDateTime dutyTo, Long maxPeopleOnDuty, Boolean isPeopleCouldChange, Set<DutyTypes> dutyTypes, Collection<PeopleOnDuty> peopleOnDuties) {
+        super(id, createdAt, updatedAt, entityStatus);
         this.dutyFrom = dutyFrom;
         this.dutyTo = dutyTo;
         this.maxPeopleOnDuty = maxPeopleOnDuty;
+        this.isPeopleCouldChange = isPeopleCouldChange;
         this.dutyTypes = dutyTypes;
+        this.peopleOnDuties = peopleOnDuties;
     }
 }

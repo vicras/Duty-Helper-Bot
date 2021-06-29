@@ -1,6 +1,7 @@
 package com.sbo.entity;
 
 import com.sbo.common.time.LocalDateTimeInterval;
+import com.sbo.entity.enums.EntityStatus;
 import com.sbo.entity.enums.PeopleOnDutyStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -41,22 +42,24 @@ public class PeopleOnDuty extends BaseEntity {
     private LocalDateTime onDutyTo;
 
     @Enumerated(STRING)
-    @Column(name ="status", nullable = false)
+    @Column(name = "status", nullable = false)
     private PeopleOnDutyStatus status = ACTIVE;
 
     @Column(name = "is_people_could_change", nullable = false)
     private Boolean isPeopleCouldChange = true;
 
     @Builder
-    public PeopleOnDuty(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, Person person, Duty duty, LocalDateTime onDutyFrom, LocalDateTime onDutyTo) {
-        super(id, createdAt, updatedAt);
+    public PeopleOnDuty(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, Person person, Duty duty, LocalDateTime onDutyFrom, LocalDateTime onDutyTo, PeopleOnDutyStatus status, Boolean isPeopleCouldChange) {
+        super(id, createdAt, updatedAt, entityStatus);
         this.person = person;
         this.duty = duty;
         this.onDutyFrom = onDutyFrom;
         this.onDutyTo = onDutyTo;
+        this.status = status;
+        this.isPeopleCouldChange = isPeopleCouldChange;
     }
 
-    public LocalDateTimeInterval getWorkInterval(){
+    public LocalDateTimeInterval getWorkInterval() {
         return new LocalDateTimeInterval(onDutyFrom, onDutyFrom);
     }
 }

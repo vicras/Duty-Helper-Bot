@@ -6,6 +6,7 @@ import com.sbo.entity.PeopleOnDuty;
 import com.sbo.entity.Person;
 import com.sbo.repository.PeopleOnDutyRepository;
 import com.sbo.service.PeopleOnDutyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,10 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class PeopleOnDutyServiceImpl implements PeopleOnDutyService {
-    @Autowired
-    private PeopleOnDutyRepository repository;
+
+    private final PeopleOnDutyRepository repository;
 
     @Override
     public List<PeopleOnDuty> getPeopleOnDutiesOfPerson(Person person) {
