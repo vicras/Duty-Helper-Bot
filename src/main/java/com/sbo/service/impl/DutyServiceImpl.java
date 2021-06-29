@@ -4,7 +4,7 @@ import com.sbo.common.utils.StreamUtil;
 import com.sbo.entity.Duty;
 import com.sbo.entity.PeopleOnDuty;
 import com.sbo.entity.Person;
-import com.sbo.repo.DutyRepository;
+import com.sbo.repository.DutyRepository;
 import com.sbo.service.DutyService;
 import com.sbo.service.PeopleOnDutyService;
 import com.sbo.service.PersonService;
@@ -55,7 +55,7 @@ public class DutyServiceImpl implements DutyService {
 
     private boolean workOnTimeWithPersonIntervals(List<PeopleOnDuty> intervals, PeopleOnDuty person) {
         return !StreamUtil.filter(
-                intervals,peopleOnDuty -> peopleOnDutyService.doWorkOnTheSameTime(peopleOnDuty, person)
+                intervals, peopleOnDuty -> peopleOnDutyService.doWorkOnTheSameTime(peopleOnDuty, person)
         ).isEmpty();
     }
 

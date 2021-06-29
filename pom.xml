@@ -16,8 +16,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
 
         <!-- Mapstruct processor -->
         <mapstruct-processor.version>1.4.1.Final</mapstruct-processor.version>

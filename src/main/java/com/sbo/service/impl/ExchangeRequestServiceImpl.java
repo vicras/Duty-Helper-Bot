@@ -6,7 +6,7 @@ import com.sbo.entity.DutyIntervalData;
 import com.sbo.entity.ExchangeRequest;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.ExchangeRequestState;
-import com.sbo.repo.ExchangeRequestRepository;
+import com.sbo.repository.ExchangeRequestRepository;
 import com.sbo.service.ExchangeRequestService;
 import com.sbo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
