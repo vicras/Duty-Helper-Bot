@@ -14,16 +14,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Main class used to handle incoming Updates.
  * Verifies incoming update and delegates handling to {@link HandlerOrchestrator}
  */
-@Component
+
 @Slf4j
+@Component
 @RequiredArgsConstructor
-@Profile("telegram-common")
 public class UpdateProcessor {
 
     private final HandlerOrchestrator orchestrator;
 
-    @EventListener(classes = {UpdateCreationEvent.class})
-    public void handleUpdate(CreationEvent<Update> updateCreationEvent) {
+    @EventListener()
+    public void handleUpdate(UpdateCreationEvent updateCreationEvent) {
         var update = updateCreationEvent.getObject();
         int userId = 0;
         String text = null;

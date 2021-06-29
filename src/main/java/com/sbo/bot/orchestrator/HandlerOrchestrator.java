@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile("telegram-common")
 public class HandlerOrchestrator {
     private final List<AbstractBaseHandler> handlers;
 //    private final UserService userService;

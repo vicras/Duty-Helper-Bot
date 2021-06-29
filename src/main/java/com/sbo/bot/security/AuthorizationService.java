@@ -18,7 +18,6 @@ import static com.sbo.entity.enums.PersonRole.UNAUTHORIZED;
  */
 @Component
 @Slf4j
-@Profile("telegram-common")
 public class AuthorizationService {
     /**
      * Checks user's permissions if class is annotated with {@link BotCommand}

@@ -23,11 +23,11 @@ public class DutyIntervalData {
     private PeopleOnDuty peopleOnDuty;
 
     @NotEmpty
-    @Column(name = "from", nullable = false)
+    @Column(name = "fromTime", nullable = false)
     private LocalDateTime from;
 
     @NotEmpty
-    @Column(name = "to", nullable = false)
+    @Column(name = "toTime", nullable = false)
     private LocalDateTime to;
 
     public static DutyIntervalData of(PeopleOnDuty peopleOnDuty, LocalDateTimeInterval localDateTimeInterval) {

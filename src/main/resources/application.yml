@@ -4,4 +4,7 @@ spring:
 
 telegram:
   bot:
+#    chat id of the bot
+    admin:
+    name: ${BOT_NAME:Duty Helper Bot}
     token: ${BOT_TOKEN}

@@ -6,7 +6,6 @@ import com.sbo.bot.security.AuthorizationService;
 import com.sbo.entity.Person;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -24,8 +23,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public abstract class AbstractBaseHandler {
     protected final AuthorizationService authorizationService;
     protected final ApplicationEventPublisher publisher;
-    @Value("${telegram.bot.admin}")
-    protected String botAdmin;
+
 
     public final void publish(SendMessage message) {
         this.publisher.publishEvent(SendMessageCreationEvent.of(message));
@@ -60,7 +58,7 @@ public abstract class AbstractBaseHandler {
                 .line("Your token is *%s*", userChatId)
                 .line("Please contact your supervisor to gain access")
                 .build());
-        publish(MessageBuilder.builder(botAdmin)
+        publish(MessageBuilder.builder("botAdmin")
                 .line("*Unauthorized access:* %s", userChatId)
                 .line("*Message:* %s", message == null || message.isEmpty()
                         ? "Empty"

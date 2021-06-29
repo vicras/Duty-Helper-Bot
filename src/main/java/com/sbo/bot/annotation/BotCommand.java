@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * // * @see DebtHandler example of implementation
  */
 
-@Profile("telegram-common")
+
 @Component
 @Retention(RUNTIME)
 @Target(TYPE)
