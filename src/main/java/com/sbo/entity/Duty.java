@@ -39,6 +39,9 @@ public class Duty extends BaseEntity {
     @Column(name = "max_people_on_duty", nullable = false)
     private Long maxPeopleOnDuty;
 
+    @Column(name = "is_people_could_change", nullable = false)
+    private Boolean isPeopleCouldChange = true;
+
     @ElementCollection
     @Enumerated(STRING)
     @CollectionTable(name = "duty_type")

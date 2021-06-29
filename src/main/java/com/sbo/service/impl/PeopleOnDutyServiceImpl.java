@@ -4,7 +4,7 @@ import com.sbo.common.time.LocalDateTimeInterval;
 import com.sbo.common.utils.StreamUtil;
 import com.sbo.entity.PeopleOnDuty;
 import com.sbo.entity.Person;
-import com.sbo.repo.PeopleOnDutyRepository;
+import com.sbo.repository.PeopleOnDutyRepository;
 import com.sbo.service.PeopleOnDutyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

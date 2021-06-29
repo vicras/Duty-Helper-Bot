@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
@@ -36,11 +38,11 @@ public class Person extends BaseEntity {
     private String firstName;
 
     @NotEmpty
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
     @NotEmpty
-    @Column(name = "patronymic", nullable = false)
+    @Column(name = "patronymic")
     private String patronymic;
 
     @NotEmpty
@@ -50,6 +52,14 @@ public class Person extends BaseEntity {
     @PastOrPresent
     @Column(name = "birth_date")
     private LocalDate birthDate;
+
+    @Range(min = 100000000000L, max = 999999999999L)
+    @Column(name = "telephone")
+    private Long tel;
+
+    @Email
+    @Column(name = "mail")
+    private String mail;
 
     @NotEmpty
     @Column(name = "address", nullable = false)

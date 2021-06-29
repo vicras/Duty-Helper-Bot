@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
@@ -17,15 +19,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DutyIntervalData {
-    @ManyToOne
+
+    // TODO link with
+    @Transient
     private PeopleOnDuty peopleOnDuty;
 
     @NotEmpty
-    @Column(nullable = false)
+    @Column(name = "from", nullable = false)
     private LocalDateTime from;
 
     @NotEmpty
-    @Column(nullable = false)
+    @Column(name = "to", nullable = false)
     private LocalDateTime to;
 
     public static DutyIntervalData of(PeopleOnDuty peopleOnDuty, LocalDateTimeInterval localDateTimeInterval) {

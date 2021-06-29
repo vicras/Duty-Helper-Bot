@@ -1,4 +1,4 @@
-package com.sbo.repo;
+package com.sbo.repository;
 
 import com.sbo.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;

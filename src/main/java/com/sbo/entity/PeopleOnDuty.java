@@ -1,7 +1,7 @@
 package com.sbo.entity;
 
 import com.sbo.common.time.LocalDateTimeInterval;
-import com.sbo.entity.enums.PersonRole;
+import com.sbo.entity.enums.PeopleOnDutyStatus;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
+import static com.sbo.entity.enums.PeopleOnDutyStatus.ACTIVE;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 /**
@@ -27,17 +28,24 @@ import static javax.persistence.FetchType.LAZY;
 @EqualsAndHashCode(callSuper = true)
 public class PeopleOnDuty extends BaseEntity {
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, optional = false)
     private Person person;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, optional = false)
     private Duty duty;
 
-    @Column(name = "on_duty_from")
+    @Column(name = "on_duty_from", nullable = false)
     private LocalDateTime onDutyFrom;
 
-    @Column(name = "on_duty_to")
+    @Column(name = "on_duty_to", nullable = false)
     private LocalDateTime onDutyTo;
+
+    @Enumerated(STRING)
+    @Column(name ="status", nullable = false)
+    private PeopleOnDutyStatus status = ACTIVE;
+
+    @Column(name = "is_people_could_change", nullable = false)
+    private Boolean isPeopleCouldChange = true;
 
     @Builder
     public PeopleOnDuty(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, Person person, Duty duty, LocalDateTime onDutyFrom, LocalDateTime onDutyTo) {

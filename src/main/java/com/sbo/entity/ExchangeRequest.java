@@ -5,7 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -18,8 +24,12 @@ import static javax.persistence.EnumType.STRING;
 @Table(name = "exchange")
 public class ExchangeRequest extends BaseEntity {
 
-    @Embedded
     private DutyIntervalData authorIntervalData;
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "from", column = @Column(name = "from_recipient")),
+            @AttributeOverride(name = "to", column = @Column(name = "to_recipient"))
+    })
     private DutyIntervalData recipientIntervalData;
 
     @Enumerated(STRING)
