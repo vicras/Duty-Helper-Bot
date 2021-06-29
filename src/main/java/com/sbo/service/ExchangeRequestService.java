@@ -4,6 +4,7 @@ import com.sbo.entity.DutyIntervalData;
 import com.sbo.entity.ExchangeRequest;
 import com.sbo.entity.Person;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ExchangeRequestService {
@@ -16,4 +17,8 @@ public interface ExchangeRequestService {
     List<ExchangeRequest> getPersonToOtherRequests(Person currentUser);
 
     List<ExchangeRequest> getPersonIncomingRequests(Person currentUser);
+
+    List<ExchangeRequest> getExchangeRequestsHistory(int maxNumber);
+
+    List<ExchangeRequest> getExchangeRequestsHistoryAfter(LocalDate localDate);
 }

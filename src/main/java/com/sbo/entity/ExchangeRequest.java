@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -21,6 +18,7 @@ import static javax.persistence.EnumType.STRING;
 @Table(name = "exchange")
 public class ExchangeRequest extends BaseEntity {
 
+    @Embedded
     private DutyIntervalData authorIntervalData;
     private DutyIntervalData recipientIntervalData;
 

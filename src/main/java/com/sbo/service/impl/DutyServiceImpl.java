@@ -11,6 +11,8 @@ import com.sbo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +36,14 @@ public class DutyServiceImpl implements DutyService {
                                 peopleOnDuty -> peopleOnDuty.getPerson().equals(person)
                         )
         );
+    }
+
+    @Override
+    public List<Duty> getDutiesOnDay(LocalDate localDate) {
+        return dutyRepository.findAll().stream()
+                .filter(duty -> duty.getDutyFrom().getYear() == localDate.getYear()
+                        && duty.getDutyFrom().getDayOfYear() == localDate.getDayOfYear())
+                .collect(Collectors.toList());
     }
 
     public List<Person> getPartnersOfCurrentPersonOn(Duty duty) {

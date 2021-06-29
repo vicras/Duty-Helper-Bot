@@ -2,6 +2,7 @@ package com.sbo.service.impl;
 
 import com.sbo.common.time.LocalDateTimeInterval;
 import com.sbo.common.utils.StreamUtil;
+import com.sbo.entity.BaseEntity;
 import com.sbo.entity.DutyIntervalData;
 import com.sbo.entity.ExchangeRequest;
 import com.sbo.entity.Person;
@@ -12,7 +13,11 @@ import com.sbo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExchangeRequestServiceImpl implements ExchangeRequestService {
@@ -59,6 +64,24 @@ public class ExchangeRequestServiceImpl implements ExchangeRequestService {
     public List<ExchangeRequest> getPersonIncomingRequests(Person currentUser) {
         return StreamUtil.filter(repository.findAll(), exchangeRequest ->
                 exchangeRequest.getRecipientIntervalData().getPeopleOnDuty().getPerson().equals(currentUser));
+    }
+
+    @Override
+    public List<ExchangeRequest> getExchangeRequestsHistory(int maxNumber) {
+        return repository.findAll().stream()
+                .filter(exchange -> exchange.getExchangeRequestState().equals(ExchangeRequestState.ACCEPTED))
+                .sorted(Comparator.comparing(BaseEntity::getCreatedAt))
+                .limit(maxNumber)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExchangeRequest> getExchangeRequestsHistoryAfter(LocalDate localDate) {
+        return StreamUtil.filter(
+                repository.findAll(),
+                exchange -> exchange.getExchangeRequestState().equals(ExchangeRequestState.ACCEPTED),
+                exchange -> exchange.getCreatedAt().isAfter(ChronoLocalDateTime.from(localDate))
+        );
     }
 
     private List<ExchangeRequest> getSentMessagesFor(DutyIntervalData dutyIntervalData, Person person) {
