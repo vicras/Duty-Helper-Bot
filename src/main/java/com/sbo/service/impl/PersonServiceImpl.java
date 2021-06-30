@@ -1,7 +1,6 @@
 package com.sbo.service.impl;
 
 import com.sbo.entity.Person;
-import com.sbo.entity.enums.EntityStatus;
 import com.sbo.entity.enums.PersonRole;
 import com.sbo.exception.EntityNotFoundException;
 import com.sbo.repository.PersonRepository;
@@ -10,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static com.sbo.entity.enums.EntityStatus.DELETED;
+import static com.sbo.entity.enums.PersonRole.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +123,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> getActivePersons() {
         return personRepository.getAllByEntityStatusIn(List.of(ACTIVE));
+    }
+
+    @Override
+    public List<Person> getActiveAdmins() {
+        return personRepository.getAllByEntityStatusInAndRoles(List.of(ACTIVE), (ADMIN));
     }
 
 

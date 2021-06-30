@@ -7,7 +7,6 @@ import com.sbo.entity.Person;
 import com.sbo.repository.PeopleOnDutyRepository;
 import com.sbo.service.PeopleOnDutyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

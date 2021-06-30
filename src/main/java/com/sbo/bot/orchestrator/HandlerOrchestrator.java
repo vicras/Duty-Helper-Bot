@@ -2,9 +2,9 @@ package com.sbo.bot.orchestrator;
 
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.provider.CurrentPersonProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,13 +18,14 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class HandlerOrchestrator {
     private final List<AbstractBaseHandler> handlers;
+    private final CurrentPersonProvider personProvider;
 //    private final UserService userService;
 
-    public void operate(int userId, String text) {
+    public void operate(String text) {
         try {
             AbstractBaseHandler handler = getHandler(text);
             log.debug("Found handler {} for command {}", handler.getClass().getSimpleName(), text);
-//            handler.authorizeAndHandle(userService.getOrCreate(userId), text);
+            handler.authorizeAndHandle(personProvider.getCurrentPerson(), text);
         } catch (UnsupportedOperationException e) {
             log.error("Command: {} is unsupported", text);
         }

@@ -4,7 +4,6 @@ import com.sbo.bot.annotation.BotCommand;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.PersonRole;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

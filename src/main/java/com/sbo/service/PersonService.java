@@ -34,4 +34,6 @@ public interface PersonService {
 
     List<Person> getActivePersons();
 
+    List<Person> getActiveAdmins();
+
 }

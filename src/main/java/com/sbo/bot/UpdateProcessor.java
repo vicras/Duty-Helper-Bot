@@ -1,14 +1,21 @@
 package com.sbo.bot;
 
+import com.sbo.bot.builder.MessageBuilder;
+import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
-import com.sbo.common.CreationEvent;
+import com.sbo.entity.Person;
+import com.sbo.exception.EntityNotFoundException;
+import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static java.util.Objects.nonNull;
 
 /**
  * Main class used to handle incoming Updates.
@@ -20,12 +27,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class UpdateProcessor {
 
+    protected final ApplicationEventPublisher publisher;
     private final HandlerOrchestrator orchestrator;
+    private final CurrentPersonProvider personProvider;
+    private final PersonService personService;
 
     @EventListener()
     public void handleUpdate(UpdateCreationEvent updateCreationEvent) {
         var update = updateCreationEvent.getObject();
-        int userId = 0;
+        long userId = 0;
         String text = null;
 
         if (isMessageWithText(update)) {
@@ -40,12 +50,45 @@ public class UpdateProcessor {
             log.debug("Update is callbackQuery {} from {}", text, userId);
         }
 
-        if (text != null && userId != 0) {
-            orchestrator.operate(userId, text);
+        try {
+            personProvider.setPersonById(userId);
+            operateMessage(text);
+        } catch (EntityNotFoundException ex) {
+            sendNotFoundMessage(userId);
         }
+
     }
 
     private boolean isMessageWithText(Update update) {
         return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
     }
+
+    private void operateMessage(String text) {
+        if (nonNull(text)) {
+            orchestrator.operate(text);
+        }
+    }
+
+    private void sendNotFoundMessage(Long telegramId) {
+        var admins = personService.getActiveAdmins();
+        var messBuilder = MessageBuilder.builder(telegramId.toString())
+                .line("*Error!!!*")
+                .line("You do not have permission to use this bot.");
+
+        if (!admins.isEmpty()) {
+            messBuilder
+                    .line("Contact with:")
+                    .line();
+            admins.forEach(person -> addPersonLinkToMessage(person, messBuilder));
+        } else {
+            messBuilder
+                    .line("There are no people you can contact at the moment!");
+        }
+        this.publisher.publishEvent(SendMessageCreationEvent.of(messBuilder.build()));
+    }
+
+    private void addPersonLinkToMessage(Person person, MessageBuilder builder) {
+        builder.line("* [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId());
+    }
+
 }

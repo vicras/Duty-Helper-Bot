@@ -2,7 +2,6 @@ package com.sbo.bot.annotation;
 
 import com.sbo.bot.enums.Command;
 import com.sbo.entity.enums.PersonRole;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Retention;
