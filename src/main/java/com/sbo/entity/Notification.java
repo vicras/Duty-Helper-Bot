@@ -16,16 +16,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "notifications")
 @EqualsAndHashCode(callSuper = true)
-public class Notification extends BaseEntity{
-    private String text;
-
-    @ManyToOne
-    private Person author;
-
-    private LocalDateTime expirationDate;
-
-    private NotificationType notificationType;
-
+public class Notification extends BaseEntity {
     @ManyToOne
     NotificationsToNotifiedUsers notificationsToNotifiedUsers;
+    private String text;
+    @ManyToOne
+    private Person author;
+    private LocalDateTime expirationDate;
+    private NotificationType notificationType;
 }

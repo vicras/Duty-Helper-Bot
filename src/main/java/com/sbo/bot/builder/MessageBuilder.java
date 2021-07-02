@@ -1,129 +1,95 @@
 package com.sbo.bot.builder;
 
-
-import com.sbo.bot.enums.Command;
-import com.sbo.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MessageBuilder is used to build instances of {@link SendMessage}
- * <p>
- * MessageBuilder provides useful methods that simplify creation of bot replies
+ * @author viktar hraskou
  */
-public final class MessageBuilder {
+public class MessageBuilder {
+
     private final StringBuilder sb = new StringBuilder();
-    private final List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    private final List<KeyboardRow> keyboard = new ArrayList<>();
+    private KeyboardRow row = null;
     @Setter
     private String chatId;
-    private List<InlineKeyboardButton> row = null;
 
-    private MessageBuilder() {
-    }
+    private boolean isResizable = true;
 
-    /**
-     * Creates new MessageBuilder with initialized chatId
-     *
-     * @param chatId of user that will receive the message
-     * @return instance of MessageBuilder with initialized chatId
-     */
-    public static MessageBuilder builder(String chatId) {
-        MessageBuilder builder = new MessageBuilder();
-        builder.setChatId(chatId);
+    private boolean isOneTime = false;
+
+    private boolean deleteKeyboard = false;
+
+    public static MessageBuilder builder(Long chatId) {
+        var builder = new MessageBuilder();
+        builder.setChatId(chatId.toString());
         return builder;
     }
 
-    /**
-     * Creates new MessageBuilder with initialized chatId
-     *
-     * @param user that will receive the message
-     * @return instance of MessageBuilder with initialized chatId
-     */
-    public static MessageBuilder builder(Person user) {
-        return builder(String.valueOf(user.getTelegramId()));
-    }
-
-    /**
-     * Simplified use of {@link String#format(String, Object...) String.format} that adds new formatted line to the
-     * inner instance of {@link StringBuilder}
-     *
-     * @param text first agrument of {@link String#format(String, Object...) String.format}
-     * @param args second and following arguments of {@link String#format(String, Object...) String.format}
-     * @return this
-     */
     public MessageBuilder line(String text, Object... args) {
         sb.append(String.format(text, args));
         return line();
     }
 
-    /**
-     * Creates new line break
-     *
-     * @return this
-     */
     public MessageBuilder line() {
         sb.append(String.format("%n"));
         return this;
     }
 
-    /**
-     * Creates new {@link InlineKeyboardButton} row
-     *
-     * @return this
-     */
     public MessageBuilder row() {
         addRowToKeyboard();
-        row = new ArrayList<>();
+        row = new KeyboardRow();
         return this;
     }
 
-    /**
-     * Creates new {@link InlineKeyboardButton}
-     *
-     * @param text         button text
-     * @param callbackData on click callback
-     * @return this
-     */
-    public MessageBuilder button(String text, String callbackData) {
-        var button = new InlineKeyboardButton();
-        button.setText(text);
-        button.setCallbackData(callbackData);
+    public MessageBuilder button(String text) {
+        KeyboardButton button = KeyboardButton.builder()
+                .text(text)
+                .build();
         row.add(button);
         return this;
     }
 
-    /**
-     * Creates new {@link InlineKeyboardButton}
-     *
-     * @param text    button text
-     * @param command on click callback
-     * @return this
-     */
-    public MessageBuilder button(String text, Command command) {
-        return button(text, command.toString());
+    public MessageBuilder geoButton(String text) {
+        KeyboardButton button = KeyboardButton.builder()
+                .requestLocation(true)
+                .text(text)
+                .build();
+        row.add(button);
+        return this;
     }
 
-    /**
-     * Creates new {@link InlineKeyboardButton}
-     *
-     * @param text    button text (and callback argument)
-     * @param command on click callback
-     * @return this
-     */
-    public MessageBuilder buttonWithArguments(String text, Command command) {
-        return button(text, command.toString() + " " + text);
+    public MessageBuilder telButton(String text) {
+        KeyboardButton button = KeyboardButton.builder()
+                .requestContact(true)
+                .text(text)
+                .build();
+        row.add(button);
+        return this;
     }
 
-    /**
-     * Builds an instance of {@link SendMessage}
-     *
-     * @return {@link SendMessage}
-     */
+    public MessageBuilder setResizable(boolean resizable) {
+        isResizable = resizable;
+        return this;
+    }
+
+    public MessageBuilder setOneTime(boolean oneTime) {
+        isOneTime = oneTime;
+        return this;
+    }
+
+    public MessageBuilder withKeyboardDelete() {
+        deleteKeyboard = true;
+        return this;
+    }
+
     public SendMessage build() {
         var sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
@@ -132,19 +98,27 @@ public final class MessageBuilder {
 
         addRowToKeyboard();
 
+        if (deleteKeyboard) {
+            var keyboardRemove = ReplyKeyboardRemove.builder()
+                    .removeKeyboard(true)
+                    .build();
+            sendMessage.setReplyMarkup(keyboardRemove);
+            return sendMessage;
+        }
+
         if (!keyboard.isEmpty()) {
-            var markup = new InlineKeyboardMarkup();
+            var markup = new ReplyKeyboardMarkup();
+
             markup.setKeyboard(keyboard);
+            markup.setResizeKeyboard(isResizable);
+            markup.setOneTimeKeyboard(isOneTime);
+
             sendMessage.setReplyMarkup(markup);
         }
 
         return sendMessage;
     }
 
-    /**
-     * Adds new row to keyboard.
-     * Performs null check of current row
-     */
     private void addRowToKeyboard() {
         if (row != null) {
             keyboard.add(row);

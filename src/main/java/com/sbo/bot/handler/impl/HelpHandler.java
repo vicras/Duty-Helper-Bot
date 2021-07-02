@@ -1,7 +1,7 @@
 package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.annotation.BotCommand;
-import com.sbo.bot.builder.MessageBuilder;
+import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.enums.Command;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.handler.CommandBaseHandler;
@@ -53,7 +53,7 @@ public class HelpHandler extends CommandBaseHandler {
 
     @Override
     protected void handle(Person user, String message) {
-        MessageBuilder builder = MessageBuilder.builder(user)
+        InlineMessageBuilder builder = InlineMessageBuilder.builder(user)
                 .line("Hello. I'm *%s*", botUsername)
                 .line("Here are your available commands")
                 .line("Use [/help] command to display this message");

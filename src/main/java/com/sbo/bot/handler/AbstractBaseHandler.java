@@ -1,6 +1,6 @@
 package com.sbo.bot.handler;
 
-import com.sbo.bot.builder.MessageBuilder;
+import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.bot.state.State;
@@ -26,6 +26,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public abstract class AbstractBaseHandler {
+
     protected final AuthorizationService authorizationService;
     protected final ApplicationEventPublisher publisher;
 
@@ -72,11 +73,11 @@ public abstract class AbstractBaseHandler {
     private void handleUnauthorized(Person user, String message) {
         log.info("Unauthorized access: {} {}", user, message);
         String userChatId = String.valueOf(user.getTelegramId());
-        publish(MessageBuilder.builder(userChatId)
+        publish(InlineMessageBuilder.builder(userChatId)
                 .line("Your token is *%s*", userChatId)
                 .line("Please contact your supervisor to gain access")
                 .build());
-        publish(MessageBuilder.builder("botAdmin")
+        publish(InlineMessageBuilder.builder("botAdmin")
                 .line("*Unauthorized access:* %s", userChatId)
                 .line("*Message:* %s", message == null || message.isEmpty()
                         ? "Empty"

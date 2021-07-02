@@ -4,27 +4,32 @@ import com.sbo.entity.Person;
 import com.sbo.exception.EntityNotFoundException;
 import com.sbo.exception.UserNameIsNullException;
 import com.sbo.service.PersonService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import javax.transaction.Transactional;
 
 
 /**
  * @author viktar hraskou
  */
-@Getter
 @Component()
+@Transactional
 @RequiredArgsConstructor
-@Scope(value = SCOPE_PROTOTYPE)
 public class CurrentPersonProvider {
 
     private final PersonService personService;
-    private Person currentPerson;
+
+    private final ThreadLocal<Person> currentPerson = ThreadLocal.withInitial(Person::new);
+
+    public Person getCurrentPerson() {
+        return currentPerson.get();
+    }
 
     public void setPersonById(Long telegramId) throws EntityNotFoundException, UserNameIsNullException {
-        currentPerson = personService.blockPersonByTelegramId(telegramId);
+        Person person = personService.getPersonByTelegramId(telegramId);
+        Hibernate.initialize(person.getRoles());
+        currentPerson.set(person);
     }
 }

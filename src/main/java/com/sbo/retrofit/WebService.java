@@ -9,12 +9,6 @@ import retrofit2.http.POST;
 
 public interface WebService {
 
-    @POST("stripes")
-    Call<GraphicResult> getFullGraphic(
-            @Body PostModel model
-    );
-
-
     static WebService create() {
         //"http://app-server.hopto.org:8081"
         Retrofit retrofit = new Retrofit.Builder()
@@ -24,5 +18,10 @@ public interface WebService {
 
         return retrofit.create(WebService.class);
     }
+
+    @POST("stripes")
+    Call<GraphicResult> getFullGraphic(
+            @Body PostModel model
+    );
 
 }

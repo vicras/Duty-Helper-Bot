@@ -1,6 +1,6 @@
 package com.sbo.bot;
 
-import com.sbo.bot.builder.MessageBuilder;
+import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
@@ -71,7 +71,7 @@ public class UpdateProcessor {
 
     private void sendNotFoundMessage(Long telegramId) {
         var admins = personService.getActiveAdmins();
-        var messBuilder = MessageBuilder.builder(telegramId.toString())
+        var messBuilder = InlineMessageBuilder.builder(telegramId.toString())
                 .line("*Error!!!*")
                 .line("You do not have permission to use this bot.");
 
@@ -87,8 +87,8 @@ public class UpdateProcessor {
         this.publisher.publishEvent(SendMessageCreationEvent.of(messBuilder.build()));
     }
 
-    private void addPersonLinkToMessage(Person person, MessageBuilder builder) {
-        builder.line("* [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId());
+    private void addPersonLinkToMessage(Person person, InlineMessageBuilder builder) {
+        builder.line("- [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId());
     }
 
 }
