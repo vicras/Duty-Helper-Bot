@@ -1,14 +1,15 @@
 package com.sbo.bot.orchestrator;
 
-import com.sbo.bot.annotation.BotCommand;
-import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.state.State;
 import com.sbo.provider.CurrentPersonProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.function.Supplier;
 
 /**
  * Chooses suitable inheritor of AbstractBaseHandler to handle the input
@@ -17,48 +18,26 @@ import java.util.stream.Stream;
 @Slf4j
 @RequiredArgsConstructor
 public class HandlerOrchestrator {
-    private final List<AbstractBaseHandler> handlers;
     private final CurrentPersonProvider personProvider;
-//    private final UserService userService;
+    private final List<State> states;
 
-    public void operate(String text) {
+    public void operate(Update update) {
+        var message = update.getMessage();
         try {
-            AbstractBaseHandler handler = getHandler(text);
-            log.debug("Found handler {} for command {}", handler.getClass().getSimpleName(), text);
-            handler.authorizeAndHandle(personProvider.getCurrentPerson(), text);
+            var state = getState();
+            log.debug("Found state {} for command {}", state.getClass().getSimpleName(), message.getText());
+            state.process(update);
         } catch (UnsupportedOperationException e) {
-            log.error("Command: {} is unsupported", text);
+            log.error("Command: {} is unsupported", message.getText());
         }
     }
 
-    /**
-     * Selects handler which can handle received command
-     *
-     * @param text content of received message
-     * @return handler suitable for command
-     */
-    protected AbstractBaseHandler getHandler(String text) {
-        return handlers.stream()
-                .filter(this::isBotAnnotationPresent)
-                .filter(handler -> isCommandHandledByHandler(extractCommand(text), handler))
+    @SneakyThrows
+    public State getState(){
+        String stateName = personProvider.getCurrentPerson().getState();
+        return states.stream()
+                .filter(state -> state.getClass().toString().equals(stateName))
                 .findAny()
-                .orElseThrow(UnsupportedOperationException::new);
-    }
-
-    private boolean isCommandHandledByHandler(String command, AbstractBaseHandler h) {
-        return Stream.of(h.getClass()
-                .getAnnotation(BotCommand.class)
-                .command()
-        )
-                .anyMatch(c -> c.equalsIgnoreCase(command));
-    }
-
-    private boolean isBotAnnotationPresent(AbstractBaseHandler h) {
-        return h.getClass()
-                .isAnnotationPresent(BotCommand.class);
-    }
-
-    private String extractCommand(String text) {
-        return text.split(" ")[0];
+                .orElseThrow((Supplier<Throwable>) () -> new RuntimeException("Internal error: state name "+stateName+" not found"));
     }
 }

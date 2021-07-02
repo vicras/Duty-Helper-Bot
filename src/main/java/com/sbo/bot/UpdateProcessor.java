@@ -36,7 +36,7 @@ public class UpdateProcessor {
     public void handleUpdate(UpdateCreationEvent updateCreationEvent) {
         var update = updateCreationEvent.getObject();
         long userId = 0;
-        String text = null;
+        String text;
 
         if (isMessageWithText(update)) {
             var message = update.getMessage();
@@ -52,7 +52,7 @@ public class UpdateProcessor {
 
         try {
             personProvider.setPersonById(userId);
-            operateMessage(text);
+            operateMessage(update);
         } catch (EntityNotFoundException ex) {
             sendNotFoundMessage(userId);
         }
@@ -63,9 +63,9 @@ public class UpdateProcessor {
         return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
     }
 
-    private void operateMessage(String text) {
-        if (nonNull(text)) {
-            orchestrator.operate(text);
+    private void operateMessage(Update message) {
+        if (nonNull(message)) {
+            orchestrator.operate(message);
         }
     }
 

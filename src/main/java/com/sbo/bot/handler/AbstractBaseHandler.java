@@ -3,11 +3,15 @@ package com.sbo.bot.handler;
 import com.sbo.bot.builder.MessageBuilder;
 import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 ///**
 // * Abstract class for all handlers
@@ -19,10 +23,22 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 // * {@link com.whiskels.notifier.telegram.annotation.Schedulable} annotation
 // */
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public abstract class AbstractBaseHandler {
     protected final AuthorizationService authorizationService;
     protected final ApplicationEventPublisher publisher;
+
+    public abstract boolean canProcessMessage(Update update);
+
+    public abstract State getNextState();
+
+    protected String extractTest(Update update){
+        if(update.hasCallbackQuery())
+            return update.getCallbackQuery().getData();
+        else
+            return update.getMessage().getText();
+    }
 
 
     public final void publish(SendMessage message) {
@@ -42,6 +58,8 @@ public abstract class AbstractBaseHandler {
             handleUnauthorized(user, message);
         }
     }
+
+    public abstract void handleMessage(Message message);
 
     /**
      * Handling of the command if user is authorized

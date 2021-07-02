@@ -4,15 +4,17 @@ import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.builder.MessageBuilder;
 import com.sbo.bot.enums.Command;
 import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
-
-import static com.sbo.bot.enums.Command.HELP;
 
 /**
  * Shows help message and dynamically created inline keyboard based on user role
@@ -20,8 +22,8 @@ import static com.sbo.bot.enums.Command.HELP;
  * Available to: everyone
  */
 @Slf4j
-@BotCommand(command = {HELP})
-public class HelpHandler extends AbstractBaseHandler {
+@Component
+public class HelpHandler extends CommandBaseHandler {
 
     private final List<AbstractBaseHandler> handlers;
     @Value("${telegram.bot.name}")
@@ -32,6 +34,21 @@ public class HelpHandler extends AbstractBaseHandler {
                        List<AbstractBaseHandler> handlers) {
         super(authorizationService, publisher);
         this.handlers = handlers;
+    }
+
+    @Override
+    protected String getCommandQualifier() {
+        return "help";
+    }
+
+    @Override
+    public State getNextState() {
+        return null;
+    }
+
+    @Override
+    public void handleMessage(Message message) {
+
     }
 
     @Override

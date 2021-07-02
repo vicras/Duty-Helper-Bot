@@ -1,5 +1,6 @@
 package com.sbo.service.impl;
 
+import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.PersonRole;
 import com.sbo.exception.EntityNotFoundException;
@@ -128,6 +129,11 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> getActiveAdmins() {
         return personRepository.getAllByEntityStatusInAndRoles(List.of(ACTIVE), (ADMIN));
+    }
+
+    @Override
+    public void updateState(Person person, State state) {
+        person.setState(state.getClass().toString());
     }
 
 

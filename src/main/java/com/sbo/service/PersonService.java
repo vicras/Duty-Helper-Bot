@@ -1,5 +1,6 @@
 package com.sbo.service;
 
+import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.PersonRole;
 
@@ -36,4 +37,5 @@ public interface PersonService {
 
     List<Person> getActiveAdmins();
 
+    void updateState(Person person, State state);
 }

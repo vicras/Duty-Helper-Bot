@@ -42,6 +42,7 @@ public class Person extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
+
     @NotEmpty
     @Column(name = "patronymic")
     private String patronymic;
@@ -71,6 +72,10 @@ public class Person extends BaseEntity {
     @BatchSize(size = 50)
     @CollectionTable(name = "roles")
     private Set<PersonRole> roles;
+
+    @NotEmpty
+    @Column(name = "state")
+    private String state;
 
     @Builder
     public Person(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, String firstName, String lastName, String patronymic, Long telegramId, LocalDate birthDate, Long tel, String mail, String homeAddress, Set<PersonRole> roles) {
