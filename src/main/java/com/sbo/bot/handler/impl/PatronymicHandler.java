@@ -2,7 +2,6 @@ package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.bot.state.State;
 import com.sbo.exception.DuringHandleExecutionException;
@@ -25,42 +24,43 @@ import static java.util.Objects.nonNull;
  */
 @Slf4j
 @Component
-public class FirstNameHandler extends AbstractBaseHandler {
+public class PatronymicHandler extends AbstractBaseHandler {
 
     private final String NAME_REGEX = "[\\w-А-Яа-я]+";
     private final PersonService personService;
 
-    public FirstNameHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+    public PatronymicHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
         this.personService = personService;
     }
 
     @Override
     protected void handleMessage(Update message) {
-        String firstName = extractStringText(message).strip();
-        if (firstName.matches(NAME_REGEX)) {
+        String patronymic = extractStringText(message).strip();
+        if (patronymic.matches(NAME_REGEX)) {
             Long userId = personProvider.getCurrentPerson().getTelegramId();
-            personService.updatePersonName(userId, firstName);
+            personService.updatePersonPatronymic(userId, patronymic);
             publishOkMessage();
         } else {
-            publishParseErrorMessage();
+            throwDuringExecutionException();
         }
     }
 
-    private void publishParseErrorMessage() {
-        String msg = "Can't change name should match regex";
+    private void throwDuringExecutionException() {
+        String msg = "Can't change patronymic should match regex";
         SendMessage message = InlineMessageBuilder.builder(personProvider.getCurrentPersonId())
-                .header("Can't change first name.")
+                .header("Can't patronymic.")
                 .line("Use only cyrillic and latin letters, numbers, _ , -.")
                 .row()
                 .button("Back", BACK.name())
                 .build();
+
         throw new DuringHandleExecutionException(List.of(message), msg);
     }
 
     private void publishOkMessage() {
         SendMessage message = InlineMessageBuilder.builder(personProvider.getCurrentPersonId())
-                .header("First name set successfully:)")
+                .header("Patronymic set successfully:)")
                 .build();
         publish(message);
     }

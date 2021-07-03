@@ -1,11 +1,16 @@
 package com.sbo.bot.state;
 
+import com.sbo.bot.events.ApiMethodsCreationEvent;
+import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -19,6 +24,7 @@ import java.util.List;
 public abstract class State {
     protected final CurrentPersonProvider personProvider;
     private final PersonService personService;
+    protected final ApplicationEventPublisher publisher;
 
     public void next(State state) {
         personService.updateState(personProvider.getCurrentPerson(), state);
@@ -40,8 +46,17 @@ public abstract class State {
     private void processUpdateWithHandler(AbstractBaseHandler handler, Update update) {
         log.info("Find Handler: {}", handler);
 
-        handler.authorizeAndHandle(update);
+        operateHandleExecution(handler, update);
         next(handler.getNextState());
+    }
+
+    private void operateHandleExecution(AbstractBaseHandler handler, Update update) {
+        try{
+            handler.authorizeAndHandle(update);
+        }catch (DuringHandleExecutionException ex){
+            log.info("Can't handle with reason {}", update.getMessage());
+            ex.getMethods().forEach(ApiMethodsCreationEvent::of);
+        }
     }
 
     private void updateCannotBeProcessed() {
@@ -49,6 +64,10 @@ public abstract class State {
         log.info("Can't find suitable handler for this command at this moment!!!");
 
         throw new RuntimeException("This format of message cannot be processed at that time");
+    }
+
+    protected final void publish(SendMessage message) {
+        this.publisher.publishEvent(ApiMethodsCreationEvent.of(message));
     }
 
     protected abstract List<AbstractBaseHandler> getAvailableHandlers();
