@@ -12,10 +12,10 @@ import java.util.List;
  * @author Dmitars
  */
 @Component
-public class NameWaitingState extends State {
+public class SettingsState extends State {
     private final RequestOperator requestOperator;
 
-    public NameWaitingState(CurrentPersonProvider personProvider, PersonService personService, RequestOperator requestOperator) {
+    public SettingsState(CurrentPersonProvider personProvider, PersonService personService, RequestOperator requestOperator) {
         super(personProvider, personService);
         this.requestOperator = requestOperator;
     }
@@ -29,7 +29,7 @@ public class NameWaitingState extends State {
     @Override
     protected RequestOperator getRequestOperator() {
         SendMessage sendMessage = SendMessage.builder()
-                .text("Please,enter your name:")
+                .text("Here you can set all your contact information. Until every info is filled in you cannot go to another functions ")
                 .build();
         requestOperator.addMessage(sendMessage);
         return requestOperator;
