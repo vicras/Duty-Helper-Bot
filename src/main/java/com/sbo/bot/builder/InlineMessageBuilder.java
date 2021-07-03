@@ -54,6 +54,7 @@ public final class InlineMessageBuilder {
         sb.append("*");
         return line();
     }
+
     /**
      * Simplified use of {@link String#format(String, Object...) String.format} that adds new formatted line to the
      * inner instance of {@link StringBuilder}

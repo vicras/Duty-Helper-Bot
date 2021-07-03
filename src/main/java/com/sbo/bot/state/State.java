@@ -1,7 +1,6 @@
 package com.sbo.bot.state;
 
 import com.sbo.bot.events.ApiMethodsCreationEvent;
-import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
@@ -23,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class State {
     protected final CurrentPersonProvider personProvider;
-    private final PersonService personService;
     protected final ApplicationEventPublisher publisher;
+    private final PersonService personService;
 
     public void next(State state) {
         personService.updateState(personProvider.getCurrentPerson(), state);
@@ -51,9 +50,9 @@ public abstract class State {
     }
 
     private void operateHandleExecution(AbstractBaseHandler handler, Update update) {
-        try{
+        try {
             handler.authorizeAndHandle(update);
-        }catch (DuringHandleExecutionException ex){
+        } catch (DuringHandleExecutionException ex) {
             log.info("Can't handle with reason {}", update.getMessage());
             ex.getMethods().forEach(ApiMethodsCreationEvent::of);
         }
