@@ -2,6 +2,7 @@ package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -13,12 +14,11 @@ import java.util.List;
  */
 @Component
 public class NameWaitingState extends State {
-    @Autowired
-    private RequestOperator requestOperator;
+    private final RequestOperator requestOperator;
 
-
-    public NameWaitingState(CurrentPersonProvider personProvider) {
-        super(personProvider);
+    public NameWaitingState(CurrentPersonProvider personProvider, PersonService personService, RequestOperator requestOperator) {
+        super(personProvider, personService);
+        this.requestOperator = requestOperator;
     }
 
 

@@ -4,7 +4,6 @@ import com.sbo.entity.PeopleOnDuty;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class PostModel {
@@ -18,15 +17,15 @@ public class PostModel {
         this.rowHeight = rowHeight;
         this.records = records.stream()
                 .map(
-                        e -> new People(e.getPerson().getId().toString(),e.getOnDutyFrom()
-                                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)+"Z",
+                        e -> new People(e.getPerson().getId().toString(), e.getOnDutyFrom()
+                                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z",
                                 e.getOnDutyTo()
-                                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)+"Z"))
+                                        .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z"))
                 .collect(Collectors.toList());
 
     }
 
-    class People{
+    class People {
         public String personId;
         public String from;
         public String to;

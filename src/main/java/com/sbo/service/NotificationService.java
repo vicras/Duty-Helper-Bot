@@ -3,7 +3,6 @@ package com.sbo.service;
 import com.sbo.entity.Notification;
 import com.sbo.entity.Person;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

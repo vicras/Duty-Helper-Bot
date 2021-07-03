@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 /**
  * @author Dmitars
  */
-public class DocumentMessageHandler extends MessageHandler{
+public class DocumentMessageHandler extends MessageHandler {
 
     @Override
     protected DocumentDataProvider extractData(Message message) {

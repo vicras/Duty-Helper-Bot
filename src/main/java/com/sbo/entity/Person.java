@@ -1,6 +1,7 @@
 package com.sbo.entity;
 
 import com.sbo.entity.enums.EntityStatus;
+import com.sbo.entity.enums.Language;
 import com.sbo.entity.enums.PersonRole;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import static com.sbo.entity.enums.Language.ENGLISH;
 import static javax.persistence.EnumType.STRING;
 
 /**
@@ -42,13 +44,12 @@ public class Person extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
-
     @NotEmpty
     @Column(name = "patronymic")
     private String patronymic;
 
     @NotEmpty
-    @Column(name = "telegram_id", nullable = false)
+    @Column(name = "telegram_id", nullable = false, unique = true)
     private Long telegramId;
 
     @PastOrPresent
@@ -66,6 +67,9 @@ public class Person extends BaseEntity {
     @NotEmpty
     @Column(name = "home_address")
     private String homeAddress;
+
+    @Column(name = "language", nullable = false)
+    private Language language = ENGLISH;
 
     @ElementCollection
     @Enumerated(STRING)

@@ -28,6 +28,7 @@ public class DutyHelperBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         log.info("Received {}", update);
         publisher.publishEvent(new UpdateCreationEvent(update));
     }
@@ -39,7 +40,7 @@ public class DutyHelperBot extends TelegramLongPollingBot {
             execute(message);
             log.debug("Executed {}", message);
         } catch (TelegramApiException e) {
-            log.error("Exception while sending message {} to user: {}", message, e.getMessage());
+            log.error("Exception while sending message {} \nException: {}", message, e.toString());
         }
     }
 

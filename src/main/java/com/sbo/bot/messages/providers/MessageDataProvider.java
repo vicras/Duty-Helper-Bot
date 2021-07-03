@@ -10,7 +10,7 @@ public abstract class MessageDataProvider<T> {
         this.data = data;
     }
 
-    T get(){
+    T get() {
         return data;
     }
 
