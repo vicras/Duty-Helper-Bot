@@ -1,6 +1,5 @@
 package com.sbo.bot.messages;
 
-import com.sbo.bot.messages.providers.MessageDataProvider;
 import com.sbo.bot.messages.providers.TextDataProvider;
 import org.telegram.telegrambots.meta.api.objects.Message;
 

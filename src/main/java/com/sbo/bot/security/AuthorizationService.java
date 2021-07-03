@@ -2,7 +2,6 @@ package com.sbo.bot.security;
 
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.entity.Person;
-import com.sbo.entity.enums.PersonRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +17,7 @@ import static com.sbo.entity.enums.PersonRole.UNAUTHORIZED;
 @Component
 @Slf4j
 public class AuthorizationService {
-    /**
-     * Checks user's permissions if class is annotated with {@link BotCommand}
-     *
-     * @param user
-     * @return authorization result
-     */
+
     public final boolean authorize(Class<?> clazz, Person user) {
         try {
             return checkAuthority(clazz, user);
@@ -37,13 +31,15 @@ public class AuthorizationService {
 
     private boolean checkAuthority(Class<?> clazz, Person user) {
         log.debug("Authorizing {} to use {}", user, clazz.getSimpleName());
-        final List<PersonRole> requiredRoles = List.of(
+
+        var requiredRoles = List.of(
                 Stream.of(clazz)
                         .filter(cls -> cls.isAnnotationPresent(BotCommand.class))
                         .findFirst()
                         .orElseThrow(UnsupportedOperationException::new)
                         .getDeclaredAnnotation(BotCommand.class)
                         .requiredRoles());
+
         log.debug("User roles: {}\nRequired roles: {}", user.getRoles(), requiredRoles);
         if (requiredRoles.contains(UNAUTHORIZED)) {
             return true;

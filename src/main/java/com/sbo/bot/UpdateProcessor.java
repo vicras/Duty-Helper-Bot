@@ -11,21 +11,14 @@ import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.Locale;
-
-import static java.util.Objects.nonNull;
 
 /**
  * Main class used to handle incoming Updates.
  * Verifies incoming update and delegates handling to {@link HandlerOrchestrator}
  */
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -39,38 +32,35 @@ public class UpdateProcessor {
     @EventListener()
     public void handleUpdate(UpdateCreationEvent updateCreationEvent) {
         var update = updateCreationEvent.getObject();
-        long userId = 0;
-        String text;
-
-        if (isMessageWithText(update)) {
-            var message = update.getMessage();
-            userId = message.getFrom().getId();
-            text = message.getText();
-            log.debug("Update is text message {} from {}", text, userId);
-        } else if (update.hasCallbackQuery()) {
-            var callbackQuery = update.getCallbackQuery();
-            userId = callbackQuery.getFrom().getId();
-            text = callbackQuery.getData();
-            log.debug("Update is callbackQuery {} from {}", text, userId);
-        }
+        var userId = extractUserId(update);
 
         try {
             personProvider.setPersonById(userId);
-            operateMessage(update);
+            orchestrator.operate(update);
         } catch (EntityNotFoundException ex) {
             sendNotFoundMessage(userId);
         }
 
     }
 
-    private boolean isMessageWithText(Update update) {
-        return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
+    private long extractUserId(Update update) {
+        long userId = 0;
+        if (isMessageWithText(update)) {
+            var message = update.getMessage();
+            userId = message.getFrom().getId();
+            var text = message.getText();
+            log.debug("Update is text message {} from {}", text, userId);
+        } else if (update.hasCallbackQuery()) {
+            var callbackQuery = update.getCallbackQuery();
+            userId = callbackQuery.getFrom().getId();
+            var text = callbackQuery.getData();
+            log.debug("Update is callbackQuery {} from {}", text, userId);
+        }
+        return userId;
     }
 
-    private void operateMessage(Update message) {
-        if (nonNull(message)) {
-            orchestrator.operate(message);
-        }
+    private boolean isMessageWithText(Update update) {
+        return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
     }
 
     private void sendNotFoundMessage(Long telegramId) {

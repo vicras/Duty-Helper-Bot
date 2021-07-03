@@ -2,6 +2,7 @@ package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.List;
 /**
  * @author Dmitars
  */
-public class NameWaitingState extends PreparedState{
+public class NameWaitingState extends PreparedState {
 
-    public NameWaitingState(ApplicationEventPublisher publisher, CurrentPersonProvider personProvider) {
-        super(publisher, personProvider);
+    public NameWaitingState(ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+        super(publisher, personProvider, personService);
     }
 
     @Override
