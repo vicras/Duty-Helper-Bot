@@ -3,7 +3,6 @@ package com.sbo.bot.state;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 

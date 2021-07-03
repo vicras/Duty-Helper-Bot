@@ -1,15 +1,12 @@
 package com.sbo.bot.state;
 
 import com.sbo.bot.events.MessageCreationEventFactory;
-import com.sbo.bot.events.SendMessageCreationEvent;
-import com.sbo.common.CreationEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;

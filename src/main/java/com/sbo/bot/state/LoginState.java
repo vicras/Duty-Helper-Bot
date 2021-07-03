@@ -19,7 +19,7 @@ public class LoginState extends State {
     private final HelpHandler helpHandler;
     private final ActionHandler actionHandler;
 
-    public LoginState(ApplicationEventPublisher publisher, PersonService personService, CurrentPersonProvider personProvider, HelpHandler helpHandler, ActionHandler actionHandler) {
+    public LoginState(PersonService personService, CurrentPersonProvider personProvider, HelpHandler helpHandler, ActionHandler actionHandler) {
         super(personProvider, personService);
         this.helpHandler = helpHandler;
         this.actionHandler = actionHandler;
