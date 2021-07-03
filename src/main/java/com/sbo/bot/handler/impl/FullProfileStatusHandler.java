@@ -29,11 +29,12 @@ public class FullProfileStatusHandler extends AbstractBaseHandler {
     private SendMessage createMessageInfo(Person person) {
 
         //text
-        var messageBuilder = InlineMessageBuilder.builder(person.getTelegramId().toString())
+        var messageBuilder = InlineMessageBuilder.builder(person.getTelegramId())
                 .line("Current settings:")
                 .line("First name: %s", person.getFirstName())
                 .line("Last name: %s", person.getLastName())
                 .line("Patronymic: %s", person.getPatronymic())
+                .line("Language: %s", person.getLanguage())
                 .line("Birthday: %s", person.getBirthDate())
                 .line("Telephone: %s", person.getTel())
                 .line("Mail address: %s", person.getMail())
