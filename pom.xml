@@ -113,6 +113,13 @@
             <version>2.9.0</version>
         </dependency>
 
+        <!-- Date parser -->
+        <dependency>
+            <groupId>com.github.sisyphsu</groupId>
+            <artifactId>dateparser</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+
     </dependencies>
 
 

@@ -1,10 +1,13 @@
 package com.sbo.bot.handler;
 
+import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.provider.CurrentPersonProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.List;
 
 /**
  * @author Dmitars
@@ -19,13 +22,14 @@ public abstract class CommandBaseHandler extends AbstractBaseHandler {
     @Override
     public boolean canProcessMessage(Update update) {
         String text = extractStringText(update);
-        return text != null && extractCommand(text).equals(getCommandQualifier());
+        return text != null && getCommandQualifiers().contains(extractCommand(update));
     }
 
-    private String extractCommand(String text) {
-        return text.split(" ")[0];
+    protected ButtonCommands extractCommand(Update update) {
+        String text = extractStringText(update);
+        return ButtonCommands.valueOf(text);
     }
 
-    protected abstract String getCommandQualifier();
+    protected abstract List<ButtonCommands> getCommandQualifiers();
 
 }

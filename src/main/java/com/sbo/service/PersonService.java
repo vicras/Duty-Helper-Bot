@@ -2,6 +2,7 @@ package com.sbo.service;
 
 import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
+import com.sbo.entity.enums.Language;
 import com.sbo.entity.enums.PersonRole;
 
 import java.time.LocalDate;
@@ -27,6 +28,10 @@ public interface PersonService {
 
     Person updatePersonHomeAddress(Long telegramID, String address);
 
+    Person updateState(Long telegramId, State state);
+
+    Person updateLanguage(Long telegramId, Language language);
+
     Person addEmptyPersonWithTelegramIdAndRole(Long telegramId, Set<PersonRole> personRoles);
 
     Person blockPersonByTelegramId(Long telegramId);
@@ -37,5 +42,4 @@ public interface PersonService {
 
     List<Person> getActiveAdmins();
 
-    void updateState(Person person, State state);
 }

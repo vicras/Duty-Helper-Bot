@@ -69,6 +69,7 @@ public class Person extends BaseEntity {
     private String homeAddress;
 
     @Column(name = "language", nullable = false)
+    @Enumerated(STRING)
     private Language language = ENGLISH;
 
     @ElementCollection

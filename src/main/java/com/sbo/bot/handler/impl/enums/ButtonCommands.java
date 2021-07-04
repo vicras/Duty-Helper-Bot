@@ -4,5 +4,8 @@ package com.sbo.bot.handler.impl.enums;
  * @author viktar hraskou
  */
 public enum ButtonCommands {
-    BACK
+    BACK,
+    LANGUAGE_RU,
+    LANGUAGE_EN,
+
 }

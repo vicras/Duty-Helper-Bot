@@ -2,6 +2,7 @@ package com.sbo.service.impl;
 
 import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
+import com.sbo.entity.enums.Language;
 import com.sbo.entity.enums.PersonRole;
 import com.sbo.exception.EntityNotFoundException;
 import com.sbo.repository.PersonRepository;
@@ -55,6 +56,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setLastName(lastName);
 
+        log.info("Set last name={} for user with id={} ", lastName, telegramID);
         return personRepository.save(person);
     }
 
@@ -63,6 +65,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setPatronymic(patronymic);
 
+        log.info("Set patronymic={} for user with id={} ", patronymic, telegramID);
         return personRepository.save(person);
     }
 
@@ -71,6 +74,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setTel(tel);
 
+        log.info("Set telephone={} for user with id={} ", tel, telegramID);
         return personRepository.save(person);
     }
 
@@ -79,6 +83,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setBirthDate(birth);
 
+        log.info("Set birth={} for user with id={} ", birth, telegramID);
         return personRepository.save(person);
     }
 
@@ -87,6 +92,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setMail(mail);
 
+        log.info("Set mail={} for user with id={} ", mail, telegramID);
         return personRepository.save(person);
     }
 
@@ -95,6 +101,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setHomeAddress(address);
 
+        log.info("Set address={} for user with id={} ", address, telegramID);
         return personRepository.save(person);
     }
 
@@ -105,6 +112,7 @@ public class PersonServiceImpl implements PersonService {
                 .roles(personRoles)
                 .build();
 
+        log.info("Set roles={} for user with id={} ", personRoles, telegramId);
         return personRepository.save(newPerson);
     }
 
@@ -113,6 +121,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramId);
         person.setEntityStatus(DELETED);
 
+        log.info("Ban user with id={} ", telegramId);
         return personRepository.save(person);
     }
 
@@ -121,6 +130,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramId);
         person.setEntityStatus(ACTIVE);
 
+        log.info("Unban user with id={} ", telegramId);
         return personRepository.save(person);
     }
 
@@ -135,8 +145,21 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updateState(Person person, State state) {
+    public Person updateState(Long telegramId, State state) {
+        var person = getPersonByTelegramId(telegramId);
         person.setState(state.getClass().toString());
+
+        log.info("Set state={} for user with id={} ", state, telegramId);
+        return personRepository.save(person);
+    }
+
+    @Override
+    public Person updateLanguage(Long telegramId, Language language) {
+        var person = getPersonByTelegramId(telegramId);
+        person.setLanguage(language);
+
+        log.info("Set language={} for user with id={} ", language, telegramId);
+        return personRepository.save(person);
     }
 
 
