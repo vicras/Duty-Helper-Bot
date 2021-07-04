@@ -26,7 +26,7 @@ public abstract class State {
     private final PersonService personService;
 
     public void next(State state) {
-        personService.updateState(personProvider.getCurrentPerson(), state);
+        personService.updateState(personProvider.getCurrentPersonId(), state);
         state.sendRequest();
     }
 

@@ -2,8 +2,10 @@ package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.handler.impl.ActionHandler;
+import com.sbo.bot.handler.impl.HelpHandler;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -15,17 +17,19 @@ import java.util.List;
 @Component
 public class LoginState extends State {
     private final RequestOperator requestOperator;
+    private final HelpHandler helpHandler;
     private final ActionHandler actionHandler;
 
-    public LoginState(PersonService personService, CurrentPersonProvider personProvider, ActionHandler actionHandler, RequestOperator requestOperator) {
-        super(personProvider, personService);
+    public LoginState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, HelpHandler helpHandler, ActionHandler actionHandler, RequestOperator requestOperator) {
+        super(personProvider, publisher, personService);
+        this.helpHandler = helpHandler;
         this.actionHandler = actionHandler;
         this.requestOperator = requestOperator;
     }
 
     @Override
     protected List<AbstractBaseHandler> getAvailableHandlers() {
-        return List.of(actionHandler);
+        return List.of(helpHandler, actionHandler);
     }
 
     @Override

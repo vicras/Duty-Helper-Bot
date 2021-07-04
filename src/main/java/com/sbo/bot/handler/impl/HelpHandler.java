@@ -5,6 +5,7 @@ import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.enums.Command;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.handler.CommandBaseHandler;
+import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
@@ -36,8 +37,8 @@ public class HelpHandler extends CommandBaseHandler {
     }
 
     @Override
-    protected String getCommandQualifier() {
-        return "help";
+    protected List<ButtonCommands> getCommandQualifiers() {
+        return null;
     }
 
     @Override
