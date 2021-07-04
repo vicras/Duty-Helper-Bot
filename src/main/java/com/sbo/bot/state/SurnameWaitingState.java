@@ -6,7 +6,6 @@ import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
 
@@ -16,9 +15,9 @@ import java.util.List;
 @Component
 public class SurnameWaitingState extends State {
     private final LastNameHandler lastNameHandler;
-    private final RequestOperator requestOperator;
+    private final SimpleRequestOperator requestOperator;
 
-    public SurnameWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, LastNameHandler lastNameHandler, RequestOperator requestOperator) {
+    public SurnameWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, LastNameHandler lastNameHandler, SimpleRequestOperator requestOperator) {
         super(personProvider, publisher, personService);
         this.lastNameHandler = lastNameHandler;
         this.requestOperator = requestOperator;
@@ -31,11 +30,9 @@ public class SurnameWaitingState extends State {
 
     @Override
     protected RequestOperator getRequestOperator() {
-        SendMessage sendMessage = SendMessage.builder()
-                .text("Enter your first name.")
-                .text("Use only cyrillic and latin letters, numbers, _ , -.")
+        return requestOperator.builder()
+                .line("Enter your last name.")
+                .line("Use only cyrillic and latin letters, numbers, _ , -.")
                 .build();
-        requestOperator.addMessage(sendMessage);
-        return requestOperator;
     }
 }

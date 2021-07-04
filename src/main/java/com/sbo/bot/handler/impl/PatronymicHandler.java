@@ -25,14 +25,12 @@ import static java.util.Objects.nonNull;
  */
 @Slf4j
 @Component
-public class PatronymicHandler extends AbstractBaseHandler {
-    private final SettingsState settingsState;
+public class PatronymicHandler extends ProfileSettingHandler {
     private final String NAME_REGEX = "[\\w-А-Яа-я]+";
     private final PersonService personService;
 
-    public PatronymicHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, SettingsState settingsState, PersonService personService) {
+    public PatronymicHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
-        this.settingsState = settingsState;
         this.personService = personService;
     }
 
@@ -70,10 +68,5 @@ public class PatronymicHandler extends AbstractBaseHandler {
     @Override
     public boolean canProcessMessage(Update update) {
         return nonNull(extractStringText(update));
-    }
-
-    @Override
-    public State getNextState() {
-        return settingsState;
     }
 }

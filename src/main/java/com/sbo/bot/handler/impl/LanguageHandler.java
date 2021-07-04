@@ -4,11 +4,11 @@ import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.SettingsState;
 import com.sbo.bot.state.State;
 import com.sbo.entity.enums.Language;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -26,10 +26,12 @@ import static com.sbo.entity.enums.Language.RUSSIAN;
 public class LanguageHandler extends CommandBaseHandler {
 
     private final PersonService personService;
+    private final SettingsState state;
 
-    public LanguageHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+    public LanguageHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService, SettingsState state) {
         super(authorizationService, publisher, personProvider);
         this.personService = personService;
+        this.state = state;
     }
 
     @Override
@@ -57,7 +59,6 @@ public class LanguageHandler extends CommandBaseHandler {
 
     @Override
     public State getNextState() {
-        // TODO return Settings state
-        throw new NotYetImplementedException();
+        return state;
     }
 }

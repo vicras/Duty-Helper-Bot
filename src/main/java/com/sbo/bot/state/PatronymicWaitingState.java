@@ -1,7 +1,7 @@
 package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.bot.handler.impl.FirstNameHandler;
+import com.sbo.bot.handler.impl.PatronymicHandler;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,25 +13,25 @@ import java.util.List;
  * @author Dmitars
  */
 @Component
-public class NameWaitingState extends State {
-    private final FirstNameHandler firstNameHandler;
+public class PatronymicWaitingState extends State{
+    private final PatronymicHandler patronymicHandler;
     private final SimpleRequestOperator requestOperator;
 
-    public NameWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, FirstNameHandler firstNameHandler, SimpleRequestOperator requestOperator) {
+    public PatronymicWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, PatronymicHandler patronymicHandler, SimpleRequestOperator requestOperator) {
         super(personProvider, publisher, personService);
-        this.firstNameHandler = firstNameHandler;
+        this.patronymicHandler = patronymicHandler;
         this.requestOperator = requestOperator;
     }
 
     @Override
     protected List<AbstractBaseHandler> getAvailableHandlers() {
-        return List.of(firstNameHandler);
+        return List.of(patronymicHandler);
     }
 
     @Override
     protected RequestOperator getRequestOperator() {
         return requestOperator.builder()
-                .line("Enter your first name. ")
+                .line("Enter your patronymic.")
                 .line("Use only cyrillic and latin letters, numbers, _ , -.")
                 .build();
     }

@@ -1,11 +1,11 @@
 package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.impl.HomeAddressHandler;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
 
@@ -13,26 +13,25 @@ import java.util.List;
  * @author Dmitars
  */
 @Component
-public class SettingsState extends State {
-    private final RequestOperator requestOperator;
+public class AddressWaitingState extends State{
+    private final SimpleRequestOperator requestOperator;
+    private final HomeAddressHandler homeAddressHandler;
 
-    public SettingsState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, RequestOperator requestOperator) {
+    public AddressWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, SimpleRequestOperator requestOperator, HomeAddressHandler homeAddressHandler) {
         super(personProvider, publisher, personService);
         this.requestOperator = requestOperator;
+        this.homeAddressHandler = homeAddressHandler;
     }
-
 
     @Override
     protected List<AbstractBaseHandler> getAvailableHandlers() {
-        return List.of();
+        return List.of(homeAddressHandler);
     }
 
     @Override
     protected RequestOperator getRequestOperator() {
-        SendMessage sendMessage = SendMessage.builder()
-                .text("Here you can set all your contact information. Until every info is filled in you cannot go to another functions ")
+        return requestOperator.builder()
+                .line("Enter your address")
                 .build();
-        requestOperator.addMessage(sendMessage);
-        return requestOperator;
     }
 }

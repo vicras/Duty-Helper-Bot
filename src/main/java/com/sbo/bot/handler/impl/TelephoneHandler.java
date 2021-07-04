@@ -19,7 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 @Slf4j
 @Component
-public class TelephoneHandler extends AbstractBaseHandler {
+public class TelephoneHandler extends ProfileSettingHandler {
 
     private final PersonService personService;
 
@@ -79,11 +79,5 @@ public class TelephoneHandler extends AbstractBaseHandler {
                 .header("Telephone _%s_ set successfully:)", tel)
                 .build();
         publish(message);
-    }
-
-    @Override
-    public State getNextState() {
-        // TODO return Settings state
-        throw new NotYetImplementedException();
     }
 }

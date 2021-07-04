@@ -24,7 +24,7 @@ import static java.util.Objects.nonNull;
  */
 @Slf4j
 @Component
-public class LastNameHandler extends AbstractBaseHandler {
+public class LastNameHandler extends ProfileSettingHandler {
 
     private final String NAME_REGEX = "[\\w-А-Яа-я]+";
     private final PersonService personService;
@@ -68,11 +68,5 @@ public class LastNameHandler extends AbstractBaseHandler {
     @Override
     public boolean canProcessMessage(Update update) {
         return nonNull(extractStringText(update));
-    }
-
-    @Override
-    public State getNextState() {
-        // TODO return Settings state
-        throw new NotYetImplementedException();
     }
 }
