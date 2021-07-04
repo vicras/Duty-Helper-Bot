@@ -3,6 +3,7 @@ package com.sbo.bot.handler.impl;
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.SettingsState;
 import com.sbo.bot.state.State;
 import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
@@ -25,12 +26,13 @@ import static java.util.Objects.nonNull;
 @Slf4j
 @Component
 public class PatronymicHandler extends AbstractBaseHandler {
-
+    private final SettingsState settingsState;
     private final String NAME_REGEX = "[\\w-А-Яа-я]+";
     private final PersonService personService;
 
-    public PatronymicHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+    public PatronymicHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, SettingsState settingsState, PersonService personService) {
         super(authorizationService, publisher, personProvider);
+        this.settingsState = settingsState;
         this.personService = personService;
     }
 
@@ -72,7 +74,6 @@ public class PatronymicHandler extends AbstractBaseHandler {
 
     @Override
     public State getNextState() {
-        // TODO return Settings state
-        throw new NotYetImplementedException();
+        return settingsState;
     }
 }

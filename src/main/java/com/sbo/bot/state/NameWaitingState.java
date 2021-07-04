@@ -2,8 +2,6 @@ package com.sbo.bot.state;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.handler.impl.FirstNameHandler;
-import com.sbo.bot.handler.impl.LastNameHandler;
-import com.sbo.bot.handler.impl.PatronymicHandler;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,30 +14,26 @@ import java.util.List;
  * @author Dmitars
  */
 @Component
-public class SettingsState extends State {
-    private final RequestOperator requestOperator;
+public class NameWaitingState extends State {
     private final FirstNameHandler firstNameHandler;
-    private final LastNameHandler lastNameHandler;
-    private final PatronymicHandler patronymicHandler;
+    private final RequestOperator requestOperator;
 
-    public SettingsState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, RequestOperator requestOperator, FirstNameHandler firstNameHandler, LastNameHandler lastNameHandler, PatronymicHandler patronymicHandler) {
+    public NameWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, FirstNameHandler firstNameHandler, RequestOperator requestOperator) {
         super(personProvider, publisher, personService);
-        this.requestOperator = requestOperator;
         this.firstNameHandler = firstNameHandler;
-        this.lastNameHandler = lastNameHandler;
-        this.patronymicHandler = patronymicHandler;
+        this.requestOperator = requestOperator;
     }
-
 
     @Override
     protected List<AbstractBaseHandler> getAvailableHandlers() {
-        return List.of(firstNameHandler, lastNameHandler, patronymicHandler);
+        return List.of(firstNameHandler);
     }
 
     @Override
     protected RequestOperator getRequestOperator() {
         SendMessage sendMessage = SendMessage.builder()
-                .text("Here you can set all your contact information. Until every info is filled in you cannot go to another functions ")
+                .text("Enter your first name. ")
+                .text("Use only cyrillic and latin letters, numbers, _ , -.")
                 .build();
         requestOperator.addMessage(sendMessage);
         return requestOperator;
