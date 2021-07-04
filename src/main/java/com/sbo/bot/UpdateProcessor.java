@@ -65,7 +65,7 @@ public class UpdateProcessor {
 
     private void sendNotFoundMessage(Long telegramId) {
         var admins = personService.getActiveAdmins();
-        var messBuilder = InlineMessageBuilder.builder(telegramId.toString())
+        var messBuilder = InlineMessageBuilder.builder(telegramId)
                 .line("*Error!!!*")
                 .line("You do not have permission to use this bot.");
 

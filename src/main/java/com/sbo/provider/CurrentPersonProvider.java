@@ -27,6 +27,10 @@ public class CurrentPersonProvider {
         return currentPerson.get();
     }
 
+    public Long getCurrentPersonId() {
+        return currentPerson.get().getTelegramId();
+    }
+
     public void setPersonById(Long telegramId) throws EntityNotFoundException, UserNameIsNullException {
         Person person = personService.getPersonByTelegramId(telegramId);
         Hibernate.initialize(person.getRoles());

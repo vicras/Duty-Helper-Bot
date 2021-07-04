@@ -35,13 +35,12 @@ public abstract class AbstractBaseHandler {
     private void handleUnauthorized(Person user) {
         log.info("Unauthorized access: {} to {}", user, this.getClass().getSimpleName());
 
-        String userChatId = String.valueOf(user.getTelegramId());
-        publish(InlineMessageBuilder.builder(userChatId)
-                .line("Your token is *%s*", userChatId)
+        publish(InlineMessageBuilder.builder(user.getTelegramId())
+                .line("Your token is *%s*", user.getTelegramId())
                 .line("Please contact your supervisor to gain access")
                 .build());
-        publish(InlineMessageBuilder.builder("botAdmin")
-                .line("*Unauthorized access:* %s", userChatId)
+        publish(InlineMessageBuilder.builder(user.getTelegramId())
+                .line("*Unauthorized access:* %s", user.getTelegramId())
                 .build());
     }
 

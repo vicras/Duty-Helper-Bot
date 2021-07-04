@@ -32,9 +32,9 @@ public final class InlineMessageBuilder {
      * @param chatId of user that will receive the message
      * @return instance of MessageBuilder with initialized chatId
      */
-    public static InlineMessageBuilder builder(String chatId) {
+    public static InlineMessageBuilder builder(Long chatId) {
         InlineMessageBuilder builder = new InlineMessageBuilder();
-        builder.setChatId(chatId);
+        builder.setChatId(chatId.toString());
         return builder;
     }
 
@@ -45,7 +45,14 @@ public final class InlineMessageBuilder {
      * @return instance of MessageBuilder with initialized chatId
      */
     public static InlineMessageBuilder builder(Person user) {
-        return builder(String.valueOf(user.getTelegramId()));
+        return builder(user.getTelegramId());
+    }
+
+    public InlineMessageBuilder header(String text, Object... args) {
+        sb.append("*");
+        sb.append(String.format(text, args));
+        sb.append("*");
+        return line();
     }
 
     /**

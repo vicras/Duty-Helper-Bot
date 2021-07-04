@@ -7,6 +7,7 @@ import com.sbo.exception.EntityNotFoundException;
 import com.sbo.repository.PersonRepository;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static com.sbo.entity.enums.EntityStatus.DELETED;
 import static com.sbo.entity.enums.PersonRole.ADMIN;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
@@ -44,6 +46,7 @@ public class PersonServiceImpl implements PersonService {
         var person = getPersonByTelegramId(telegramID);
         person.setFirstName(name);
 
+        log.info("Set first name={} for user with id={} ", name, telegramID);
         return personRepository.save(person);
     }
 
