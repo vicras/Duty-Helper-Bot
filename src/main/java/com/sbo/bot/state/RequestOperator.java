@@ -60,7 +60,7 @@ public class RequestOperator {
                 .chatId(method.getChatId())
                 .entities(method.getEntities())
                 .parseMode(method.getParseMode())
-//                    TODO ebanet?
+                // TODO ebanet?
                 .replyMarkup((InlineKeyboardMarkup) method.getReplyMarkup())
                 .build();
     }
