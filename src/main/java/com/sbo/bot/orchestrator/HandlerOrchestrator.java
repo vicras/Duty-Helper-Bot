@@ -21,20 +21,30 @@ public class HandlerOrchestrator {
     public void operate(Update update) {
         var message = update.getMessage();
         try {
-            var state = getState();
-            log.info("Current state={} and command={}", state.getClass().getSimpleName(), message.getText());
-            state.process(update);
+            var state = getCurrentPersonState();
+            log.info("Current state={} and command={}", state.getClass().getSimpleName(), getStringCommand(update));
+
+            state.process(update, this::getState);
+
         } catch (UnsupportedOperationException e) {
             log.error("Command: {} is unsupported", message.getText());
         }
     }
 
-    public State getState() {
+    private String getStringCommand(Update update) {
+        return update.hasMessage() ? update.getMessage().getText() : update.getCallbackQuery().getData();
+    }
+
+    private State getCurrentPersonState() {
         String personStateName = personProvider.getCurrentPerson().getState();
+        return getState(personStateName);
+    }
+
+    private State getState(String state) {
         return states.stream()
-                .filter(isStateWithName(personStateName))
+                .filter(isStateWithName(state))
                 .findAny()
-                .orElseThrow(criticalException(personStateName));
+                .orElseThrow(criticalException(state));
     }
 
     private Predicate<State> isStateWithName(String stateName) {
@@ -42,8 +52,10 @@ public class HandlerOrchestrator {
     }
 
     private Supplier<RuntimeException> criticalException(String stateName) {
-        String message = "Internal error: state name " + stateName + " not found";
-        log.error(message);
-        return () -> new RuntimeException(message);
+        return () -> {
+            String message = "Internal error: state name " + stateName + " not found";
+            log.error(message);
+            return new RuntimeException(message);
+        };
     }
 }

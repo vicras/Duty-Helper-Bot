@@ -4,16 +4,17 @@ import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.messages.providers.HandlerDataProvider;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * @author Dmitars
  */
+// TODO delete?
 @Component
 @RequiredArgsConstructor
 public class CommandMessageHandler extends MessageHandler {
@@ -38,11 +39,12 @@ public class CommandMessageHandler extends MessageHandler {
     }
 
     private boolean isCommandHandledByHandler(String command, AbstractBaseHandler h) {
-        return Stream.of(h.getClass()
-                .getAnnotation(BotCommand.class)
-                .command()
-        )
-                .anyMatch(c -> c.equalsIgnoreCase(command));
+        throw new NotYetImplementedException();
+//        return Stream.of(h.getClass()
+//                .getAnnotation(BotCommand.class)
+//                .command()
+//        )
+//                .anyMatch(c -> c.equalsIgnoreCase(command));
     }
 
     private boolean isBotAnnotationPresent(AbstractBaseHandler h) {

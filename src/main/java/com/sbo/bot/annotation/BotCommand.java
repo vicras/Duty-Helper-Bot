@@ -1,8 +1,6 @@
 package com.sbo.bot.annotation;
 
-import com.sbo.bot.enums.Command;
 import com.sbo.entity.enums.PersonRole;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -20,16 +18,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 
 
-@Component
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface BotCommand {
-    /**
-     * Returns an array of the commands supported by handler
-     *
-     * @return an array of the commands supported by handler
-     */
-    Command[] command();
 
     /**
      * Returns an array of user roles that have access to the handler

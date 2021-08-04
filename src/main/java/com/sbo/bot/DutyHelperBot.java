@@ -1,6 +1,5 @@
 package com.sbo.bot;
 
-import com.sbo.bot.events.SendMessageCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.common.CreationEvent;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +9,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * @author viktar hraskou
@@ -29,16 +32,17 @@ public class DutyHelperBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
+        printLogSeparator();
         log.info("Received {}", update);
         publisher.publishEvent(new UpdateCreationEvent(update));
     }
 
-    @EventListener(SendMessageCreationEvent.class)
-    public void executeSafe(CreationEvent<SendMessage> event) {
-        final SendMessage message = event.getObject();
+    @EventListener
+    public void executeSafe(CreationEvent<BotApiMethod<?>> event) {
+        final var message = event.getObject();
         try {
             execute(message);
-            log.debug("Executed {}", message);
+            log.info("Executed {}", message);
         } catch (TelegramApiException e) {
             log.error("Exception while sending message {} \nException: {}", message, e.toString());
         }
@@ -52,5 +56,12 @@ public class DutyHelperBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return botToken;
+    }
+
+    public void printLogSeparator() {
+        String stars = Stream.generate(() -> "*")
+                .limit(34)
+                .collect(joining());
+        log.info(stars + "NEW REQUEST" + stars);
     }
 }

@@ -1,7 +1,11 @@
-package com.sbo.bot.handler.impl;
+package com.sbo.bot.handler.impl.settings;
 
+import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.builder.InlineMessageBuilder;
+import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +24,13 @@ import static com.sbo.common.utils.DateTimeUtil.parseDate;
  */
 @Slf4j
 @Component
-public class BirthdayHandler extends ProfileSettingHandler {
+@BotCommand
+public class BirthdayHandler extends AbstractBaseHandler {
+
     private final PersonService personService;
 
-    public BirthdayHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+    public BirthdayHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
+                           CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
         this.personService = personService;
     }
@@ -42,6 +49,7 @@ public class BirthdayHandler extends ProfileSettingHandler {
                 .build();
         publish(message);
     }
+
     @Override
     public boolean canProcessMessage(Update update) {
         var text = extractStringText(update);
@@ -51,5 +59,10 @@ public class BirthdayHandler extends ProfileSettingHandler {
         } catch (DateTimeParseException ex) {
             return false;
         }
+    }
+
+    @Override
+    public Class<? extends State> getNextState() {
+        return SettingState.class;
     }
 }

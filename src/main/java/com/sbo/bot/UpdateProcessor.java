@@ -1,7 +1,7 @@
 package com.sbo.bot;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.events.SendMessageCreationEvent;
+import com.sbo.bot.events.ApiMethodsCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
 import com.sbo.entity.Person;
@@ -45,6 +45,10 @@ public class UpdateProcessor {
 
     private long extractUserId(Update update) {
         long userId = 0;
+        if (update.hasMessage()) {
+            userId = update.getMessage().getFrom().getId();
+            log.debug("Update is message from {}", userId);
+        }
         if (isMessageWithText(update)) {
             var message = update.getMessage();
             userId = message.getFrom().getId();
@@ -78,7 +82,7 @@ public class UpdateProcessor {
             messBuilder
                     .line("There are no people you can contact at the moment!");
         }
-        this.publisher.publishEvent(SendMessageCreationEvent.of(messBuilder.build()));
+        this.publisher.publishEvent(ApiMethodsCreationEvent.of(messBuilder.build()));
     }
 
     private void addPersonLinkToMessage(Person person, InlineMessageBuilder builder) {

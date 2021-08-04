@@ -1,5 +1,6 @@
 package com.sbo.entity;
 
+import com.sbo.bot.state.impl.StartState;
 import com.sbo.entity.enums.EntityStatus;
 import com.sbo.entity.enums.Language;
 import com.sbo.entity.enums.PersonRole;
@@ -36,20 +37,16 @@ import static javax.persistence.EnumType.STRING;
 @EqualsAndHashCode(callSuper = true)
 public class Person extends BaseEntity {
 
-    @NotEmpty
     @Column(name = "first_name")
     private String firstName;
 
-    @NotEmpty
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty
     @Column(name = "patronymic")
     private String patronymic;
 
-    @NotEmpty
-    @Column(name = "telegram_id", nullable = false, unique = true)
+    @Column(name = "telegram_id", nullable = false)
     private Long telegramId;
 
     @PastOrPresent
@@ -64,7 +61,6 @@ public class Person extends BaseEntity {
     @Column(name = "mail")
     private String mail;
 
-    @NotEmpty
     @Column(name = "home_address")
     private String homeAddress;
 
@@ -80,7 +76,7 @@ public class Person extends BaseEntity {
 
     @NotEmpty
     @Column(name = "state")
-    private String state;
+    private String state = StartState.class.toString();
 
     @Builder
     public Person(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, String firstName, String lastName, String patronymic, Long telegramId, LocalDate birthDate, Long tel, String mail, String homeAddress, Set<PersonRole> roles) {

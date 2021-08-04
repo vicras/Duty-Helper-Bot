@@ -1,13 +1,14 @@
-package com.sbo.bot.handler.impl;
+package com.sbo.bot.handler.impl.settings;
 
-import com.sbo.bot.builder.InlineMessageBuilder;
+import com.sbo.bot.annotation.BotCommand;
+import com.sbo.bot.builder.MessageBuilder;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,11 +20,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 @Slf4j
 @Component
-public class TelephoneHandler extends ProfileSettingHandler {
+@BotCommand
+public class TelephoneHandler extends AbstractBaseHandler {
 
     private final PersonService personService;
 
-    public TelephoneHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider, PersonService personService) {
+    public TelephoneHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
+                            CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
         this.personService = personService;
     }
@@ -41,7 +44,7 @@ public class TelephoneHandler extends ProfileSettingHandler {
                 ? message.getContact().getPhoneNumber()
                 : extractStringText(update);
 
-        return parseTelNumber(extractStringText(update));
+        return parseTelNumber(tel);
     }
 
     @Override
@@ -75,9 +78,16 @@ public class TelephoneHandler extends ProfileSettingHandler {
     }
 
     private void publishOkMessage(long tel) {
-        SendMessage message = InlineMessageBuilder.builder(personProvider.getCurrentPersonId())
-                .header("Telephone _%s_ set successfully:)", tel)
+        SendMessage message = MessageBuilder.builder(personProvider.getCurrentPersonId())
+                .line("Telephone _%s_ set successfully:)", tel)
+                .row()
+                .withKeyboardDelete()
                 .build();
         publish(message);
+    }
+
+    @Override
+    public Class<? extends State> getNextState() {
+        return SettingState.class;
     }
 }

@@ -1,5 +1,6 @@
 package com.sbo.bot.builder;
 
+import com.sbo.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -31,6 +32,10 @@ public class MessageBuilder {
         var builder = new MessageBuilder();
         builder.setChatId(chatId.toString());
         return builder;
+    }
+
+    public static MessageBuilder builder(Person person) {
+        return builder(person.getTelegramId());
     }
 
     public MessageBuilder line(String text, Object... args) {

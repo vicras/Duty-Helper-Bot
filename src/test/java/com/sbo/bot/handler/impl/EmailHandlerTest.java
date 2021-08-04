@@ -1,6 +1,8 @@
 package com.sbo.bot.handler.impl;
 
+import com.sbo.bot.handler.impl.settings.EmailHandler;
 import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
@@ -33,7 +35,9 @@ class EmailHandlerTest {
         var publisher = Mockito.mock(ApplicationEventPublisher.class);
         var personProvider = Mockito.mock(CurrentPersonProvider.class);
         var personService = Mockito.mock(PersonService.class);
-        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher,personProvider, new EmailValidator(), personService);
+        var settingState = Mockito.mock(SettingState.class);
+
+        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher,personProvider, personService, settingState);
 
         //when
         boolean condition = emailHandler.canProcessMessage(update);

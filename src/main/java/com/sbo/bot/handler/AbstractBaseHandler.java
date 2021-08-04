@@ -1,7 +1,7 @@
 package com.sbo.bot.handler;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.events.SendMessageCreationEvent;
+import com.sbo.bot.events.ApiMethodsCreationEvent;
 import com.sbo.bot.security.AuthorizationService;
 import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
@@ -52,13 +52,13 @@ public abstract class AbstractBaseHandler {
     }
 
     protected final void publish(SendMessage message) {
-        this.publisher.publishEvent(SendMessageCreationEvent.of(message));
+        this.publisher.publishEvent(ApiMethodsCreationEvent.of(message));
     }
 
     protected abstract void handleMessage(Update message);
 
     public abstract boolean canProcessMessage(Update update);
 
-    public abstract State getNextState();
+    public abstract Class<? extends State> getNextState();
 
 }

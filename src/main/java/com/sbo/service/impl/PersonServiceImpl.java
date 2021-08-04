@@ -9,8 +9,10 @@ import com.sbo.repository.PersonRepository;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +23,7 @@ import static com.sbo.entity.enums.PersonRole.ADMIN;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
@@ -106,6 +109,24 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Person updatePersonState(Long telegramId, State state) {
+        var person = getPersonByTelegramId(telegramId);
+        person.setState(state.getClass().toString());
+
+        log.info("Set state={} for user with id={} ", state, telegramId);
+        return personRepository.save(person);
+    }
+
+    @Override
+    public Person updatePersonLanguage(Long telegramId, Language language) {
+        var person = getPersonByTelegramId(telegramId);
+        person.setLanguage(language);
+
+        log.info("Set language={} for user with id={} ", language, telegramId);
+        return personRepository.save(person);
+    }
+
+    @Override
     public Person addEmptyPersonWithTelegramIdAndRole(Long telegramId, Set<PersonRole> personRoles) {
         var newPerson = Person.builder()
                 .telegramId(telegramId)
@@ -145,22 +166,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person updateState(Long telegramId, State state) {
-        var person = getPersonByTelegramId(telegramId);
-        person.setState(state.getClass().toString());
-
-        log.info("Set state={} for user with id={} ", state, telegramId);
-        return personRepository.save(person);
+    public Person initializePersonRoles(Person person) {
+        Hibernate.initialize(person.getRoles());
+        return person;
     }
-
-    @Override
-    public Person updateLanguage(Long telegramId, Language language) {
-        var person = getPersonByTelegramId(telegramId);
-        person.setLanguage(language);
-
-        log.info("Set language={} for user with id={} ", language, telegramId);
-        return personRepository.save(person);
-    }
-
 
 }

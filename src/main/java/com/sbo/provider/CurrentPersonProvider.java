@@ -5,7 +5,6 @@ import com.sbo.exception.EntityNotFoundException;
 import com.sbo.exception.UserNameIsNullException;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -14,7 +13,7 @@ import javax.transaction.Transactional;
 /**
  * @author viktar hraskou
  */
-@Component()
+@Component
 @Transactional
 @RequiredArgsConstructor
 public class CurrentPersonProvider {
@@ -33,7 +32,12 @@ public class CurrentPersonProvider {
 
     public void setPersonById(Long telegramId) throws EntityNotFoundException, UserNameIsNullException {
         Person person = personService.getPersonByTelegramId(telegramId);
-        Hibernate.initialize(person.getRoles());
+        personService.initializePersonRoles(person);
+        currentPerson.set(person);
+    }
+
+    public void setPerson(Person person) {
+        personService.initializePersonRoles(person);
         currentPerson.set(person);
     }
 }

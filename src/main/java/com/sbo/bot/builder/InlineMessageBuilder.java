@@ -1,7 +1,7 @@
 package com.sbo.bot.builder;
 
 
-import com.sbo.bot.enums.Command;
+import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -104,26 +104,8 @@ public final class InlineMessageBuilder {
         return this;
     }
 
-    /**
-     * Creates new {@link InlineKeyboardButton}
-     *
-     * @param text    button text
-     * @param command on click callback
-     * @return this
-     */
-    public InlineMessageBuilder button(String text, Command command) {
-        return button(text, command.toString());
-    }
-
-    /**
-     * Creates new {@link InlineKeyboardButton}
-     *
-     * @param text    button text (and callback argument)
-     * @param command on click callback
-     * @return this
-     */
-    public InlineMessageBuilder buttonWithArguments(String text, Command command) {
-        return button(text, command.toString() + " " + text);
+    public InlineMessageBuilder button(String text, ButtonCommands buttonCommand) {
+        return button(text, buttonCommand.name());
     }
 
     /**

@@ -28,9 +28,9 @@ public interface PersonService {
 
     Person updatePersonHomeAddress(Long telegramID, String address);
 
-    Person updateState(Long telegramId, State state);
+    Person updatePersonState(Long telegramId, State state);
 
-    Person updateLanguage(Long telegramId, Language language);
+    Person updatePersonLanguage(Long telegramId, Language language);
 
     Person addEmptyPersonWithTelegramIdAndRole(Long telegramId, Set<PersonRole> personRoles);
 
@@ -41,5 +41,7 @@ public interface PersonService {
     List<Person> getActivePersons();
 
     List<Person> getActiveAdmins();
+
+    Person initializePersonRoles(Person person);
 
 }

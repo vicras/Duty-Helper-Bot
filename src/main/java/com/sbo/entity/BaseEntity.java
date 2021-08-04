@@ -15,6 +15,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 import java.time.LocalDateTime;
 
+import static javax.persistence.EnumType.STRING;
+
 /**
  * @author viktar hraskou
  */
@@ -35,7 +37,7 @@ public abstract class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Enumerated
+    @Enumerated(STRING)
     @Column(name = "entity_status")
     private EntityStatus entityStatus;
 

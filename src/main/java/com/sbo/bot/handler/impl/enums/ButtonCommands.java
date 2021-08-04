@@ -7,5 +7,15 @@ public enum ButtonCommands {
     BACK,
     LANGUAGE_RU,
     LANGUAGE_EN,
+    START,
+    SETTINGS,
+    NAME,
+    LASTNAME,
+    PATRONYMIC,
+    TELEPHONE,
+    ADDRESS,
+    MAIL,
+    BIRTH,
+    LANGUAGE,
 
 }
