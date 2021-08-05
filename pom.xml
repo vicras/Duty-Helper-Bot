@@ -28,6 +28,9 @@
 
         <!-- Jackson -->
         <jackson-json.version>2.12.3</jackson-json.version>
+
+        <!-- Java version -->
+        <java.version>11</java.version>
     </properties>
 
     <dependencies>
@@ -37,11 +40,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <!-- Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <!-- Telegram boot API -->
         <dependency>
             <groupId>com.github.xabgesagtx</groupId>
@@ -68,18 +73,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Validator -->
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>6.0.13.Final</version>
-        </dependency>
-
         <!-- Utils -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.5</version>
+            <version>3.6.1</version>
         </dependency>
 
         <!-- Test -->
@@ -95,6 +93,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Http -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit</artifactId>

@@ -3,7 +3,7 @@ package com.sbo.bot.handler.impl.settings;
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
@@ -26,9 +26,8 @@ public class EmailHandler extends AbstractBaseHandler {
     private final EmailValidator emailValidator;
     private final PersonService personService;
 
-    public EmailHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
-                        CurrentPersonProvider personProvider, PersonService personService,
-                        SettingState settingState) {
+    public EmailHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher,
+                        CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
         this.emailValidator = new EmailValidator();
         this.personService = personService;

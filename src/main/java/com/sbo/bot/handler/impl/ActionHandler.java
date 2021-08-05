@@ -2,7 +2,7 @@ package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.provider.CurrentPersonProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class ActionHandler extends CommandBaseHandler {
 
-    public ActionHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider) {
+    public ActionHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider) {
         super(authorizationService, publisher, personProvider);
     }
 

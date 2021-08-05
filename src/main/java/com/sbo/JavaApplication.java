@@ -24,17 +24,16 @@ public class JavaApplication implements WebMvcConfigurer {
         SpringApplication.run(JavaApplication.class, args);
     }
 
-    @Bean // <--- 1
+    @Bean
     public LocaleResolver localeResolver() {
-        CookieLocaleResolver localeResolver = new CookieLocaleResolver(); // <--- 2
-        localeResolver.setDefaultLocale(Locale.US); // <--- 3
+        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.US);
         return localeResolver;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        // Defaults to "locale" if not set
         localeChangeInterceptor.setParamName("localeData");
         return localeChangeInterceptor;
     }

@@ -1,7 +1,8 @@
-package com.sbo.bot.security;
+package com.sbo.service.impl;
 
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.entity.Person;
+import com.sbo.service.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,9 @@ import static com.sbo.entity.enums.PersonRole.UNAUTHORIZED;
  */
 @Component
 @Slf4j
-public class AuthorizationService {
+public class AuthorizationServiceImpl implements AuthorizationService {
 
+    @Override
     public final boolean authorize(Class<?> clazz, Person user) {
         try {
             return checkAuthority(clazz, user);

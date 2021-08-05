@@ -1,8 +1,7 @@
 package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.impl.settings.TelephoneHandler;
-import com.sbo.bot.security.AuthorizationService;
-import com.sbo.bot.state.impl.settings.SettingState;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +25,7 @@ class TelephoneHandlerTest {
     void parseTelNumber() {
 
         //given
-        var authorizationService = Mockito.mock(AuthorizationService.class);
+        var authorizationService = Mockito.mock(AuthorizationServiceImpl.class);
         var publisher = Mockito.mock(ApplicationEventPublisher.class);
         var personProvider = Mockito.mock(CurrentPersonProvider.class);
         var personService = Mockito.mock(PersonService.class);
@@ -49,7 +48,7 @@ class TelephoneHandlerTest {
     void parseNotTelNumber() {
 
         //given
-        var authorizationService = Mockito.mock(AuthorizationService.class);
+        var authorizationService = Mockito.mock(AuthorizationServiceImpl.class);
         var publisher = Mockito.mock(ApplicationEventPublisher.class);
         var personProvider = Mockito.mock(CurrentPersonProvider.class);
         var personService = Mockito.mock(PersonService.class);

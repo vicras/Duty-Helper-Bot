@@ -3,7 +3,7 @@ package com.sbo.bot.handler.impl.settings;
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.entity.enums.Language;
@@ -31,7 +31,7 @@ public class LanguageHandler extends CommandBaseHandler {
 
     private final PersonService personService;
 
-    public LanguageHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
+    public LanguageHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher,
                            CurrentPersonProvider personProvider, PersonService personService) {
         super(authorizationService, publisher, personProvider);
         this.personService = personService;

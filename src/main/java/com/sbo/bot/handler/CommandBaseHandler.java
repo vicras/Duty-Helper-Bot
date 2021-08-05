@@ -1,7 +1,7 @@
 package com.sbo.bot.handler;
 
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -17,14 +17,17 @@ import static java.util.Objects.nonNull;
 @Component
 public abstract class CommandBaseHandler extends AbstractBaseHandler {
 
-    public CommandBaseHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider) {
+    public CommandBaseHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher, CurrentPersonProvider personProvider) {
         super(authorizationService, publisher, personProvider);
     }
 
     @Override
     public boolean canProcessMessage(Update update) {
-        String text = extractStringText(update);
-        return nonNull(text) && isCommand(text) && getCommandQualifiers().contains(extractCommand(update));
+        if(update.hasCallbackQuery()){
+            var text = update.getCallbackQuery().getData();
+            return nonNull(text) && isCommand(text) && getCommandQualifiers().contains(extractCommand(update));
+        }
+        return false;
     }
 
     protected ButtonCommands extractCommand(Update update) {

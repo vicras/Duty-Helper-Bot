@@ -1,7 +1,7 @@
 package com.sbo.bot.state.impl.settings;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.impl.settings.BackSettingsHandler;
 import com.sbo.bot.handler.impl.settings.LastNameHandler;
 import com.sbo.bot.state.RequestOperator;
@@ -35,7 +35,7 @@ public class LastNameWaitingState extends State {
     }
 
     @Override
-    protected List<AbstractBaseHandler> getAvailableHandlers() {
+    protected List<BaseHandler> getAvailableHandlers() {
         return List.of(lastNameHandler, backSettingsHandler);
     }
 

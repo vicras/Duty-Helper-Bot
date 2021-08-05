@@ -1,10 +1,12 @@
 package com.sbo.bot.state.impl;
 
-import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.BaseHandler;
+import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.handler.impl.StartHandler;
-import com.sbo.bot.handler.impl.settings.SettingsHandler;
+import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +23,20 @@ import java.util.List;
 @Component
 public class StartState extends State {
 
-    private final SettingsHandler settingsHandler;
     private final StartHandler startHandler;
 
-    public StartState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, SettingsHandler settingsHandler, StartHandler startHandler) {
+    public StartState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
+                      PersonService personService, StartHandler startHandler) {
         super(personProvider, publisher, personService);
-        this.settingsHandler = settingsHandler;
         this.startHandler = startHandler;
     }
 
     @Override
-    protected List<AbstractBaseHandler> getAvailableHandlers() {
-        return List.of(settingsHandler, startHandler);
+    protected List<BaseHandler> getAvailableHandlers() {
+        return List.of(
+                SwitchHandler.of(SettingState.class, ButtonCommands.SETTINGS),
+                startHandler
+        );
     }
 
     @Override

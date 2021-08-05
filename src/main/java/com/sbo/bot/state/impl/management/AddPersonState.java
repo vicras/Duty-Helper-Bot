@@ -1,14 +1,13 @@
-package com.sbo.bot.state.impl.settings;
+package com.sbo.bot.state.impl.management;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.BaseHandler;
-import com.sbo.bot.handler.impl.settings.BackSettingsHandler;
-import com.sbo.bot.handler.impl.settings.PatronymicHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,33 +22,34 @@ import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
  */
 @Slf4j
 @Component
-public class PatronymicWaitingState extends State {
+public class AddPersonState extends State {
 
-    private final PatronymicHandler patronymicHandler;
-    private final BackSettingsHandler backSettingsHandler;
-
-    public PatronymicWaitingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService, PatronymicHandler patronymicHandler, BackSettingsHandler backSettingsHandler) {
+    public AddPersonState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService) {
         super(personProvider, publisher, personService);
-        this.patronymicHandler = patronymicHandler;
-        this.backSettingsHandler = backSettingsHandler;
     }
 
     @Override
     protected List<BaseHandler> getAvailableHandlers() {
-        return List.of(patronymicHandler, backSettingsHandler);
+        throw new NotYetImplementedException();
     }
 
     @Override
     protected RequestOperator getRequestOperator(Update update) {
+        var mess = getStatusMessage(update);
 
-        SendMessage message = InlineMessageBuilder.builder(personProvider.getCurrentPerson())
-                .header("Send me your new patronymic")
+        return new RequestOperator(publisher)
+                .addMessage(mess, update);
+    }
+
+    private SendMessage getStatusMessage(Update update) {
+        return InlineMessageBuilder.builder(personProvider.getCurrentPerson())
+                .header("To add new person")
+                .line("Do one:")
+                .line("- Forward me his message")
+                .line("- Send me his telegram ID")
+
                 .row()
                 .button("Back", BACK)
                 .build();
-
-        return new RequestOperator(publisher)
-                .addMessage(message, update);
-
     }
 }

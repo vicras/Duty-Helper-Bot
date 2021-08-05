@@ -1,6 +1,7 @@
 package com.sbo.bot.messages;
 
 import com.sbo.bot.annotation.BotCommand;
+import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.messages.providers.HandlerDataProvider;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +20,14 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class CommandMessageHandler extends MessageHandler {
 
-    private final List<AbstractBaseHandler> handlers;
+    private final List<BaseHandler> handlers;
 
     @Override
     protected HandlerDataProvider extractData(Message message) {
         return new HandlerDataProvider(getHandler(message.getText()));
     }
 
-    private AbstractBaseHandler getHandler(String text) {
+    private BaseHandler getHandler(String text) {
         return handlers.stream()
                 .filter(handler -> isCommandHandledByHandler(text, handler))
                 .findAny()
@@ -38,7 +39,7 @@ public class CommandMessageHandler extends MessageHandler {
         return Message::hasText;
     }
 
-    private boolean isCommandHandledByHandler(String command, AbstractBaseHandler h) {
+    private boolean isCommandHandledByHandler(String command, BaseHandler h) {
         throw new NotYetImplementedException();
 //        return Stream.of(h.getClass()
 //                .getAnnotation(BotCommand.class)

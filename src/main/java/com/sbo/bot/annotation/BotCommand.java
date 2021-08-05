@@ -1,5 +1,6 @@
 package com.sbo.bot.annotation;
 
+import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.entity.enums.PersonRole;
 
 import java.lang.annotation.Retention;
@@ -12,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Indicates that a component is a valid handler for bot command
  * <p>
- * // * Used on inheritors of {@link com.sbo.bot.handler.AbstractBaseHandler}
+ * // * Used on inheritors of {@link AbstractBaseHandler}
  * <p>
  * // * @see DebtHandler example of implementation
  */

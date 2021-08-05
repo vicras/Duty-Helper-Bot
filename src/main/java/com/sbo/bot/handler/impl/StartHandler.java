@@ -3,7 +3,7 @@ package com.sbo.bot.handler.impl;
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.StartState;
 import com.sbo.provider.CurrentPersonProvider;
@@ -23,7 +23,7 @@ import static com.sbo.bot.handler.impl.enums.ButtonCommands.SETTINGS;
 @BotCommand()
 public class StartHandler extends AbstractBaseHandler {
 
-    public StartHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
+    public StartHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher,
                         CurrentPersonProvider personProvider) {
         super(authorizationService, publisher, personProvider);
     }

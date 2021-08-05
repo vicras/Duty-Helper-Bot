@@ -4,6 +4,8 @@ import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import com.sbo.entity.enums.Language;
 import com.sbo.entity.enums.PersonRole;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,7 +40,7 @@ public interface PersonService {
 
     Person unblockPersonByTelegramId(Long telegramId);
 
-    List<Person> getActivePersons();
+    Page<Person> getActivePersons(Pageable pageable);
 
     List<Person> getActiveAdmins();
 

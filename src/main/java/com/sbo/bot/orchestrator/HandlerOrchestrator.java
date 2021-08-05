@@ -23,7 +23,6 @@ public class HandlerOrchestrator {
         try {
             var state = getCurrentPersonState();
             log.info("Current state={} and command={}", state.getClass().getSimpleName(), getStringCommand(update));
-
             state.process(update, this::getState);
 
         } catch (UnsupportedOperationException e) {

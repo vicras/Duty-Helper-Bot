@@ -2,10 +2,9 @@ package com.sbo.bot.handler;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.ApiMethodsCreationEvent;
-import com.sbo.bot.security.AuthorizationService;
-import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.AuthorizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,13 +15,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public abstract class AbstractBaseHandler {
+public abstract class AbstractBaseHandler implements BaseHandler {
 
     protected final AuthorizationService authorizationService;
     protected final ApplicationEventPublisher publisher;
     protected final CurrentPersonProvider personProvider;
 
-    public final void authorizeAndHandle(Update update) {
+    @Override
+    public void authorizeAndHandle(Update update) {
         Person currentPerson = personProvider.getCurrentPerson();
 
         if (this.authorizationService.authorize(this.getClass(), currentPerson)) {
@@ -30,6 +30,7 @@ public abstract class AbstractBaseHandler {
         } else {
             handleUnauthorized(currentPerson);
         }
+
     }
 
     private void handleUnauthorized(Person user) {
@@ -56,9 +57,5 @@ public abstract class AbstractBaseHandler {
     }
 
     protected abstract void handleMessage(Update message);
-
-    public abstract boolean canProcessMessage(Update update);
-
-    public abstract Class<? extends State> getNextState();
 
 }

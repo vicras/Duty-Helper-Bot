@@ -1,6 +1,6 @@
 package com.sbo.bot.state.impl;
 
-import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.impl.ActionHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
@@ -24,7 +24,7 @@ public class LoginState extends State {
     }
 
     @Override
-    protected List<AbstractBaseHandler> getAvailableHandlers() {
+    protected List<BaseHandler> getAvailableHandlers() {
         return List.of(actionHandler);
     }
 

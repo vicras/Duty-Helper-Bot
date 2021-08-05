@@ -3,7 +3,7 @@ package com.sbo.bot.handler.impl.settings;
 import com.sbo.bot.annotation.BotCommand;
 import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.settings.SettingState;
 import com.sbo.provider.CurrentPersonProvider;
@@ -24,7 +24,7 @@ import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
 @BotCommand
 public class BackSettingsHandler extends CommandBaseHandler {
 
-    public BackSettingsHandler(AuthorizationService authorizationService, ApplicationEventPublisher publisher,
+    public BackSettingsHandler(AuthorizationServiceImpl authorizationService, ApplicationEventPublisher publisher,
                                CurrentPersonProvider personProvider) {
         super(authorizationService, publisher, personProvider);
     }

@@ -17,5 +17,10 @@ public enum ButtonCommands {
     MAIL,
     BIRTH,
     LANGUAGE,
-
+    ALL_PERSON,
+    NEW_PERSON,
+    SELF_DESTRUCTION,
+    BLOCKED_PERSONS,
+    HOME,
+    PAGE
 }

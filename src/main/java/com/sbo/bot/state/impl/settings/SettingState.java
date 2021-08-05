@@ -1,14 +1,14 @@
 package com.sbo.bot.state.impl.settings;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.bot.handler.SwitchBaseHandler;
-import com.sbo.bot.security.AuthorizationService;
+import com.sbo.bot.handler.BaseHandler;
+import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
 import com.sbo.entity.Person;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,6 @@ import static com.sbo.bot.handler.impl.enums.ButtonCommands.MAIL;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.NAME;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.PATRONYMIC;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.TELEPHONE;
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author viktar hraskou
@@ -34,42 +33,32 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class SettingState extends State {
 
-    private final AuthorizationService authorizationService;
-
-    private List<AbstractBaseHandler> handlers;
+    private List<BaseHandler> handlers;
 
     public SettingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
-                        PersonService personService, AuthorizationService authorizationService
+                        PersonService personService, AuthorizationServiceImpl authorizationService
     ) {
         super(personProvider, publisher, personService);
-        this.authorizationService = authorizationService;
 
         initHandlers();
     }
 
 
     private void initHandlers() {
-        handlers = mapCommandWithState().stream()
-                .map(commandToState -> new SwitchBaseHandler(authorizationService, publisher, personProvider, commandToState))
-                .collect(toList());
-
-    }
-
-    private List<SwitchBaseHandler.CommandToState> mapCommandWithState() {
-        return List.of(
-                new SwitchBaseHandler.CommandToState(NAME, NameWaitingState.class),
-                new SwitchBaseHandler.CommandToState(LASTNAME, LastNameWaitingState.class),
-                new SwitchBaseHandler.CommandToState(PATRONYMIC, PatronymicWaitingState.class),
-                new SwitchBaseHandler.CommandToState(TELEPHONE, TelephoneWaitingState.class),
-                new SwitchBaseHandler.CommandToState(ADDRESS, HomeAddressWaitingState.class),
-                new SwitchBaseHandler.CommandToState(MAIL, EmailWaitingState.class),
-                new SwitchBaseHandler.CommandToState(BIRTH, BirthdayWaitingState.class),
-                new SwitchBaseHandler.CommandToState(LANGUAGE, LanguageWaitingState.class)
+        handlers = List.of(
+                SwitchHandler.of(NameWaitingState.class, NAME),
+                SwitchHandler.of(LastNameWaitingState.class, LASTNAME),
+                SwitchHandler.of(PatronymicWaitingState.class, PATRONYMIC),
+                SwitchHandler.of(TelephoneWaitingState.class, TELEPHONE),
+                SwitchHandler.of(HomeAddressWaitingState.class, ADDRESS),
+                SwitchHandler.of(EmailWaitingState.class, MAIL),
+                SwitchHandler.of(BirthdayWaitingState.class, BIRTH),
+                SwitchHandler.of(LanguageWaitingState.class, LANGUAGE)
         );
     }
 
     @Override
-    protected List<AbstractBaseHandler> getAvailableHandlers() {
+    protected List<BaseHandler> getAvailableHandlers() {
         return handlers;
     }
 
@@ -89,7 +78,7 @@ public class SettingState extends State {
                 .line("Name: %s", person.getFirstName())
                 .line("Last name: %s", person.getLastName())
                 .line("Patronymic: %s", person.getPatronymic())
-                .line("Telephone: %s", person.getTel())
+                .line("Telephone: +%s", person.getTel())
                 .line("Home address: %s", person.getHomeAddress())
                 .line("Birthday: %s", person.getBirthDate())
                 .line("Mail: %s", person.getMail())

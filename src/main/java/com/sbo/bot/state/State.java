@@ -1,7 +1,7 @@
 package com.sbo.bot.state;
 
 import com.sbo.bot.events.ApiMethodsCreationEvent;
-import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.BaseHandler;
 import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 public abstract class State {
     protected final CurrentPersonProvider personProvider;
     protected final ApplicationEventPublisher publisher;
-    private final PersonService personService;
+    protected final PersonService personService;
 
     public void setNextState(State state, Update update) {
         personService.updatePersonState(personProvider.getCurrentPersonId(), state);
@@ -45,13 +45,13 @@ public abstract class State {
 
     }
 
-    private void processUpdateWithHandler(AbstractBaseHandler handler, Update update, Function<String, State> stateByName) {
+    private void processUpdateWithHandler(BaseHandler handler, Update update, Function<String, State> stateByName) {
         log.info("Find Handler: {}", handler);
 
         operateHandleExecution(handler, update, stateByName);
     }
 
-    private void operateHandleExecution(AbstractBaseHandler handler, Update update, Function<String, State> stateByName) {
+    private void operateHandleExecution(BaseHandler handler, Update update, Function<String, State> stateByName) {
         try {
             handler.authorizeAndHandle(update);
             setNextState(stateByName.apply(handler.getNextState().toString()), update);
@@ -71,7 +71,7 @@ public abstract class State {
         this.publisher.publishEvent(ApiMethodsCreationEvent.of(message));
     }
 
-    protected abstract List<AbstractBaseHandler> getAvailableHandlers();
+    protected abstract List<BaseHandler> getAvailableHandlers();
 
     protected abstract RequestOperator getRequestOperator(Update update);
 

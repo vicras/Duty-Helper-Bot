@@ -10,6 +10,9 @@ import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -156,8 +159,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getActivePersons() {
-        return personRepository.getAllByEntityStatusIn(List.of(ACTIVE));
+    public Page<Person> getActivePersons(Pageable pageable) {
+        return personRepository.getAllByEntityStatusIn(List.of(ACTIVE), pageable);
     }
 
     @Override

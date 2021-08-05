@@ -1,11 +1,9 @@
 package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.impl.settings.EmailHandler;
-import com.sbo.bot.security.AuthorizationService;
-import com.sbo.bot.state.impl.settings.SettingState;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,13 +29,12 @@ class EmailHandlerTest {
         Mockito.when(update.getMessage())
                 .thenReturn(message);
 
-        var authorizationService = Mockito.mock(AuthorizationService.class);
+        var authorizationService = Mockito.mock(AuthorizationServiceImpl.class);
         var publisher = Mockito.mock(ApplicationEventPublisher.class);
         var personProvider = Mockito.mock(CurrentPersonProvider.class);
         var personService = Mockito.mock(PersonService.class);
-        var settingState = Mockito.mock(SettingState.class);
 
-        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher,personProvider, personService, settingState);
+        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher,personProvider, personService);
 
         //when
         boolean condition = emailHandler.canProcessMessage(update);
