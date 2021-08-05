@@ -1,8 +1,8 @@
 package com.sbo.bot.handler;
 
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -23,7 +23,7 @@ public abstract class CommandBaseHandler extends AbstractBaseHandler {
 
     @Override
     public boolean canProcessMessage(Update update) {
-        if(update.hasCallbackQuery()){
+        if (update.hasCallbackQuery()) {
             var text = update.getCallbackQuery().getData();
             return nonNull(text) && isCommand(text) && getCommandQualifiers().contains(extractCommand(update));
         }

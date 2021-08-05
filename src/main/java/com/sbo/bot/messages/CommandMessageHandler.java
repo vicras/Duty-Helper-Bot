@@ -1,8 +1,8 @@
 package com.sbo.bot.messages;
 
 import com.sbo.bot.annotation.BotCommand;
-import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.AbstractBaseHandler;
+import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.messages.providers.HandlerDataProvider;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.NotYetImplementedException;

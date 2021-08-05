@@ -5,13 +5,16 @@ import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.HomeState;
 import com.sbo.entity.Person;
+import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import com.sbo.service.impl.AuthorizationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -19,6 +22,7 @@ import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.ADDRESS;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BIRTH;
+import static com.sbo.bot.handler.impl.enums.ButtonCommands.HOME;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.LANGUAGE;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.LASTNAME;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.MAIL;
@@ -53,7 +57,9 @@ public class SettingState extends State {
                 SwitchHandler.of(HomeAddressWaitingState.class, ADDRESS),
                 SwitchHandler.of(EmailWaitingState.class, MAIL),
                 SwitchHandler.of(BirthdayWaitingState.class, BIRTH),
-                SwitchHandler.of(LanguageWaitingState.class, LANGUAGE)
+                SwitchHandler.of(LanguageWaitingState.class, LANGUAGE),
+                SwitchHandler.of(HomeState.class, HOME)
+                        .setAction(this::goHomeAction)
         );
     }
 
@@ -93,12 +99,29 @@ public class SettingState extends State {
                 .button("Last name", LASTNAME)
                 .button("Patronymic", PATRONYMIC)
                 .row()
-                .button("Address", ADDRESS)
-                .button("Birth", BIRTH)
-                .button("Mail", MAIL)
+                .button("Address🗺", ADDRESS)
+                .button("Birth🎂", BIRTH)
+                .button("Mail📨", MAIL)
                 .row()
-                .button("Telephone", TELEPHONE)
-                .button("Language", LANGUAGE)
+                .button("Telephone📞", TELEPHONE)
+                .button("Language🇧🇾", LANGUAGE)
+                .row()
+                .button("Home🏠", HOME)
                 .build();
+    }
+
+    private void goHomeAction(Update update) {
+        AnswerCallbackQuery message = AnswerCallbackQuery.builder()
+                .text("Person information should be filled before go to main page")
+                .showAlert(true)
+                .callbackQueryId(update.getCallbackQuery().getId())
+                .build();
+
+        if (!personService.isPersonInfoFiled(personProvider.getCurrentPerson())) {
+            throw new DuringHandleExecutionException(
+                    List.of(message),
+                    "Person information should be filled before go to main page"
+            );
+        }
     }
 }

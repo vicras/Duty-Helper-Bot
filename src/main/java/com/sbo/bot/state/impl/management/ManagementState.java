@@ -2,12 +2,13 @@ package com.sbo.bot.state.impl.management;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.handler.BaseHandler;
+import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.HomeState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -35,7 +36,12 @@ public class ManagementState extends State {
 
     @Override
     protected List<BaseHandler> getAvailableHandlers() {
-        throw new NotYetImplementedException();
+        return List.of(
+                SwitchHandler.of(AllPersonState.class, ALL_PERSON),
+                SwitchHandler.of(AddPersonState.class, NEW_PERSON),
+                SwitchHandler.of(UnbanPersonState.class, BLOCKED_PERSONS),
+                SwitchHandler.of(HomeState.class, HOME)
+        );
     }
 
     @Override

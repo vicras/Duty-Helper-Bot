@@ -42,8 +42,15 @@ public interface PersonService {
 
     Page<Person> getActivePersons(Pageable pageable);
 
+    Page<Person> getBlockedPersons(Pageable pageable);
+
     List<Person> getActiveAdmins();
 
     Person initializePersonRoles(Person person);
 
+    boolean isPersonInfoFiled(Long telegramId);
+
+    boolean isPersonInfoFiled(Person person);
+
+    boolean isPersonExist(Long telegramId);
 }

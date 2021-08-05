@@ -1,5 +1,6 @@
 package com.sbo.bot;
 
+import com.sbo.bot.events.CallbackChatEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.common.CreationEvent;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,20 @@ public class DutyHelperBot extends TelegramLongPollingBot {
             log.info("Executed {}", message);
         } catch (TelegramApiException e) {
             log.error("Exception while sending message {} \nException: {}", message, e.toString());
+        }
+    }
+
+    @EventListener
+    public void executeWithCallback(CallbackChatEvent event) {
+        final var message = event.getMethod();
+        final var handle = event.getHandle();
+        final var error = event.getError();
+        try {
+            var result = execute(message);
+            handle.accept(result);
+            log.info("Executed {}", message);
+        } catch (TelegramApiException e) {
+            error.run();
         }
     }
 

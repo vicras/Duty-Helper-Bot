@@ -1,7 +1,6 @@
 package com.sbo.service;
 
 import com.sbo.entity.Person;
-import org.springframework.stereotype.Service;
 
 /**
  * @author viktar hraskou

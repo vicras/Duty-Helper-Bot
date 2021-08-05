@@ -18,4 +18,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Page<Person> getAllByEntityStatusIn(Collection<EntityStatus> entityStatus, Pageable pageable);
 
     List<Person> getAllByEntityStatusInAndRoles(Collection<EntityStatus> entityStatus, PersonRole role);
+
+    Boolean existsByTelegramId(Long telegramId);
 }

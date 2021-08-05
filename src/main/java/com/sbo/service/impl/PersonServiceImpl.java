@@ -7,11 +7,11 @@ import com.sbo.entity.enums.PersonRole;
 import com.sbo.exception.EntityNotFoundException;
 import com.sbo.repository.PersonRepository;
 import com.sbo.service.PersonService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +23,7 @@ import java.util.Set;
 import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static com.sbo.entity.enums.EntityStatus.DELETED;
 import static com.sbo.entity.enums.PersonRole.ADMIN;
+import static java.util.Objects.nonNull;
 
 @Slf4j
 @Service
@@ -130,7 +131,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addEmptyPersonWithTelegramIdAndRole(Long telegramId, Set<PersonRole> personRoles) {
+    public Person addEmptyPersonWithTelegramIdAndRole(@NonNull Long telegramId, Set<PersonRole> personRoles) {
         var newPerson = Person.builder()
                 .telegramId(telegramId)
                 .roles(personRoles)
@@ -164,6 +165,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Page<Person> getBlockedPersons(Pageable pageable) {
+        return personRepository.getAllByEntityStatusIn(List.of(DELETED), pageable);
+    }
+
+    @Override
     public List<Person> getActiveAdmins() {
         return personRepository.getAllByEntityStatusInAndRoles(List.of(ACTIVE), (ADMIN));
     }
@@ -174,4 +180,25 @@ public class PersonServiceImpl implements PersonService {
         return person;
     }
 
+    @Override
+    public boolean isPersonInfoFiled(Long telegramId) {
+        Person person = getPersonByTelegramId(telegramId);
+        return isPersonInfoFiled(person);
+    }
+
+    @Override
+    public boolean isPersonInfoFiled(Person person) {
+        return nonNull(person.getFirstName())
+                && nonNull(person.getLastName())
+                && nonNull(person.getPatronymic())
+                && nonNull(person.getBirthDate())
+                && nonNull(person.getTel())
+                && nonNull(person.getMail())
+                && nonNull(person.getHomeAddress());
+    }
+
+    @Override
+    public boolean isPersonExist(Long telegramId) {
+        return personRepository.existsByTelegramId(telegramId);
+    }
 }

@@ -15,6 +15,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Version;
 import java.time.LocalDateTime;
 
+import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static javax.persistence.EnumType.STRING;
 
 /**
@@ -39,7 +40,7 @@ public abstract class BaseEntity {
 
     @Enumerated(STRING)
     @Column(name = "entity_status")
-    private EntityStatus entityStatus;
+    private EntityStatus entityStatus = ACTIVE;
 
     @PrePersist
     private void setCreationDate() {

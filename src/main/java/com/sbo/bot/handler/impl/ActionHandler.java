@@ -2,9 +2,9 @@ package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.bot.state.State;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

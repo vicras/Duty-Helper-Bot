@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import javax.transaction.Transactional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
@@ -19,16 +20,23 @@ import static java.util.stream.Collectors.joining;
  * @author viktar hraskou
  */
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class PersonPagination extends MessagePaginator<Person> {
 
-    private static final int PAGINATION_SIZE = 4;
+    private static final int PAGINATION_SIZE = 3;
     private final PersonService personService;
     private final CurrentPersonProvider personProvider;
 
-    public SendMessage paginateActivePersons(int page){
+    public SendMessage paginateActivePersons(int page) {
         PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("lastName"));
         Page<Person> personPage = personService.getActivePersons(personRequest);
+        return paginate(personPage, personProvider.getCurrentPerson());
+    }
+
+    public SendMessage paginateBlockedPersons(int page) {
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("lastName"));
+        Page<Person> personPage = personService.getBlockedPersons(personRequest);
         return paginate(personPage, personProvider.getCurrentPerson());
     }
 
@@ -40,16 +48,18 @@ public class PersonPagination extends MessagePaginator<Person> {
     }
 
     private void printPersonInfo(Person person, InlineMessageBuilder builder) {
+        personService.initializePersonRoles(person);
         builder.line(personSeparator())
                 .header("%s %s %s", person.getLastName(), person.getFirstName(), person.getPatronymic())
                 .line("Tel: %s", person.getTel())
                 .line("Address: %s", person.getHomeAddress())
                 .line("Email: %s", person.getMail())
+                .line("Roles: ")
                 .line("Birth: %s", person.getBirthDate());
         person.getRoles().forEach(role -> builder.line("- %s", role));
-        builder.line("Link: [%s](tg://user?id=%d)%s", person.getFirstName(), person.getTelegramId())
+        builder.line("Link: [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId())
                 .line()
-                .button(person.getFirstName().charAt(0)+ ". " + person.getLastName(), person.getTelegramId().toString());
+                .button(person.getFirstName().charAt(0) + ". " + person.getLastName(), person.getTelegramId().toString());
     }
 
     private String personSeparator() {

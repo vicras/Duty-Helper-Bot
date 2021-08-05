@@ -46,7 +46,7 @@ public class Person extends BaseEntity {
     @Column(name = "patronymic")
     private String patronymic;
 
-    @Column(name = "telegram_id", nullable = false)
+    @Column(name = "telegram_id", nullable = false, unique = true)
     private Long telegramId;
 
     @PastOrPresent

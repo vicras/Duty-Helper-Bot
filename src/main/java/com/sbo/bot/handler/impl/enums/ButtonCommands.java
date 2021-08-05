@@ -22,5 +22,6 @@ public enum ButtonCommands {
     SELF_DESTRUCTION,
     BLOCKED_PERSONS,
     HOME,
+    PERSON_MANAGEMENT,
     PAGE
 }

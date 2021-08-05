@@ -18,7 +18,9 @@ public abstract class MessagePaginator<T> {
 
         fillBuilderText(builder, data);
 
-        builder.line("In all: %s elements. page %s from %s", data.getTotalElements(), data.getNumber()+1, data.getTotalPages());
+        builder.line("In all: %s elements. page %s from %s", data.getTotalElements(), data.getNumber() + 1, data.getTotalPages());
+
+        builder.row();
 
         if (data.hasPrevious()) {
             builder.button("|<", PAGE + " " + "0");
@@ -27,8 +29,8 @@ public abstract class MessagePaginator<T> {
         builder.button("Back", BACK);
 
         if (!data.isLast()) {
-            builder.button(">|", PAGE + " " + (data.getTotalPages() - 1));
             builder.button("-->", PAGE + " " + data.nextPageable().getPageNumber());
+            builder.button(">|", PAGE + " " + (data.getTotalPages() - 1));
         }
         return builder.build();
     }
