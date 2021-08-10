@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static com.sbo.entity.enums.EntityStatus.DELETED;
@@ -127,6 +130,15 @@ public class PersonServiceImpl implements PersonService {
         person.setLanguage(language);
 
         log.info("Set language={} for user with id={} ", language, telegramId);
+        return personRepository.save(person);
+    }
+
+    @Override
+    public Person updatePersonRoles(Long telegramId, Collection<PersonRole> personRoles) {
+        var person = getPersonByTelegramId(telegramId);
+        person.setRoles(new HashSet<>(personRoles));
+
+        log.info("Set language={} for user with id={} ", personRoles, telegramId);
         return personRepository.save(person);
     }
 

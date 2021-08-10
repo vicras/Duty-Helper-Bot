@@ -29,8 +29,8 @@ public abstract class State {
     protected final PersonService personService;
 
     public void setNextState(State state, Update update) {
-        personService.updatePersonState(personProvider.getCurrentPersonId(), state);
         state.sendRequest(update);
+        personService.updatePersonState(personProvider.getCurrentPersonId(), state);
     }
 
     public void process(Update update, Function<String, State> stateByName) {
@@ -63,7 +63,7 @@ public abstract class State {
 
     private void updateCannotBeProcessed() {
         // TODO think about how to user will know about it
-        log.error("Can't find suitable handler for this command at this moment!!!");
+        log.warn("Can't find suitable handler for this command at this moment!!!");
 //        throw new RuntimeException("This format of message cannot be processed at that time");
     }
 

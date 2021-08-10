@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,8 @@ public interface PersonService {
     Person updatePersonState(Long telegramId, State state);
 
     Person updatePersonLanguage(Long telegramId, Language language);
+
+    Person updatePersonRoles(Long telegramId, Collection<PersonRole> personRoles);
 
     Person addEmptyPersonWithTelegramIdAndRole(Long telegramId, Set<PersonRole> personRoles);
 

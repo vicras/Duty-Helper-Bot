@@ -23,5 +23,7 @@ public enum ButtonCommands {
     BLOCKED_PERSONS,
     HOME,
     PERSON_MANAGEMENT,
-    PAGE
+    PAGE,
+    BLOCK,
+    ROLES
 }

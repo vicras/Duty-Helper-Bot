@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.PAGE;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * @author viktar hraskou
@@ -26,6 +27,7 @@ public class AllPersonState extends State {
 
     private final PersonPagination personPagination;
     private final SwitchHandler controlButtonsHandler = SwitchHandler.of(getClass(), this::isPageChange);
+    private final SwitchHandler personButtonsHandler = SwitchHandler.of(SinglePersonState.class, this::isPersonChosen);
 
     public AllPersonState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
                           PersonService personService, PersonPagination personPagination) {
@@ -37,7 +39,9 @@ public class AllPersonState extends State {
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
                 SwitchHandler.of(ManagementState.class, BACK),
-                controlButtonsHandler);
+                controlButtonsHandler,
+                personButtonsHandler
+        );
     }
 
     @Override
@@ -60,6 +64,11 @@ public class AllPersonState extends State {
     private boolean isPageChange(Update update) {
         return update.hasCallbackQuery()
                 && update.getCallbackQuery().getData().contains(PAGE.name());
+    }
+
+    private boolean isPersonChosen(Update update) {
+        return update.hasCallbackQuery()
+                && isNumeric(update.getCallbackQuery().getData());
     }
 
 

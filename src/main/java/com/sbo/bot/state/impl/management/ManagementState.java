@@ -39,7 +39,7 @@ public class ManagementState extends State {
         return List.of(
                 SwitchHandler.of(AllPersonState.class, ALL_PERSON),
                 SwitchHandler.of(AddPersonState.class, NEW_PERSON),
-                SwitchHandler.of(UnbanPersonState.class, BLOCKED_PERSONS),
+                SwitchHandler.of(UnblockPersonState.class, BLOCKED_PERSONS),
                 SwitchHandler.of(HomeState.class, HOME)
         );
     }

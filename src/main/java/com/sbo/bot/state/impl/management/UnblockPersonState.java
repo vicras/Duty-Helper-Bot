@@ -23,12 +23,12 @@ import static org.apache.commons.lang3.StringUtils.isNumeric;
  * @author viktar hraskou
  */
 @Component
-public class UnbanPersonState extends State {
+public class UnblockPersonState extends State {
     private final PersonPagination personPagination;
     private final SwitchHandler controlButtonsHandler = SwitchHandler.of(getClass(), this::isPageChange);
 
-    public UnbanPersonState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
-                            PersonService personService, PersonPagination personPagination) {
+    public UnblockPersonState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
+                              PersonService personService, PersonPagination personPagination) {
         super(personProvider, publisher, personService);
         this.personPagination = personPagination;
     }
@@ -75,7 +75,7 @@ public class UnbanPersonState extends State {
         Person person = personService.unblockPersonByTelegramId(telegramId);
 
         AnswerCallbackQuery message = AnswerCallbackQuery.builder()
-                .text(String.format("Person [%s](tg://user?id=%d) unblocked successfully", person.getFirstName(), person.getTelegramId()))
+                .text(String.format("Person %s unblocked successfully", person.getFirstName()))
                 .showAlert(true)
                 .callbackQueryId(update.getCallbackQuery().getId())
                 .build();

@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 /**
  * @author Dmitars
  */
@@ -29,14 +31,19 @@ public class RequestOperator {
         return this;
     }
 
-    public RequestOperator addMessage(SendMessage messageBotApiMethod, Update update) {
-        if (isPertinentlyEditPreviousMessage(update)) {
-            var editText = convertToEditText(messageBotApiMethod, update);
+    public RequestOperator addMessage(SendMessage message, Update update) {
+        if (isPertinentlyEditPreviousMessage(update) && isInlineMarkupOrNull(message)) {
+            var editText = convertToEditText(message, update);
             messages.add(editText);
         } else {
-            messages.add(messageBotApiMethod);
+            messages.add(message);
         }
         return this;
+    }
+
+    private boolean isInlineMarkupOrNull(SendMessage message) {
+        return isNull(message.getReplyMarkup())
+                || message.getReplyMarkup() instanceof InlineKeyboardMarkup;
     }
 
     public void sendRequest() {
@@ -60,7 +67,6 @@ public class RequestOperator {
                 .chatId(method.getChatId())
                 .entities(method.getEntities())
                 .parseMode(method.getParseMode())
-                // TODO ebanet?
                 .replyMarkup((InlineKeyboardMarkup) method.getReplyMarkup())
                 .build();
     }

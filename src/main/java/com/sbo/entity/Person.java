@@ -7,8 +7,10 @@ import com.sbo.entity.enums.PersonRole;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.CollectionTable;

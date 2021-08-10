@@ -5,11 +5,15 @@ import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 /**
  * MessageBuilder is used to build instances of {@link SendMessage}
@@ -22,6 +26,7 @@ public final class InlineMessageBuilder {
     @Setter
     private String chatId;
     private List<InlineKeyboardButton> row = null;
+    private ForceReplyKeyboard forceReplyKeyboard = null;
 
     private InlineMessageBuilder() {
     }
@@ -108,6 +113,13 @@ public final class InlineMessageBuilder {
         return button(text, buttonCommand.name());
     }
 
+    public InlineMessageBuilder setForceReply() {
+        forceReplyKeyboard = ForceReplyKeyboard.builder()
+                .forceReply(true)
+                .build();
+        return this;
+    }
+
     /**
      * Builds an instance of {@link SendMessage}
      *
@@ -120,8 +132,9 @@ public final class InlineMessageBuilder {
         sendMessage.setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
-
-        if (!keyboard.isEmpty()) {
+        if(nonNull(forceReplyKeyboard)){
+            sendMessage.setReplyMarkup(forceReplyKeyboard);
+        }else if (!keyboard.isEmpty()) {
             var markup = new InlineKeyboardMarkup();
             markup.setKeyboard(keyboard);
             sendMessage.setReplyMarkup(markup);

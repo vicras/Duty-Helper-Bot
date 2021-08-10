@@ -63,7 +63,7 @@ public class PersonPagination extends MessagePaginator<Person> {
     }
 
     private String personSeparator() {
-        return Stream.generate(() -> "*")
+        return Stream.generate(() -> "-")
                 .limit(30)
                 .collect(joining());
     }
