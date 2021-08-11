@@ -15,12 +15,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
@@ -32,7 +28,8 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class RoleChangingState extends State {
 
-    public RoleChangingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher, PersonService personService) {
+    public RoleChangingState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
+                             PersonService personService) {
         super(personProvider, publisher, personService);
     }
 
@@ -55,16 +52,18 @@ public class RoleChangingState extends State {
 
 
     private SendMessage createInfoMessage(Person personToBlock) {
+        personToBlock = personService.initializePersonRoles(personToBlock);
         InlineMessageBuilder builder = InlineMessageBuilder.builder(personProvider.getCurrentPerson())
-
                 .line("[%s](tg://user?id=%d)",
-                        personToBlock.getFirstName(), personToBlock.getTelegramId());
-// TODO lazy init
-//                .line("Current roles list:");
-//        personToBlock.getRoles().forEach(role -> builder.line("- %s", role));
+                        personToBlock.getFirstName(), personToBlock.getTelegramId())
+                .line("Current roles list:");
+
+        personToBlock.getRoles().forEach(role -> builder.line("- %s", role));
+
         builder.line()
                 .line("Available roles: ");
-        for (int i = 0; i <PersonRole.values().length; i++) {
+
+        for (int i = 0; i < PersonRole.values().length; i++) {
             builder.line("%d. %s", i, PersonRole.values()[i]);
         }
 
@@ -106,7 +105,7 @@ public class RoleChangingState extends State {
         return Long.valueOf(update.getMessage().getReplyToMessage().getEntities().get(0).getUser().getId());
     }
 
-    private SendMessage okMessage(){
+    private SendMessage okMessage() {
         return InlineMessageBuilder.builder(personProvider.getCurrentPerson())
                 .line("Changed successfully✔")
                 .build();

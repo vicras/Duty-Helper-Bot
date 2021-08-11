@@ -7,14 +7,11 @@ import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
-
 
 /**
  * @author viktar hraskou
  */
 @Component
-@Transactional
 @RequiredArgsConstructor
 public class CurrentPersonProvider {
 

@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import javax.transaction.Transactional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
@@ -20,7 +19,6 @@ import static java.util.stream.Collectors.joining;
  * @author viktar hraskou
  */
 @Component
-@Transactional
 @RequiredArgsConstructor
 public class PersonPagination extends MessagePaginator<Person> {
 
@@ -48,7 +46,7 @@ public class PersonPagination extends MessagePaginator<Person> {
     }
 
     private void printPersonInfo(Person person, InlineMessageBuilder builder) {
-        personService.initializePersonRoles(person);
+        person = personService.initializePersonRoles(person);
         builder.line(personSeparator())
                 .header("%s %s %s", person.getLastName(), person.getFirstName(), person.getPatronymic())
                 .line("Tel: %s", person.getTel())

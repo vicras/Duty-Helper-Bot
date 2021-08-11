@@ -15,8 +15,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.function.Predicate.not;
 
@@ -36,7 +34,7 @@ public class BlockPersonState extends State {
         return List.of(
                 SwitchHandler.of(AllPersonState.class, not(this::isWordBlock)),
                 SwitchHandler.of(AllPersonState.class, this::isWordBlock)
-                .setAction(this::blockUser)
+                        .setAction(this::blockUser)
         );
     }
 
@@ -78,7 +76,7 @@ public class BlockPersonState extends State {
         return Long.valueOf(update.getMessage().getReplyToMessage().getEntities().get(0).getUser().getId());
     }
 
-    private SendMessage okMessage(){
+    private SendMessage okMessage() {
         return InlineMessageBuilder.builder(personProvider.getCurrentPerson())
                 .line("Blocked successfully✔")
                 .build();

@@ -49,16 +49,17 @@ public class SinglePersonState extends State {
     }
 
     public SendMessage printPersonInfo(Person person) {
+        person = personService.initializePersonRoles(person);
+
         InlineMessageBuilder builder = InlineMessageBuilder.builder(personProvider.getCurrentPerson())
                 .header("%s %s %s", person.getLastName(), person.getFirstName(), person.getPatronymic())
                 .line("Tel: %s", person.getTel())
                 .line("Address: %s", person.getHomeAddress())
                 .line("Email: %s", person.getMail())
-                .line("Birth: %s", person.getBirthDate());
-//        TODO remove or win a transaction
-//                .line("Roles: ")
-//        person.getRoles().forEach(role -> builder.line("- %s", role));
-       return builder.line("Link: [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId())
+                .line("Birth: %s", person.getBirthDate())
+                .line("Roles: ");
+        person.getRoles().forEach(role -> builder.line("- %s", role));
+        return builder.line("Link: [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId())
                 .line("You can block person or change his system role")
                 .row()
                 .button("Block", BLOCK + " " + person.getTelegramId())

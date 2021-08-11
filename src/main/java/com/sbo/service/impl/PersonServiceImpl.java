@@ -14,14 +14,15 @@ import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 import static com.sbo.entity.enums.EntityStatus.DELETED;
@@ -30,10 +31,11 @@ import static java.util.Objects.nonNull;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
+    private final TransactionTemplate transactionTemplate;
+    private final EntityManagerFactory entityManagerFactory;
     private final PersonRepository personRepository;
 
     @Override
@@ -188,7 +190,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person initializePersonRoles(Person person) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        person = entityManager.merge(person);
         Hibernate.initialize(person.getRoles());
+        entityManager.close();
         return person;
     }
 

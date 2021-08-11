@@ -5,7 +5,6 @@ import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -132,9 +131,9 @@ public final class InlineMessageBuilder {
         sendMessage.setText(sb.toString().replace("_", " "));
 
         addRowToKeyboard();
-        if(nonNull(forceReplyKeyboard)){
+        if (nonNull(forceReplyKeyboard)) {
             sendMessage.setReplyMarkup(forceReplyKeyboard);
-        }else if (!keyboard.isEmpty()) {
+        } else if (!keyboard.isEmpty()) {
             var markup = new InlineKeyboardMarkup();
             markup.setKeyboard(keyboard);
             sendMessage.setReplyMarkup(markup);

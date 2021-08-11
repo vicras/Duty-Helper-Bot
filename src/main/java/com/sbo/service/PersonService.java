@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+//@Transactional
 public interface PersonService {
     Person getPersonByTelegramId(Long telegramId);
 
@@ -49,6 +50,7 @@ public interface PersonService {
 
     List<Person> getActiveAdmins();
 
+    //    @Transactional(readOnly = true)
     Person initializePersonRoles(Person person);
 
     boolean isPersonInfoFiled(Long telegramId);
