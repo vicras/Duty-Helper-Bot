@@ -40,6 +40,7 @@ public class ManagementState extends State {
                 SwitchHandler.of(AllPersonState.class, ALL_PERSON),
                 SwitchHandler.of(AddPersonState.class, NEW_PERSON),
                 SwitchHandler.of(UnblockPersonState.class, BLOCKED_PERSONS),
+                SwitchHandler.of(SelfDestructionState.class, SELF_DESTRUCTION),
                 SwitchHandler.of(HomeState.class, HOME)
         );
     }

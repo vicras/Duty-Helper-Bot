@@ -5,7 +5,7 @@ import com.sbo.bot.events.ApiMethodsCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
 import com.sbo.entity.Person;
-import com.sbo.exception.EntityNotFoundException;
+import com.sbo.exception.AuthenticationException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static com.sbo.entity.enums.EntityStatus.ACTIVE;
 
 /**
  * Main class used to handle incoming Updates.
@@ -35,12 +37,24 @@ public class UpdateProcessor {
         var userId = extractUserId(update);
 
         try {
-            personProvider.setPersonById(userId);
+            recognisePerson(userId);
             orchestrator.operate(update);
-        } catch (EntityNotFoundException ex) {
+        } catch (AuthenticationException ex) {
             sendNotFoundMessage(userId);
         }
 
+    }
+
+    private void recognisePerson(long userId) {
+        Person person;
+        try {
+            person = personService.getPersonByTelegramId(userId);
+        } catch (Exception e) {
+            throw new AuthenticationException("User with id" + userId + "not a system user", e);
+        }
+        if (!ACTIVE.equals(person.getEntityStatus()))
+            throw new AuthenticationException("User deleted");
+        personProvider.setPerson(person);
     }
 
     private long extractUserId(Update update) {

@@ -53,7 +53,7 @@ public class SinglePersonState extends State {
 
         InlineMessageBuilder builder = InlineMessageBuilder.builder(personProvider.getCurrentPerson())
                 .header("%s %s %s", person.getLastName(), person.getFirstName(), person.getPatronymic())
-                .line("Tel: %s", person.getTel())
+                .line("Tel: +%s", person.getTel())
                 .line("Address: %s", person.getHomeAddress())
                 .line("Email: %s", person.getMail())
                 .line("Birth: %s", person.getBirthDate())
@@ -64,6 +64,7 @@ public class SinglePersonState extends State {
                 .row()
                 .button("Block", BLOCK + " " + person.getTelegramId())
                 .button("Set Roles", ROLES + " " + person.getTelegramId())
+                .row()
                 .button("Back", BACK)
                 .build();
     }

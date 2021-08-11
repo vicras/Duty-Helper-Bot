@@ -11,6 +11,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -46,6 +47,16 @@ public class DutyHelperBot extends TelegramLongPollingBot {
             log.info("Executed {}", message);
         } catch (TelegramApiException e) {
             log.error("Exception while sending message {} \nException: {}", message, e.toString());
+        }
+    }
+
+    @EventListener
+    public void executeSafe(SendPhoto event) {
+        try {
+            execute(event);
+            log.info("Executed {}", event);
+        } catch (TelegramApiException e) {
+            log.error("Exception while sending message {} \nException: {}", event, e.toString());
         }
     }
 

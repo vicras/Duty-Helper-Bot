@@ -27,14 +27,8 @@ public class CurrentPersonProvider {
         return currentPerson.get().getTelegramId();
     }
 
-    public void setPersonById(Long telegramId) throws EntityNotFoundException, UserNameIsNullException {
-        Person person = personService.getPersonByTelegramId(telegramId);
-        personService.initializePersonRoles(person);
-        currentPerson.set(person);
-    }
-
     public void setPerson(Person person) {
-        personService.initializePersonRoles(person);
+        person = personService.initializePersonRoles(person);
         currentPerson.set(person);
     }
 }

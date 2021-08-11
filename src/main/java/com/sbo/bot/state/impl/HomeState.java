@@ -7,6 +7,7 @@ import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.management.ManagementState;
 import com.sbo.bot.state.impl.settings.SettingState;
+import com.sbo.bot.state.impl.timetable.TimetableState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static com.sbo.bot.handler.impl.enums.ButtonCommands.TIMETABLE;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.PERSON_MANAGEMENT;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.SETTINGS;
 
@@ -32,7 +34,8 @@ public class HomeState extends State {
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
                 SwitchHandler.of(SettingState.class, SETTINGS),
-                SwitchHandler.of(ManagementState.class, PERSON_MANAGEMENT)
+                SwitchHandler.of(ManagementState.class, PERSON_MANAGEMENT),
+                SwitchHandler.of(TimetableState.class, TIMETABLE)
         );
     }
 
@@ -50,6 +53,7 @@ public class HomeState extends State {
                 .row()
                 .button("Settings⚙🛠", SETTINGS)
                 .button("Person management📈", PERSON_MANAGEMENT)
+                .button("Timetable🗓", TIMETABLE)
                 .build();
     }
 }
