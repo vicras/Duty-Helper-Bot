@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -32,6 +33,7 @@ import static java.util.stream.Collectors.joining;
  * @author viktar hraskou
  */
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class DutyPagination extends MessagePaginator<Duty> {
 // TODO Warning, don't use static import for CalendarProvider.getIsChosenDay() it will brake your p

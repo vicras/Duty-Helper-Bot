@@ -1,2 +1,0 @@
-insert into public.duties (id, created_at, entity_status, updated_at, duty_from, duty_to, is_people_could_change, max_people_on_duty, description)
-values  (1, '2021-08-03 17:52:20.386375', 'ACTIVE', '2021-08-05 16:57:27.585185', '2021-08-18 17:52:20.386000', '2021-08-18 20:18:54.000000', true, 2, '');
