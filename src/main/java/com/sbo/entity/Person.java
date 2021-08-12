@@ -91,4 +91,8 @@ public class Person extends BaseEntity {
         this.homeAddress = homeAddress;
         this.roles = roles;
     }
+
+    public String telegramLink(){
+        return String.format("[%s. %s](tg://user?id=%d)", firstName.charAt(0), lastName, telegramId);
+    }
 }

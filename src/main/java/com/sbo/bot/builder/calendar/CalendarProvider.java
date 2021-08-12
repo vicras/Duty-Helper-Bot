@@ -50,7 +50,7 @@ public class CalendarProvider {
     private static final Function<LocalDate, String> YEAR_PAGE_SWITCHER = (day) -> String.format(YEAR_PAGE + ":%s", day);
     private static final Function<LocalDate, String> TO_YEAR_VIEW = (day) -> String.format(TO_MONTH + ":%s", day);
     private static final Function<LocalDate, String> CHOSEN_MONTH = (day) -> String.format(CHOSEN_MONTH_CONST + ":%s", day);
-    private static final Function<String, String> CHOSEN_DAY = (text) -> String.format(CHOSEN_DAY_CONST + ":%s", text);
+    public static final Function<String, String> CHOSEN_DAY = (text) -> String.format(CHOSEN_DAY_CONST + ":%s", text);
 
     @Setter
     private Function<LocalDate, String> mapToText = (date) -> "" + date.getDayOfMonth();
@@ -62,27 +62,40 @@ public class CalendarProvider {
     private Supplier<String> dayText = () -> "Choose date";
 
     @Getter
-    private final Function<String, LocalDate> commandButtonParser = (command) -> LocalDate.parse(command.split(":")[1]);
+    private final static Function<String, LocalDate> commandButtonParser = (command) -> LocalDate.parse(command.split(":")[1]);
 
     @Getter
-    private final Predicate<String> isMonthSwitch = (command) -> command.matches(MONTH_PAGE + SEPARATOR + ISO_REGEX);
+    private final static Predicate<String> isMonthSwitch = (command) -> command.matches(MONTH_PAGE + SEPARATOR + ISO_REGEX);
     @Getter
-    private final Predicate<String> isYearSwitch = (command) -> command.matches(YEAR_PAGE + SEPARATOR + ISO_REGEX);
+    private final static Predicate<String> isYearSwitch = (command) -> command.matches(YEAR_PAGE + SEPARATOR + ISO_REGEX);
     @Getter
-    private final Predicate<String> isToYear = (command) -> command.matches(TO_MONTH + SEPARATOR + ISO_REGEX);
+    private final static Predicate<String> isToYear = (command) -> command.matches(TO_MONTH + SEPARATOR + ISO_REGEX);
     @Getter
-    private final Predicate<String> isChosenMonth = (command) -> command.matches(CHOSEN_MONTH_CONST + SEPARATOR + ISO_REGEX);
+    private final static Predicate<String> isChosenMonth = (command) -> command.matches(CHOSEN_MONTH_CONST + SEPARATOR + ISO_REGEX);
     @Getter
-    private final Predicate<String> isChosenDay = (command) -> command.matches(CHOSEN_DAY + SEPARATOR + "*");
+    private final static Predicate<String> isChosenDay = (command) -> command.matches(CHOSEN_DAY + SEPARATOR + "*");
 
     @Getter
-    private final Predicate<String> isDrawMonthView = isMonthSwitch.or(isChosenMonth);
+    private final static Predicate<String> isDrawMonthView = isMonthSwitch.or(isChosenMonth);
     @Getter
-    private final Predicate<String> isDrawYearView = isYearSwitch.or(isToYear);
+    private final static Predicate<String> isDrawYearView = isYearSwitch.or(isToYear);
 
     @Getter
     private final Predicate<String> isCommand = isDrawYearView.or(isDrawMonthView);
 
+
+    public SendMessage handle(CallbackQuery callbackQuery, Person person) {
+        String text = callbackQuery.getData();
+
+        LocalDate day = isCommand.test(text)
+                ? commandButtonParser.apply(text)
+                : LocalDate.now();
+
+        return isDrawYearView.test(text)
+                ? generateYearView(day, person)
+                : generateMonthView(day, person);
+
+    }
 
     public SendMessage generateMonthView(LocalDate localDate, Person person) {
         InlineMessageBuilder builder = InlineMessageBuilder.builder(person)
@@ -120,7 +133,7 @@ public class CalendarProvider {
         if (date.getDayOfWeek().equals(MONDAY)) {
             builder.row();
         }
-        builder.button(mapToText.apply(date), CHOSEN_DAY.apply(mapToCallback.apply(date)));
+            builder.button(mapToText.apply(date), CHOSEN_DAY.apply(mapToCallback.apply(date)));
     }
 
     private void fillWithMonthCommandButtons(InlineMessageBuilder builder, LocalDate day, Locale locale) {
@@ -132,6 +145,9 @@ public class CalendarProvider {
                 .button("HOME", HOME);
     }
 
+    /**
+     * View consist all month, also you can choose next or previous year.
+     */
     public SendMessage generateYearView(LocalDate day, Person person) {
         Locale locale = person.getLanguage().getLocale();
         InlineMessageBuilder builder = InlineMessageBuilder.builder(person)
@@ -157,19 +173,6 @@ public class CalendarProvider {
                 .button("⏪", YEAR_PAGE_SWITCHER.apply(day.minusYears(1)))
                 .button(String.valueOf(day.getYear()), "~")
                 .button("⏩", YEAR_PAGE_SWITCHER.apply(day.plusYears(1)));
-    }
-
-    public SendMessage handle(CallbackQuery callbackQuery, Person person) {
-        String text = callbackQuery.getData();
-
-        LocalDate day = isCommand.test(text)
-                ? commandButtonParser.apply(text)
-                : LocalDate.now();
-
-        return isDrawYearView.test(text)
-                ? generateYearView(day, person)
-                : generateMonthView(day, person);
-
     }
 
 }

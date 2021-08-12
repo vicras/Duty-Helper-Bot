@@ -26,5 +26,6 @@ public enum ButtonCommands {
     PAGE,
     BLOCK,
     ROLES,
-    TIMETABLE
+    TIMETABLE,
+    DUTY
 }

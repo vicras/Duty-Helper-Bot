@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.util.stream.Stream;
 
@@ -26,13 +27,19 @@ public class PersonPagination extends MessagePaginator<Person> {
     private final PersonService personService;
     private final CurrentPersonProvider personProvider;
 
-    public SendMessage paginateActivePersons(int page) {
+    public SendMessage paginateActivePersons(CallbackQuery callbackQuery) {
+        String text = callbackQuery.getData();
+        int page = getIsPageChangeRequest().test(text) ? getExtractPage().apply(text) : 0;
+
         PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("lastName"));
         Page<Person> personPage = personService.getActivePersons(personRequest);
         return paginate(personPage, personProvider.getCurrentPerson());
     }
 
-    public SendMessage paginateBlockedPersons(int page) {
+    public SendMessage paginateBlockedPersons(CallbackQuery callbackQuery) {
+        String text = callbackQuery.getData();
+        int page = getIsPageChangeRequest().test(text) ? getExtractPage().apply(text) : 0;
+
         PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("lastName"));
         Page<Person> personPage = personService.getBlockedPersons(personRequest);
         return paginate(personPage, personProvider.getCurrentPerson());

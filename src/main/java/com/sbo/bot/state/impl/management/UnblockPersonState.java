@@ -16,7 +16,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
-import static com.sbo.bot.handler.impl.enums.ButtonCommands.PAGE;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
@@ -44,24 +43,15 @@ public class UnblockPersonState extends State {
 
     @Override
     protected RequestOperator getRequestOperator(Update update) {
-        int pageToPaginate = 0;
-        if (isPageChange(update)) {
-            pageToPaginate = getPageToPaginate(update);
-        }
-
-        var mess = personPagination.paginateBlockedPersons(pageToPaginate);
+        var mess = personPagination.paginateBlockedPersons(update.getCallbackQuery());
 
         return new RequestOperator(publisher)
                 .addMessage(mess, update);
     }
 
-    private int getPageToPaginate(Update update) {
-        return Integer.parseInt(update.getCallbackQuery().getData().split(" ")[1]);
-    }
-
     private boolean isPageChange(Update update) {
         return update.hasCallbackQuery()
-                && update.getCallbackQuery().getData().contains(PAGE.name());
+                && personPagination.getIsPageChangeRequest().test(update.getCallbackQuery().getData());
     }
 
     private boolean isExistingId(Update update) {

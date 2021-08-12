@@ -10,6 +10,8 @@ import com.sbo.service.DutyService;
 import com.sbo.service.PeopleOnDutyService;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,11 +39,14 @@ public class DutyServiceImpl implements DutyService {
     }
 
     @Override
+    @Deprecated
     public List<Duty> getDutiesOnDay(LocalDate localDate) {
-        return dutyRepository.findAll().stream()
-                .filter(duty -> duty.getDutyFrom().getYear() == localDate.getYear()
-                        && duty.getDutyFrom().getDayOfYear() == localDate.getDayOfYear())
-                .collect(Collectors.toList());
+        return dutyRepository.findAllByDutyFrom(localDate);
+    }
+
+    @Override
+    public Page<Duty> getDutiesPageOnADay(LocalDate localDate, Pageable pageable) {
+        return dutyRepository.findAllByDutyFrom(localDate, pageable);
     }
 
     public List<Person> getPartnersOfCurrentPersonOn(Duty duty) {

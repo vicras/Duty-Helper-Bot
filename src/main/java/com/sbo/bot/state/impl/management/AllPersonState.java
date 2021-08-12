@@ -46,24 +46,15 @@ public class AllPersonState extends State {
 
     @Override
     protected RequestOperator getRequestOperator(Update update) {
-        int pageToPaginate = 0;
-        if (isPageChange(update)) {
-            pageToPaginate = getPageToPaginate(update);
-        }
-
-        var mess = personPagination.paginateActivePersons(pageToPaginate);
+        var mess = personPagination.paginateActivePersons(update.getCallbackQuery());
 
         return new RequestOperator(publisher)
                 .addMessage(mess, update);
     }
 
-    private int getPageToPaginate(Update update) {
-        return Integer.parseInt(update.getCallbackQuery().getData().split(" ")[1]);
-    }
-
     private boolean isPageChange(Update update) {
         return update.hasCallbackQuery()
-                && update.getCallbackQuery().getData().contains(PAGE.name());
+                && personPagination.getIsPageChangeRequest().test(update.getCallbackQuery().getData());
     }
 
     private boolean isPersonChosen(Update update) {

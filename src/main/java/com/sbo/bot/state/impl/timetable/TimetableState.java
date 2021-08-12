@@ -9,6 +9,7 @@ import com.sbo.bot.state.impl.HomeState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.sbo.bot.builder.calendar.CalendarProvider.getIsChosenDay;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.HOME;
 
 /**
@@ -32,13 +34,16 @@ public class TimetableState extends State {
                           PersonService personService, CalendarProvider calendarProvider) {
         super(personProvider, publisher, personService);
         this.calendarProvider = calendarProvider;
+//        TODO customize number buttons
+//        calendarProvider.setMapToText(this::buttonTextFunction);
     }
 
     @Override
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
                 SwitchHandler.of(HomeState.class, HOME),
-                SwitchHandler.of(getClass(), this::isCalendarCommand)
+                SwitchHandler.of(getClass(), this::isCalendarCommand),
+                SwitchHandler.of(DayState.class, this::isDayChosenCommand)
         );
     }
 
@@ -54,5 +59,14 @@ public class TimetableState extends State {
         return update.hasCallbackQuery()
                 && calendarProvider.getIsCommand().test(update.getCallbackQuery().getData());
 
+    }
+
+    private boolean isDayChosenCommand(Update update){
+        return update.hasCallbackQuery()
+                && getIsChosenDay().test(update.getCallbackQuery().getData());
+    }
+
+    private String buttonTextFunction(LocalDate day){
+        throw new NotYetImplementedException();
     }
 }

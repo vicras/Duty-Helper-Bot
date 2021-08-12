@@ -43,6 +43,9 @@ public class Duty extends BaseEntity {
     @Column(name = "is_people_could_change", nullable = false)
     private Boolean isPeopleCouldChange = true;
 
+    @Column(name = "description")
+    private String description;
+
     @ElementCollection
     @Enumerated(STRING)
     @CollectionTable(name = "duty_type")
