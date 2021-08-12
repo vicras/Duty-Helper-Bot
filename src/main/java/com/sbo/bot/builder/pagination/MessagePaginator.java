@@ -27,7 +27,7 @@ public abstract class MessagePaginator<T> {
 
     @Setter
     @Getter
-    private Predicate<String> isPageChangeRequest = (text)->text.matches(PAGE + SEPARATOR + "*");
+    private Predicate<String> isPageChangeRequest = (text)->text.matches(PAGE + SEPARATOR + ".*");
 
     @Setter
     @Getter

@@ -4,17 +4,21 @@ spring:
     username: ${DATABASE_USERNAME:postgres}
     password: ${DATABASE_PASSWORD:root}
     driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+  jpa:
+#    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
 
-#  jpa:
-#    show-sql: false
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        format_sql: true
 
 logging:
   level:
     root: info
-#    org.hibernate.type.descriptor.sql.BasicBinder: debug
-#    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: info
+    org.hibernate.SQL: info
+
+

@@ -75,7 +75,7 @@ public class DutyPagination extends MessagePaginator<Duty> {
 
     @Override
     protected void fillBuilderText(InlineMessageBuilder builder, Page<Duty> data) {
-        builder.header("Persons info")
+        builder.header("Duty info")
                 .row();
         data.forEach(duty -> printDutyInfo(duty, builder));
     }

@@ -73,7 +73,7 @@ public class CalendarProvider {
     @Getter
     private final static Predicate<String> isChosenMonth = (command) -> command.matches(CHOSEN_MONTH_CONST + SEPARATOR + ISO_REGEX);
     @Getter
-    private final static Predicate<String> isChosenDay = (command) -> command.matches(CHOSEN_DAY + SEPARATOR + "*");
+    private final static Predicate<String> isChosenDay = (command) -> command.matches(CHOSEN_DAY_CONST + SEPARATOR + ".*");
 
     @Getter
     private final static Predicate<String> isDrawMonthView = isMonthSwitch.or(isChosenMonth);

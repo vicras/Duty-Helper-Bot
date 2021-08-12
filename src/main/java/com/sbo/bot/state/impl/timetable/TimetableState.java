@@ -18,7 +18,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.sbo.bot.builder.calendar.CalendarProvider.getIsChosenDay;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.HOME;
 
 /**
@@ -63,7 +62,7 @@ public class TimetableState extends State {
 
     private boolean isDayChosenCommand(Update update){
         return update.hasCallbackQuery()
-                && getIsChosenDay().test(update.getCallbackQuery().getData());
+                && CalendarProvider.getIsChosenDay().test(update.getCallbackQuery().getData());
     }
 
     private String buttonTextFunction(LocalDate day){
