@@ -25,7 +25,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.sbo.bot.builder.calendar.CalendarProvider.CHOSEN_DAY;
-import static com.sbo.bot.builder.calendar.CalendarProvider.getIsChosenDay;
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 import static java.util.stream.Collectors.joining;
 
@@ -35,12 +34,12 @@ import static java.util.stream.Collectors.joining;
 @Component
 @RequiredArgsConstructor
 public class DutyPagination extends MessagePaginator<Duty> {
-
+// TODO Warning, don't use static import for CalendarProvider.getIsChosenDay() it will brake your p
     private static final int PAGINATION_SIZE = 1;
     private static final String DUTY_PAGE = "DUTY_PAGE";
     private static final String SEPARATOR = ":";
 
-    public static final Predicate<String> isDutyPageChosen = (text) -> getIsChosenDay()
+    public static final Predicate<String> isDutyPageChosen = (text) -> CalendarProvider.getIsChosenDay()
             .and((t) -> t.matches(".*:.*:\\d+"))
             .test(text);
     private static final Function<Duty, String> callbackSetter = duty -> DUTY_PAGE + SEPARATOR + duty.getId();
@@ -59,7 +58,7 @@ public class DutyPagination extends MessagePaginator<Duty> {
     public SendMessage handle(CallbackQuery query) {
         String text = query.getData();
 
-        if (!getIsChosenDay().test(text)) {
+        if (!CalendarProvider.getIsChosenDay().test(text)) {
             throw new RuntimeException(String.format("expected command %s%s[day]%s[page], found %s", DUTY_PAGE, SEPARATOR, SEPARATOR, text));
         }
 
