@@ -4,6 +4,7 @@ import com.sbo.common.utils.StreamUtil;
 import com.sbo.entity.Duty;
 import com.sbo.entity.PeopleOnDuty;
 import com.sbo.entity.Person;
+import com.sbo.exception.EntityNotFoundException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.repository.DutyRepository;
 import com.sbo.service.DutyService;
@@ -47,6 +48,12 @@ public class DutyServiceImpl implements DutyService {
     @Override
     public Page<Duty> getDutiesPageOnADay(LocalDate localDate, Pageable pageable) {
         return dutyRepository.findAllByDutyFrom(localDate, pageable);
+    }
+
+    @Override
+    public Duty getDutyById(Long dutyId) {
+        return dutyRepository.findById(dutyId)
+                .orElseThrow(() -> new EntityNotFoundException(Duty.class, dutyId));
     }
 
     public List<Person> getPartnersOfCurrentPersonOn(Duty duty) {

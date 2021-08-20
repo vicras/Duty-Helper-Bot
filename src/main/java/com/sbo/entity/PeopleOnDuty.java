@@ -59,6 +59,7 @@ public class PeopleOnDuty extends BaseEntity {
         this.isPeopleCouldChange = isPeopleCouldChange;
     }
 
+    // TODO what a fucking shit?
     public LocalDateTimeInterval getWorkInterval() {
         return new LocalDateTimeInterval(onDutyFrom, onDutyFrom);
     }

@@ -41,9 +41,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person getPersonByTelegramId(Long telegramId) {
         return personRepository.findPersonByTelegramId(telegramId)
-                .orElseThrow(() -> {
-                    throw new EntityNotFoundException(Person.class, telegramId);
-                });
+                .orElseThrow(() -> new EntityNotFoundException(Person.class, telegramId));
     }
 
     @Override

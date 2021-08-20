@@ -33,8 +33,8 @@ public class DayState extends State {
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
                 SwitchHandler.of(TimetableState.class, BACK),
-                SwitchHandler.of(getClass(), this::isPaginationCommand)
-//                TODO detail command
+                SwitchHandler.of(getClass(), this::isPaginationCommand),
+                SwitchHandler.of(DutyState.class, this::isDutyChosen)
         );
     }
 
@@ -49,6 +49,11 @@ public class DayState extends State {
     private boolean isPaginationCommand(Update update) {
         return update.hasCallbackQuery()
                 && CalendarProvider.getIsChosenDay().test(update.getCallbackQuery().getData());
+    }
+
+    private boolean isDutyChosen(Update update) {
+        return update.hasCallbackQuery()
+                && DutyPagination.isDutyChosen.test(update.getCallbackQuery().getData());
     }
 
 }

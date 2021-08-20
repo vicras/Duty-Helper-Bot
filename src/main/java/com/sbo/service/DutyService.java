@@ -14,4 +14,6 @@ public interface DutyService {
     List<Duty> getDutiesOnDay(LocalDate localDate);
 
     Page<Duty> getDutiesPageOnADay(LocalDate localDate, Pageable pageable);
+
+    Duty getDutyById(Long dutyId);
 }

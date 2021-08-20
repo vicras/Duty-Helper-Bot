@@ -93,6 +93,10 @@ public class Person extends BaseEntity {
     }
 
     public String telegramLink(){
-        return String.format("[%s. %s](tg://user?id=%d)", firstName.charAt(0), lastName, telegramId);
+        return String.format("[%s](tg://user?id=%d)", shortFirstLastName(), telegramId);
+    }
+
+    public String shortFirstLastName(){
+        return String.format("%s. %s", firstName.charAt(0), lastName);
     }
 }
