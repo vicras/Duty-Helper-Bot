@@ -1,7 +1,7 @@
 package com.sbo.bot.builder.pagination;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 import java.util.stream.Stream;
 
+import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -28,8 +29,11 @@ public class PersonPagination extends MessagePaginator<Person> {
     private final CurrentPersonProvider personProvider;
 
     public SendMessage paginateActivePersons(CallbackQuery callbackQuery) {
-        String text = callbackQuery.getData();
-        int page = getIsPageChangeRequest().test(text) ? getExtractPage().apply(text) : 0;
+        int page = 0;
+        if (nonNull(callbackQuery)) {
+            String text = callbackQuery.getData();
+            page = getIsPageChangeRequest().test(text) ? getExtractPage().apply(text) : 0;
+        }
 
         PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("lastName"));
         Page<Person> personPage = personService.getActivePersons(personRequest);

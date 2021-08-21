@@ -1,6 +1,6 @@
 package com.sbo.retrofit;
 
-import com.sbo.entity.PeopleOnDuty;
+import com.sbo.domain.postgres.entity.PeopleOnDuty;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -17,9 +17,9 @@ public class PostModel {
         this.rowHeight = rowHeight;
         this.records = records.stream()
                 .map(
-                        e -> new People(e.getPerson().getId().toString(), e.getOnDutyFrom()
+                        e -> new People(e.getPerson().getId().toString(), e.getFromTime()
                                 .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z",
-                                e.getOnDutyTo()
+                                e.getToTime()
                                         .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "Z"))
                 .collect(Collectors.toList());
 

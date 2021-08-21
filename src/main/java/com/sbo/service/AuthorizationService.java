@@ -1,6 +1,6 @@
 package com.sbo.service;
 
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 
 /**
  * @author viktar hraskou

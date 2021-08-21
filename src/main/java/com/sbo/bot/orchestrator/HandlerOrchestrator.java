@@ -5,6 +5,7 @@ import com.sbo.provider.CurrentPersonProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.function.Supplier;
 
 @Component
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class HandlerOrchestrator {
     private final CurrentPersonProvider personProvider;

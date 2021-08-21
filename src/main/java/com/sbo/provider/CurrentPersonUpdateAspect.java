@@ -1,6 +1,6 @@
 package com.sbo.provider;
 
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

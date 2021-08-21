@@ -15,7 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
-import static com.sbo.bot.handler.impl.enums.ButtonCommands.PAGE;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**

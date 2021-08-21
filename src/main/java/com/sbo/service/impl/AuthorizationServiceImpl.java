@@ -1,7 +1,7 @@
 package com.sbo.service.impl;
 
 import com.sbo.bot.annotation.BotCommand;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.service.AuthorizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.sbo.entity.enums.PersonRole.UNAUTHORIZED;
+import static com.sbo.domain.postgres.entity.enums.PersonRole.UNAUTHORIZED;
 
 /**
  * Checks if user is authorized to use the desired command

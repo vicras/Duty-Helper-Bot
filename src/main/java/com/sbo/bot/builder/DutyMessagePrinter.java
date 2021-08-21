@@ -1,14 +1,11 @@
 package com.sbo.bot.builder;
 
-import com.sbo.entity.Duty;
-import com.sbo.entity.PeopleOnDuty;
+import com.sbo.domain.postgres.entity.Duty;
+import com.sbo.domain.postgres.entity.PeopleOnDuty;
 import com.sbo.provider.CurrentPersonProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionSynchronizationUtils;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDate;
@@ -48,27 +45,25 @@ public class DutyMessagePrinter {
     }
 
     public String getDutyType(Duty duty) {
-        return "FIX LAZY";
         // TODO ebanet lazy
-//        return transactionTemplate.execute((status)->
-//             duty.getDutyTypes().stream()
-//                    .map(Objects::toString)
-//                    .collect(joining("/"))
-//        );
-//        TransactionSynchronizationManager.isSynchronizationActive();
+        return transactionTemplate.execute((status) ->
+                duty.getDutyTypes().stream()
+                        .map(Objects::toString)
+                        .collect(joining("/"))
+        );
     }
 
     private void fillPersons(InlineMessageBuilder builder, Duty duty) {
-        // TODO ebanet lazy
-//        var peoples = duty.getPeopleOnDuties();
-//        peoples.forEach(peopleOnDuty -> builder.line(formatPerson(peopleOnDuty)));
+//         TODO ebanet lazy
+        var peoples = duty.getPeopleOnDuties();
+        peoples.forEach(peopleOnDuty -> builder.line(personWithTime(peopleOnDuty)));
     }
 
-    private String formatPerson(PeopleOnDuty peopleOnDuty) {
+    private String personWithTime(PeopleOnDuty peopleOnDuty) {
         return String.format("- %s time: %s - %s",
                 peopleOnDuty.getPerson().telegramLink(),
-                peopleOnDuty.getOnDutyFrom().format(isoTime),
-                peopleOnDuty.getOnDutyTo().format(isoTime));
+                peopleOnDuty.getFromTime().format(isoTime),
+                peopleOnDuty.getToTime().format(isoTime));
     }
 
     private String getDutyDescription(Duty duty) {

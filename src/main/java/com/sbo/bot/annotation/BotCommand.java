@@ -1,12 +1,12 @@
 package com.sbo.bot.annotation;
 
 import com.sbo.bot.handler.AbstractBaseHandler;
-import com.sbo.entity.enums.PersonRole;
+import com.sbo.domain.postgres.entity.enums.PersonRole;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static com.sbo.entity.enums.PersonRole.UNAUTHORIZED;
+import static com.sbo.domain.postgres.entity.enums.PersonRole.UNAUTHORIZED;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

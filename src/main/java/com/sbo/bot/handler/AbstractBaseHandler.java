@@ -2,7 +2,7 @@ package com.sbo.bot.handler;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.ApiMethodsCreationEvent;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.AuthorizationService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import static java.util.Objects.nonNull;
 
 @Slf4j
 @Component
@@ -47,9 +49,22 @@ public abstract class AbstractBaseHandler implements BaseHandler {
 
     protected String extractStringText(Update update) {
         if (update.hasCallbackQuery())
-            return update.getCallbackQuery().getData();
+            return extractCallbackData(update);
         else
-            return update.getMessage().getText();
+            return extractMessageText(update);
+    }
+
+    protected String extractMessageText(Update update) {
+        return update.getMessage().getText();
+    }
+
+    protected String extractCallbackData(Update update) {
+        return update.getCallbackQuery().getData();
+    }
+
+    protected boolean isCallbackDataExist(Update update) {
+        return nonNull(update.getCallbackQuery())
+                && nonNull(update.getCallbackQuery().getData());
     }
 
     protected final void publish(SendMessage message) {

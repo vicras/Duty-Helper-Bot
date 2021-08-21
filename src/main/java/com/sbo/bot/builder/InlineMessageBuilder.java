@@ -2,7 +2,7 @@ package com.sbo.bot.builder;
 
 
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import lombok.Setter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;

@@ -1,9 +1,9 @@
 package com.sbo.service;
 
 import com.sbo.bot.state.State;
-import com.sbo.entity.Person;
-import com.sbo.entity.enums.Language;
-import com.sbo.entity.enums.PersonRole;
+import com.sbo.domain.postgres.entity.Person;
+import com.sbo.domain.postgres.entity.enums.Language;
+import com.sbo.domain.postgres.entity.enums.PersonRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

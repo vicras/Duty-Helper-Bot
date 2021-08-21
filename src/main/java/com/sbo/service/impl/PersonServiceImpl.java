@@ -1,11 +1,11 @@
 package com.sbo.service.impl;
 
 import com.sbo.bot.state.State;
-import com.sbo.entity.Person;
-import com.sbo.entity.enums.Language;
-import com.sbo.entity.enums.PersonRole;
+import com.sbo.domain.postgres.entity.Person;
+import com.sbo.domain.postgres.entity.enums.Language;
+import com.sbo.domain.postgres.entity.enums.PersonRole;
+import com.sbo.domain.postgres.repository.PersonRepository;
 import com.sbo.exception.EntityNotFoundException;
-import com.sbo.repository.PersonRepository;
 import com.sbo.service.PersonService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.sbo.entity.enums.EntityStatus.ACTIVE;
-import static com.sbo.entity.enums.EntityStatus.DELETED;
-import static com.sbo.entity.enums.PersonRole.ADMIN;
+import static com.sbo.domain.postgres.entity.enums.EntityStatus.ACTIVE;
+import static com.sbo.domain.postgres.entity.enums.EntityStatus.DELETED;
+import static com.sbo.domain.postgres.entity.enums.PersonRole.ADMIN;
 import static java.util.Objects.nonNull;
 
 @Slf4j

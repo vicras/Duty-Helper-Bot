@@ -1,6 +1,6 @@
 package com.sbo.common.utils;
 
-import com.sbo.entity.PeopleOnDuty;
+import com.sbo.domain.postgres.entity.PeopleOnDuty;
 import com.sbo.retrofit.GraphicResult;
 import com.sbo.retrofit.PostModel;
 import com.sbo.retrofit.WebService;

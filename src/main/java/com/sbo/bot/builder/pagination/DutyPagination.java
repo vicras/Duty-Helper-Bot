@@ -3,7 +3,7 @@ package com.sbo.bot.builder.pagination;
 import com.sbo.bot.builder.DutyMessagePrinter;
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.builder.calendar.CalendarProvider;
-import com.sbo.entity.Duty;
+import com.sbo.domain.postgres.entity.Duty;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.DutyService;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +31,21 @@ import static java.time.format.DateTimeFormatter.ISO_DATE;
 @Transactional
 @RequiredArgsConstructor
 public class DutyPagination extends MessagePaginator<Duty> {
-    // TODO Warning, don't use static import for CalendarProvider.getIsChosenDay() it will brake your p
-    private static final int PAGINATION_SIZE = 1;
-    private static final String DUTY_PAGE = "DUTY_PAGE";
-    private static final String SEPARATOR = ":";
-
     //region Use this functions to set, and check callback command buttons
     //check
     public static final Predicate<String> isDutyPageChosen = (text) ->
             CalendarProvider.getIsChosenDay()
-            .and((t) -> t.matches(".*:.*:\\d+"))
-            .test(text);
+                    .and((t) -> t.matches(".*:.*:\\d+"))
+                    .test(text);
+    // TODO Warning, don't use static import for CalendarProvider.getIsChosenDay() it will brake your p
+    private static final int PAGINATION_SIZE = 1;
+    private static final String DUTY_PAGE = "DUTY_PAGE";
+    private static final String SEPARATOR = ":";
+    //region Use this functions to set, check and retrieved Chosen Duty
+    public static final Function<Duty, String> callbackSetter = duty -> DUTY_PAGE + SEPARATOR + duty.getId();
+    public static final Function<String, Long> parseDutyId = command -> Long.parseLong(command.split(SEPARATOR)[1]);
+    public static final Predicate<String> isDutyChosen = text -> text.matches(DUTY_PAGE + SEPARATOR + "\\d+");
+    //endregion
     //set
     private static final BiFunction<LocalDate, Integer, String> commandButtonCallback =
             (day, page) -> CHOSEN_DAY.apply(day.format(ISO_DATE)) + SEPARATOR + page;
@@ -49,13 +53,6 @@ public class DutyPagination extends MessagePaginator<Duty> {
     private static final Function<String, LocalDate> dateParser = (command) -> LocalDate.parse(command.split(SEPARATOR)[1]);
     private static final Function<String, Integer> pageParser = (command) -> Integer.valueOf(command.split(SEPARATOR)[2]);
     //endregion
-
-    //region Use this functions to set, check and retrieved Chosen Duty
-    public static final Function<Duty, String> callbackSetter = duty -> DUTY_PAGE + SEPARATOR + duty.getId();
-    public static final Function<String, Long> parseDutyId = command -> Long.parseLong(command.split(SEPARATOR)[1]);
-    public static final Predicate<String> isDutyChosen = text -> text.matches(DUTY_PAGE + SEPARATOR + "\\d+");
-    //endregion
-
     private final CurrentPersonProvider personProvider;
     private final DutyService dutyService;
     private final DutyMessagePrinter dutyMessagePrinter;

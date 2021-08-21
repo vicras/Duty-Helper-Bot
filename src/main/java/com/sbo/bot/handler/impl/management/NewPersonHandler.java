@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.sbo.entity.enums.PersonRole.USER;
+import static com.sbo.domain.postgres.entity.enums.PersonRole.USER;
 import static java.util.Objects.nonNull;
 
 /**

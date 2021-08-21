@@ -1,7 +1,7 @@
 package com.sbo.service;
 
-import com.sbo.entity.Notification;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Notification;
+import com.sbo.domain.postgres.entity.Person;
 
 import java.util.List;
 import java.util.Set;

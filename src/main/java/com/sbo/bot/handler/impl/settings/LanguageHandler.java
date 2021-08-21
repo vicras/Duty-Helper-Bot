@@ -5,7 +5,7 @@ import com.sbo.bot.handler.CommandBaseHandler;
 import com.sbo.bot.handler.impl.enums.ButtonCommands;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.settings.SettingState;
-import com.sbo.entity.enums.Language;
+import com.sbo.domain.postgres.entity.enums.Language;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import com.sbo.service.impl.AuthorizationServiceImpl;
@@ -18,8 +18,8 @@ import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.LANGUAGE_EN;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.LANGUAGE_RU;
-import static com.sbo.entity.enums.Language.ENGLISH;
-import static com.sbo.entity.enums.Language.RUSSIAN;
+import static com.sbo.domain.postgres.entity.enums.Language.ENGLISH;
+import static com.sbo.domain.postgres.entity.enums.Language.RUSSIAN;
 
 /**
  * @author viktar hraskou

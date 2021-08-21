@@ -1,8 +1,8 @@
 package com.sbo.common.time;
 
 
-import com.sbo.entity.DutyIntervalData;
-import com.sbo.entity.PeopleOnDuty;
+import com.sbo.domain.postgres.entity.DutyIntervalData;
+import com.sbo.domain.postgres.entity.PeopleOnDuty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,8 +23,8 @@ public class LocalDateTimeInterval {
     }
 
     public static LocalDateTimeInterval of(PeopleOnDuty peopleOnDuty) {
-        var from = peopleOnDuty.getOnDutyFrom();
-        var to = peopleOnDuty.getOnDutyTo();
+        var from = peopleOnDuty.getFromTime();
+        var to = peopleOnDuty.getToTime();
         return new LocalDateTimeInterval(from, to);
     }
 

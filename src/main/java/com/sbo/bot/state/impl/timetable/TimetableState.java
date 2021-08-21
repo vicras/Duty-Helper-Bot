@@ -60,12 +60,12 @@ public class TimetableState extends State {
 
     }
 
-    private boolean isDayChosenCommand(Update update){
+    private boolean isDayChosenCommand(Update update) {
         return update.hasCallbackQuery()
                 && CalendarProvider.getIsChosenDay().test(update.getCallbackQuery().getData());
     }
 
-    private String buttonTextFunction(LocalDate day){
+    private String buttonTextFunction(LocalDate day) {
         throw new NotYetImplementedException();
     }
 }

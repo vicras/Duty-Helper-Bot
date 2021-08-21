@@ -1,7 +1,7 @@
 package com.sbo.service;
 
-import com.sbo.entity.Duty;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Duty;
+import com.sbo.domain.postgres.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

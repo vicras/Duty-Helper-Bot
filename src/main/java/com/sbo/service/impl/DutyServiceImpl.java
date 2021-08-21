@@ -1,14 +1,14 @@
 package com.sbo.service.impl;
 
 import com.sbo.common.utils.StreamUtil;
-import com.sbo.entity.Duty;
-import com.sbo.entity.PeopleOnDuty;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Duty;
+import com.sbo.domain.postgres.entity.PeopleOnDuty;
+import com.sbo.domain.postgres.entity.Person;
+import com.sbo.domain.postgres.repository.DutyRepository;
 import com.sbo.exception.EntityNotFoundException;
 import com.sbo.provider.CurrentPersonProvider;
-import com.sbo.repository.DutyRepository;
 import com.sbo.service.DutyService;
-import com.sbo.service.PeopleOnDutyService;
+import com.sbo.service.PersonOnDutyService;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ public class DutyServiceImpl implements DutyService {
     private final CurrentPersonProvider personProvider;
     private final DutyRepository dutyRepository;
     private final PersonService personService;
-    private final PeopleOnDutyService peopleOnDutyService;
+    private final PersonOnDutyService personOnDutyService;
 
     @Override
     public List<Duty> getPersonDuties(Person person) {
@@ -63,7 +63,7 @@ public class DutyServiceImpl implements DutyService {
                 .collect(Collectors.toList());
         duty.getPeopleOnDuties().removeIf(peopleOnDuty -> peopleOnDuty.getPerson().equals(currentPerson));
         List<PeopleOnDuty> partnersOnDuty = getWhoWorksWithUser(duty.getPeopleOnDuties(), currentUserOnDuty);
-        return peopleOnDutyService.getPersonsInPeopleOnDuties(partnersOnDuty);
+        return personOnDutyService.getPersonsInPeopleOnDuties(partnersOnDuty);
     }
 
     private List<PeopleOnDuty> getWhoWorksWithUser(Collection<PeopleOnDuty> peopleOnDuties,
@@ -75,7 +75,7 @@ public class DutyServiceImpl implements DutyService {
 
     private boolean workOnTimeWithPersonIntervals(List<PeopleOnDuty> intervals, PeopleOnDuty person) {
         return !StreamUtil.filter(
-                intervals, peopleOnDuty -> peopleOnDutyService.doWorkOnTheSameTime(peopleOnDuty, person)
+                intervals, peopleOnDuty -> personOnDutyService.doWorkOnTheSameTime(peopleOnDuty, person)
         ).isEmpty();
     }
 

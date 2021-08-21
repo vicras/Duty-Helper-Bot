@@ -5,6 +5,9 @@ spring:
   messages:
     basename: "lang/res"
 
+  jpa:
+    open-in-view: false
+
 telegram:
   bot:
 #    chat id of the bot

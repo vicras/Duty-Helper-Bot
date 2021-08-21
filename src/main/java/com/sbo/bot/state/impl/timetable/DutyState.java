@@ -7,7 +7,7 @@ import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
-import com.sbo.entity.Duty;
+import com.sbo.domain.postgres.entity.Duty;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.DutyService;
 import com.sbo.service.PersonService;
@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.SWAP;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * @author viktar hraskou
@@ -42,7 +43,8 @@ public class DutyState extends State {
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
                 SwitchHandler.of(TimetableState.class, BACK),
-                SwitchHandler.of(getClass(), SWAP)
+                SwitchHandler.of(getClass(), this::isContainsSwap),
+                SwitchHandler.of(TimeWaitingState.class, this::isContainsPersonOnDutyId)
         );
     }
 
@@ -57,20 +59,27 @@ public class DutyState extends State {
     private SendMessage dutyInfoMessage(Duty duty, Update update) {
         InlineMessageBuilder builder = InlineMessageBuilder.builder(personProvider.getCurrentPerson());
         messagePrinter.simpleDutyMessage(builder, duty);
-        return setCommandButtons(builder,duty,  update)
+        return setCommandButtons(builder, duty, update)
                 .build();
     }
 
     private InlineMessageBuilder setCommandButtons(InlineMessageBuilder builder, Duty duty, Update update) {
-        if(update.getCallbackQuery().getData().contains(SWAP.name())){
+        if (isContainsSwap(update)) {
             messagePrinter.addButtonsWithPersonOnDuty(builder, duty);
-        }else{
+        } else {
             builder.row()
-                    .button("Swap", SWAP);
+                    .button("Swap", SWAP + ":" + duty.getId());
         }
         return builder
                 .row()
                 .button("Back", BACK);
     }
 
+    private boolean isContainsSwap(Update update) {
+        return update.getCallbackQuery().getData().contains(SWAP.name());
+    }
+
+    private boolean isContainsPersonOnDutyId(Update update) {
+        return isNumeric(update.getCallbackQuery().getData());
+    }
 }

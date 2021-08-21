@@ -6,7 +6,7 @@ import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
 import com.sbo.bot.state.impl.HomeState;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.exception.DuringHandleExecutionException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;

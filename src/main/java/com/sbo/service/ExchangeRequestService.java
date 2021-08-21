@@ -1,8 +1,8 @@
 package com.sbo.service;
 
-import com.sbo.entity.DutyIntervalData;
-import com.sbo.entity.ExchangeRequest;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.DutyIntervalData;
+import com.sbo.domain.postgres.entity.ExchangeRequest;
+import com.sbo.domain.postgres.entity.Person;
 
 import java.time.LocalDate;
 import java.util.List;

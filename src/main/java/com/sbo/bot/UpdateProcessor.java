@@ -4,7 +4,7 @@ import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.ApiMethodsCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.exception.AuthenticationException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
@@ -15,7 +15,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static com.sbo.entity.enums.EntityStatus.ACTIVE;
+import static com.sbo.domain.postgres.entity.enums.EntityStatus.ACTIVE;
 
 /**
  * Main class used to handle incoming Updates.

@@ -1,11 +1,11 @@
 package com.sbo.service.impl;
 
 import com.sbo.common.utils.StreamUtil;
-import com.sbo.entity.Notification;
-import com.sbo.entity.Person;
-import com.sbo.entity.relations.NotificationsToNotifiedUsers;
-import com.sbo.repo.NotificationsToNotifiedUsersRepository;
-import com.sbo.repository.NotificationRepository;
+import com.sbo.domain.postgres.entity.Notification;
+import com.sbo.domain.postgres.entity.Person;
+import com.sbo.domain.postgres.entity.relations.NotificationsToNotifiedUsers;
+import com.sbo.domain.postgres.repository.NotificationRepository;
+import com.sbo.domain.postgres.repository.NotificationsToNotifiedUsersRepository;
 import com.sbo.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 

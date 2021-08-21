@@ -1,6 +1,6 @@
 package com.sbo.service;
 
-import com.sbo.entity.Duty;
+import com.sbo.domain.postgres.entity.Duty;
 
 import java.awt.image.BufferedImage;
 

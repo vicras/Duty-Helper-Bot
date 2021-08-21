@@ -1,7 +1,7 @@
 package com.sbo.bot.builder.pagination;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.entity.Person;
+import com.sbo.domain.postgres.entity.Person;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
@@ -9,10 +9,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
-import static com.sbo.bot.handler.impl.enums.ButtonCommands.PAGE;
 
 /**
  * @author viktar hraskou
@@ -23,15 +21,15 @@ public abstract class MessagePaginator<T> {
 
     @Setter
     @Getter
-    private Function<Integer, String> callBackDataProvider = (text)->PAGE + SEPARATOR + text;
+    private Function<Integer, String> callBackDataProvider = (text) -> PAGE + SEPARATOR + text;
 
     @Setter
     @Getter
-    private Predicate<String> isPageChangeRequest = (text)->text.matches(PAGE + SEPARATOR + ".*");
+    private Predicate<String> isPageChangeRequest = (text) -> text.matches(PAGE + SEPARATOR + ".*");
 
     @Setter
     @Getter
-    private Function<String, Integer> extractPage = (text)-> Integer.valueOf(text.split(SEPARATOR)[1]);
+    private Function<String, Integer> extractPage = (text) -> Integer.valueOf(text.split(SEPARATOR)[1]);
 
     protected SendMessage paginate(Page<T> data, Person person) {
         InlineMessageBuilder builder = InlineMessageBuilder.builder(person);

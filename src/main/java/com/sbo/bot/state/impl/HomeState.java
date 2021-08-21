@@ -17,9 +17,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static com.sbo.bot.handler.impl.enums.ButtonCommands.TIMETABLE;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.PERSON_MANAGEMENT;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.SETTINGS;
+import static com.sbo.bot.handler.impl.enums.ButtonCommands.TIMETABLE;
 
 /**
  * @author viktar hraskou

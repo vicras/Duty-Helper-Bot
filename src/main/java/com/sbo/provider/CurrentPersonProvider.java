@@ -1,8 +1,6 @@
 package com.sbo.provider;
 
-import com.sbo.entity.Person;
-import com.sbo.exception.EntityNotFoundException;
-import com.sbo.exception.UserNameIsNullException;
+import com.sbo.domain.postgres.entity.Person;
 import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
