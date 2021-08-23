@@ -18,6 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
+import static com.sbo.bot.builder.pagination.DutyPagination.*;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.SWAP;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
@@ -50,7 +51,7 @@ public class DutyState extends State {
 
     @Override
     protected RequestOperator getRequestOperator(Update update) {
-        Long dutyId = DutyPagination.parseDutyId.apply(update.getCallbackQuery().getData());
+        Long dutyId = parseDutyId.apply(update.getCallbackQuery().getData());
         Duty duty = dutyService.getDutyById(dutyId);
         return new RequestOperator(publisher)
                 .addMessage(dutyInfoMessage(duty, update), update);

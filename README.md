@@ -1,6 +1,5 @@
 # DUTY HELPER TELEGRAM BOT
 ## TODO
 * Role and blocking policy, can't block the last admin, admin can edit only added by him persons.
-* try default keyboard with force reply and add button back to it
-* self destruction 
-* lazy init
+* Give and sold duty.
+* Case: you are on duty, you want to change time in time brackets of this duty.

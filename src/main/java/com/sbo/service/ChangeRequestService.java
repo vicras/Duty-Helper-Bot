@@ -33,4 +33,6 @@ public interface ChangeRequestService {
 
     boolean isDataComplete(DutyChangeDataHolder holder);
 
+    boolean isPersonAlreadyFilledInHolder(Person person);
+
 }

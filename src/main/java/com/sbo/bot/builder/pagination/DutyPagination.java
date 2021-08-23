@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -28,7 +27,6 @@ import static java.time.format.DateTimeFormatter.ISO_DATE;
  * @author viktar hraskou
  */
 @Component
-@Transactional
 @RequiredArgsConstructor
 public class DutyPagination extends MessagePaginator<Duty> {
     //region Use this functions to set, and check callback command buttons
@@ -58,23 +56,44 @@ public class DutyPagination extends MessagePaginator<Duty> {
     private final DutyMessagePrinter dutyMessagePrinter;
     private final DateTimeFormatter isoTime = DateTimeFormatter.ISO_TIME;
 
-    public SendMessage handle(CallbackQuery query) {
+    public SendMessage handleAll(CallbackQuery query) {
+        return process(query, this::getAllDuties);
+    }
+
+    private SendMessage process(CallbackQuery query, BiFunction<LocalDate, Integer, Page<Duty>> dutyProvider) {
         String text = query.getData();
         throwIfCantHandle(text);
 
         LocalDate day = getDay(text);
         int page = getPage(text);
 
-        // TODO huerga
+        // TODO huerga, ebanet 100%
         setCallBackDataProvider((pageNumber) -> commandButtonCallback.apply(day, pageNumber));
 
-        Page<Duty> dutyPage = getDuties(day, page);
+        Page<Duty> dutyPage = dutyProvider.apply(day, page);
         return paginate(dutyPage, personProvider.getCurrentPerson());
     }
 
-    private Page<Duty> getDuties(LocalDate day, int page) {
+    public SendMessage handleWithoutDutyOfCurrentPerson(CallbackQuery query) {
+        return process(query,this::getWithoutMyDuties);
+    }
+    public SendMessage handleOnlyDutyOfCurrentPerson(CallbackQuery query) {
+        return process(query, this::getOnlyMyDuties);
+    }
+
+    private Page<Duty> getAllDuties(LocalDate day, int page) {
         PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
-        return dutyService.getDutiesPageOnADay(day, personRequest);
+        return dutyService.getPageWithAllDutiesOnADay(day, personRequest);
+    }
+
+    private Page<Duty> getOnlyMyDuties(LocalDate day, int page) {
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
+        return dutyService.getPageWithOnlyMyDutiesOnADay(day, personRequest);
+    }
+
+    private Page<Duty> getWithoutMyDuties(LocalDate day, int page) {
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
+        return dutyService.getPageWithoutMyDutiesOnADay(day, personRequest);
     }
 
     private int getPage(String text) {

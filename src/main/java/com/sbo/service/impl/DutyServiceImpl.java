@@ -26,17 +26,25 @@ public class DutyServiceImpl implements DutyService {
 
     private final CurrentPersonProvider personProvider;
     private final DutyRepository dutyRepository;
-    private final PersonService personService;
     private final PersonOnDutyService personOnDutyService;
 
     @Override
     public List<Duty> getPersonDuties(Person person) {
-        return StreamUtil.filter(dutyRepository.findAll(),
-                duty -> duty.getPeopleOnDuties().stream()
-                        .anyMatch(
-                                peopleOnDuty -> peopleOnDuty.getPerson().equals(person)
-                        )
-        );
+        return dutyRepository.findAllDutyOfPerson(person);
+    }
+
+    @Override
+    public Page<Duty> getPersonDuties(Person person, Pageable pageable) {
+        return dutyRepository.findAllDutyOfPerson(person, pageable);
+    }
+
+    public List<Duty> getDutiesWithoutPerson(Person person){
+        return dutyRepository.findAllDutyWithoutPerson(person);
+    }
+
+    @Override
+    public Page<Duty> getDutiesWithoutPerson(Person person, Pageable pageable) {
+        return dutyRepository.findAllDutyWithoutPerson(person, pageable);
     }
 
     @Override
@@ -46,8 +54,18 @@ public class DutyServiceImpl implements DutyService {
     }
 
     @Override
-    public Page<Duty> getDutiesPageOnADay(LocalDate localDate, Pageable pageable) {
+    public Page<Duty> getPageWithAllDutiesOnADay(LocalDate localDate, Pageable pageable) {
         return dutyRepository.findAllByDutyFrom(localDate, pageable);
+    }
+
+    @Override
+    public Page<Duty> getPageWithOnlyMyDutiesOnADay(LocalDate localDate, Pageable pageable) {
+        return dutyRepository.findAllByDutyFromWithOnlyPerson(localDate, personProvider.getCurrentPerson(), pageable);
+    }
+
+    @Override
+    public Page<Duty> getPageWithoutMyDutiesOnADay(LocalDate localDate, Pageable pageable) {
+        return dutyRepository.findAllByDutyFromWithoutPerson(localDate, personProvider.getCurrentPerson(), pageable);
     }
 
     @Override

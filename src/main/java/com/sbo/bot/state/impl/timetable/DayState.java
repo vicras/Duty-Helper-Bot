@@ -40,7 +40,7 @@ public class DayState extends State {
 
     @Override
     protected RequestOperator getRequestOperator(Update update) {
-        var sendMessage = dutyPagination.handle(update.getCallbackQuery());
+        var sendMessage = dutyPagination.handleAll(update.getCallbackQuery());
 
         return new RequestOperator(publisher)
                 .addMessage(sendMessage, update);

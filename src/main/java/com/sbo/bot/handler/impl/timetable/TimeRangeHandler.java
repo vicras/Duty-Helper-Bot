@@ -3,6 +3,9 @@ package com.sbo.bot.handler.impl.timetable;
 import com.google.common.collect.Range;
 import com.sbo.bot.handler.AbstractBaseHandler;
 import com.sbo.bot.state.State;
+import com.sbo.bot.state.impl.HomeState;
+import com.sbo.bot.state.impl.timetable.PersonChoiceState;
+import com.sbo.bot.state.impl.timetable.SendRequestState;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.AuthorizationService;
 import com.sbo.service.ChangeRequestService;
@@ -48,14 +51,12 @@ public class TimeRangeHandler extends AbstractBaseHandler {
 
     @Override
     public Class<? extends State> getNextState() {
-        // TODO return state
-
         if (changeRequestService.isDataComplete()) {
             changeRequestService.sendRequestIfComplete();
+            return SendRequestState.class;
         } else {
-
+            return PersonChoiceState.class;
         }
-        return null;
     }
 
     private boolean isFullCommand(Update update) {
@@ -66,4 +67,6 @@ public class TimeRangeHandler extends AbstractBaseHandler {
         String text = extractMessageText(update);
         return isTimeRange(text);
     }
+
+
 }

@@ -18,6 +18,7 @@ import java.time.LocalTime;
 
 import static com.sbo.common.utils.DateTimeUtil.convert2LocalDateTimeRange;
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -181,5 +182,18 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
                 && nonNull(holder.getToDutyId())
                 && nonNull(holder.getFromRange())
                 && nonNull(holder.getToRange());
+    }
+
+    @Override
+    public boolean isPersonAlreadyFilledInHolder(Person person) {
+        return dutyChangeDataRepository.findDutyChangeData(person)
+                .filter(holder -> isPersonFilled(person, holder))
+                .map(e -> TRUE)
+                .orElse(FALSE);
+    }
+
+    private boolean isPersonFilled(Person person, DutyChangeDataHolder holder) {
+        return holder.getFromDutyId().getPerson().getId().equals(person.getId()) ||
+                holder.getToDutyId().getPerson().getId().equals(person.getId());
     }
 }
