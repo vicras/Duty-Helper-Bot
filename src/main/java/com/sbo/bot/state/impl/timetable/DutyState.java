@@ -2,7 +2,6 @@ package com.sbo.bot.state.impl.timetable;
 
 import com.sbo.bot.builder.DutyMessagePrinter;
 import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.builder.pagination.DutyPagination;
 import com.sbo.bot.handler.BaseHandler;
 import com.sbo.bot.handler.SwitchHandler;
 import com.sbo.bot.state.RequestOperator;
@@ -18,7 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static com.sbo.bot.builder.pagination.DutyPagination.*;
+import static com.sbo.bot.builder.pagination.DutyPagination.parseDutyId;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.SWAP;
 import static org.apache.commons.lang3.StringUtils.isNumeric;

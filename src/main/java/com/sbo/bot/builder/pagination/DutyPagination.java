@@ -75,8 +75,9 @@ public class DutyPagination extends MessagePaginator<Duty> {
     }
 
     public SendMessage handleWithoutDutyOfCurrentPerson(CallbackQuery query) {
-        return process(query,this::getWithoutMyDuties);
+        return process(query, this::getWithoutMyDuties);
     }
+
     public SendMessage handleOnlyDutyOfCurrentPerson(CallbackQuery query) {
         return process(query, this::getOnlyMyDuties);
     }

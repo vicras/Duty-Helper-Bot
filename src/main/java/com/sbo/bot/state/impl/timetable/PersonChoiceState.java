@@ -59,14 +59,14 @@ public class PersonChoiceState extends State {
     @Override
     protected RequestOperator getRequestOperator(Update update) {
         return new RequestOperator(publisher)
-                .addMessage(firstMessage(update),update);
+                .addMessage(firstMessage(update), update);
     }
 
     private SendMessage firstMessage(Update update) {
         SendMessage message;
         if (isDutyChosen(update)) {
             message = dutyMessage(update);
-        }else if (isDayChosenCommand(update)) {
+        } else if (isDayChosenCommand(update)) {
             message = dayMessage(update);
         } else {
             message = calendarMessage(update);
@@ -85,7 +85,7 @@ public class PersonChoiceState extends State {
     }
 
     private SendMessage dayMessage(Update update) {
-        if(changeRequestService.isPersonAlreadyFilledInHolder(personProvider.getCurrentPerson())){
+        if (changeRequestService.isPersonAlreadyFilledInHolder(personProvider.getCurrentPerson())) {
             return dutyPagination.handleWithoutDutyOfCurrentPerson(update.getCallbackQuery());
         }
         return dutyPagination.handleOnlyDutyOfCurrentPerson(update.getCallbackQuery());

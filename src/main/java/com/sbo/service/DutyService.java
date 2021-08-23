@@ -5,7 +5,6 @@ import com.sbo.domain.postgres.entity.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.awt.PageAttributes;
 import java.time.LocalDate;
 import java.util.List;
 

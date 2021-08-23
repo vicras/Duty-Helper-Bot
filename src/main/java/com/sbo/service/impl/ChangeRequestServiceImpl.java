@@ -67,11 +67,11 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
 
     @NotNull
     private Range<LocalDateTime> getLocalDateTimeRange(Range<LocalTime> range, DutyChangeDataHolder dutyChangeHolder) {
-        if (nonNull(dutyChangeHolder.getFromDutyId())) {
-            return convert2LocalDateTimeRange(range, dutyChangeHolder.getFromDutyId().getRange().lowerEndpoint().toLocalDate());
+        if (nonNull(dutyChangeHolder.getFromPeopleOnDuty())) {
+            return convert2LocalDateTimeRange(range, dutyChangeHolder.getFromPeopleOnDuty().getRange().lowerEndpoint().toLocalDate());
         }
-        if (nonNull(dutyChangeHolder.getToDutyId())) {
-            return convert2LocalDateTimeRange(range, dutyChangeHolder.getToDutyId().getRange().lowerEndpoint().toLocalDate());
+        if (nonNull(dutyChangeHolder.getToPeopleOnDuty())) {
+            return convert2LocalDateTimeRange(range, dutyChangeHolder.getToPeopleOnDuty().getRange().lowerEndpoint().toLocalDate());
         }
         throw new ChangeRequestCreationException("Choose person on duty before");
     }
@@ -81,12 +81,12 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
         Person currentPerson = personProvider.getCurrentPerson();
         DutyChangeDataHolder holder = getIncompleteData(currentPerson);
 
-        if (isNull(holder.getFromRange()) && nonNull(holder.getFromDutyId())) {
-            holder.setFromRange(holder.getFromDutyId().getRange());
+        if (isNull(holder.getFromRange()) && nonNull(holder.getFromPeopleOnDuty())) {
+            holder.setFromRange(holder.getFromPeopleOnDuty().getRange());
         }
 
-        if (isNull(holder.getToRange()) && nonNull(holder.getToDutyId())) {
-            holder.setToRange(holder.getToDutyId().getRange());
+        if (isNull(holder.getToRange()) && nonNull(holder.getToPeopleOnDuty())) {
+            holder.setToRange(holder.getToPeopleOnDuty().getRange());
         }
 
 
@@ -111,12 +111,12 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
             throw new ChangeRequestCreationException("Request data is full");
         }
 
-        if (isNull(holder.getFromDutyId())) {
+        if (isNull(holder.getFromPeopleOnDuty())) {
             checkRange(peopleOnDuty, holder.getFromRange());
-            holder.setFromDutyId(peopleOnDuty);
+            holder.setFromPeopleOnDuty(peopleOnDuty);
         } else {
             checkRange(peopleOnDuty, holder.getToRange());
-            holder.setToDutyId(peopleOnDuty);
+            holder.setToPeopleOnDuty(peopleOnDuty);
         }
     }
 
@@ -126,10 +126,10 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
         }
 
         if (isNull(holder.getFromRange())) {
-            checkRange(holder.getFromDutyId(), range);
+            checkRange(holder.getFromPeopleOnDuty(), range);
             holder.setFromRange(range);
         } else {
-            checkRange(holder.getToDutyId(), range);
+            checkRange(holder.getToPeopleOnDuty(), range);
             holder.setToRange(range);
         }
     }
@@ -147,7 +147,7 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
 
     void createNewHolderWith(PeopleOnDuty peopleOnDuty) {
         DutyChangeDataHolder holder = DutyChangeDataHolder.builder()
-                .fromDutyId(peopleOnDuty)
+                .fromPeopleOnDuty(peopleOnDuty)
                 .build();
         saveIncompleteDataForPerson(personProvider.getCurrentPerson(), holder);
     }
@@ -178,8 +178,8 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
 
     @Override
     public boolean isDataComplete(DutyChangeDataHolder holder) {
-        return nonNull(holder.getFromDutyId())
-                && nonNull(holder.getToDutyId())
+        return nonNull(holder.getFromPeopleOnDuty())
+                && nonNull(holder.getToPeopleOnDuty())
                 && nonNull(holder.getFromRange())
                 && nonNull(holder.getToRange());
     }
@@ -193,7 +193,7 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
     }
 
     private boolean isPersonFilled(Person person, DutyChangeDataHolder holder) {
-        return holder.getFromDutyId().getPerson().getId().equals(person.getId()) ||
-                holder.getToDutyId().getPerson().getId().equals(person.getId());
+        return holder.getFromPeopleOnDuty().getPerson().getId().equals(person.getId()) ||
+                holder.getToPeopleOnDuty().getPerson().getId().equals(person.getId());
     }
 }

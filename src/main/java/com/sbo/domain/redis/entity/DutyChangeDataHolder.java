@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class DutyChangeDataHolder implements Serializable {
-    private PeopleOnDuty fromDutyId;
+    private PeopleOnDuty fromPeopleOnDuty;
     private Range<LocalDateTime> fromRange;
-    private PeopleOnDuty toDutyId;
+    private PeopleOnDuty toPeopleOnDuty;
     private Range<LocalDateTime> toRange;
 }

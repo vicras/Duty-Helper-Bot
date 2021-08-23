@@ -9,7 +9,6 @@ import com.sbo.exception.EntityNotFoundException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.DutyService;
 import com.sbo.service.PersonOnDutyService;
-import com.sbo.service.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +37,7 @@ public class DutyServiceImpl implements DutyService {
         return dutyRepository.findAllDutyOfPerson(person, pageable);
     }
 
-    public List<Duty> getDutiesWithoutPerson(Person person){
+    public List<Duty> getDutiesWithoutPerson(Person person) {
         return dutyRepository.findAllDutyWithoutPerson(person);
     }
 

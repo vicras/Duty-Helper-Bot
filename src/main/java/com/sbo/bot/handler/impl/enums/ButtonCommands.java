@@ -29,5 +29,7 @@ public enum ButtonCommands {
     TIMETABLE,
     DUTY,
     SWAP,
-    FULL
+    FULL,
+    SEND,
+    DISMISS
 }
