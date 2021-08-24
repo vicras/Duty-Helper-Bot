@@ -29,6 +29,15 @@ services:
     networks:
       - duty-helper-network
 
+  redisdb:
+    container_name: redis-for-duty-helper
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - duty-helper-network
+    restart: always
+
 networks:
   duty-helper-network:
     driver: bridge
