@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,22 +50,22 @@ public class DutyServiceImpl implements DutyService {
     @Override
     @Deprecated
     public List<Duty> getDutiesOnDay(LocalDate localDate) {
-        return dutyRepository.findAllByDutyFrom(localDate);
+        return dutyRepository.findAllDutyInDay(localDate);
     }
 
     @Override
     public Page<Duty> getPageWithAllDutiesOnADay(LocalDate localDate, Pageable pageable) {
-        return dutyRepository.findAllByDutyFrom(localDate, pageable);
+        return dutyRepository.findAllDutyInDay(localDate, pageable);
     }
 
     @Override
     public Page<Duty> getPageWithOnlyMyDutiesOnADay(LocalDate localDate, Pageable pageable) {
-        return dutyRepository.findAllByDutyFromWithOnlyPerson(localDate, personProvider.getCurrentPerson(), pageable);
+        return dutyRepository.findAllDutyInDayWithPerson(localDate, personProvider.getCurrentPerson(), pageable);
     }
 
     @Override
     public Page<Duty> getPageWithoutMyDutiesOnADay(LocalDate localDate, Pageable pageable) {
-        return dutyRepository.findAllByDutyFromWithoutPerson(localDate, personProvider.getCurrentPerson(), pageable);
+        return dutyRepository.findAllDutyInDayWithoutPersons(localDate, Set.of(personProvider.getCurrentPerson()), pageable);
     }
 
     @Override

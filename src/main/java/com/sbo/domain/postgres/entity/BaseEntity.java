@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static com.sbo.domain.postgres.entity.enums.EntityStatus.ACTIVE;
@@ -25,10 +27,10 @@ import static javax.persistence.EnumType.STRING;
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "created_at")

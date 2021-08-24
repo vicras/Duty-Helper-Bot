@@ -99,7 +99,7 @@ public class PersonChoiceState extends State {
 //        TODO logic of non visible duty
         return MONDAY.equals(day.getDayOfWeek())
                 ? "🏛 test"
-                : day.toString();
+                : String.valueOf(day.getDayOfMonth());
     }
 
 

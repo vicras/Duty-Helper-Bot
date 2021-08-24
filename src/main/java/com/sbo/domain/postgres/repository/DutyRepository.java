@@ -8,31 +8,82 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 
 public interface DutyRepository extends JpaRepository<Duty, Long> {
-    @Query(value = "select * from duties d where DATE(duty_from) = :dutyFrom", nativeQuery = true)
-    Page<Duty> findAllByDutyFrom(LocalDate dutyFrom, Pageable pageable);
 
-    @Query(value = "select * from duties d left join person p where DATE(duty_from) = :dutyFrom and p.id <> :#{#person.id}", nativeQuery = true)
-    Page<Duty> findAllByDutyFromWithoutPerson(LocalDate dutyFrom, Person person, Pageable pageable);
+    //region all duty in day
+    @Query(value = "select d from Duty d" +
+            " where d.dutyFrom > :#{#day.atStartOfDay()} " +
+            "  and d.dutyFrom < :#{#day.plusDays(1).atStartOfDay()} ")
+    Page<Duty> findAllDutyInDay(LocalDate day, Pageable pageable);
 
-    @Query(value = "select * from duties d left join person p where DATE(duty_from) = :dutyFrom and p.id = :#{#person.id}", nativeQuery = true)
-    Page<Duty> findAllByDutyFromWithOnlyPerson(LocalDate dutyFrom, Person person, Pageable pageable);
+    @Query(value = "select d from Duty d" +
+            " where d.dutyFrom > :#{#day.atStartOfDay()} " +
+            "  and d.dutyFrom < :#{#day.plusDays(1).atStartOfDay()} ")
+    List<Duty> findAllDutyInDay(LocalDate day);
+    //endregion
 
-    @Query(value = "select * from duties d where DATE(duty_from) = :dutyFrom", nativeQuery = true)
-    List<Duty> findAllByDutyFrom(LocalDate dutyFrom);
+    // flexible method
+    @Query(value = "select d " +
+            "from Duty d " +
+            "where d.dutyFrom > :#{#day.atStartOfDay()} " +
+            "  and d.dutyFrom < :#{#day.plusDays(1).atStartOfDay()} " +
+            "  and d not IN ( select pod2.duty from PeopleOnDuty pod2 where pod2.person in :person ) ")
+    Page<Duty> findAllDutyInDayWithoutPersons(LocalDate day,
+                                              Collection<Person> person,
+                                              Pageable pageable);
 
-    @Query(value = "select d from Duty d join Person p where p.id = :#{#person.id}")
+    @Query(value = "select d " +
+            "from Duty d " +
+            "left join d.peopleOnDuties pod " +
+            "where d.dutyFrom > :#{#day.atStartOfDay()} " +
+            "  and d.dutyFrom < :#{#day.plusDays(1).atStartOfDay()} " +
+            "  and pod.person = :person")
+    Page<Duty> findAllDutyInDayWithPerson(LocalDate day,
+                                          Person person,
+                                          Pageable pageable);
+
+    // flexible method
+    @Query(value = "select d " +
+            "from Duty d " +
+            "left join d.peopleOnDuties pod " +
+            "where d.dutyFrom > :#{#day.atStartOfDay()} " +
+            "  and d.dutyFrom < :#{#day.plusDays(1).atStartOfDay()} " +
+            "  and pod.person in :withPersons " +
+            "  and d not in ( select pod2.duty from PeopleOnDuty pod2 where pod.person in :withoutPersons)")
+    Page<Duty> findAllDutyInDayWithPersonsAndWithoutPersons(LocalDate day,
+                                                            Collection<Person> withPersons,
+                                                            Collection<Person> withoutPersons,
+                                                            Pageable pageable);
+
+    //region all duty of person
+    @Query(value = "select d " +
+            " from Duty d" +
+            " join d.peopleOnDuties pod" +
+            " where pod.person = :person")
     List<Duty> findAllDutyOfPerson(Person person);
 
-    @Query(value = "select d from Duty d join Person p where p.id = :#{#person.id}")
+    @Query(value = "select d " +
+            " from Duty d" +
+            " join d.peopleOnDuties pod" +
+            " where pod.person = :person")
     Page<Duty> findAllDutyOfPerson(Person person, Pageable pageable);
+    //endregion
 
-    @Query(value = "select d from Duty d join Person p where p.id <> :#{#person.id}")
+    //region all duty without person
+    @Query(value = "select d " +
+            " from Duty d " +
+            " left join d.peopleOnDuties pod " +
+            " where d not IN ( select pod2.duty from PeopleOnDuty pod2 where pod2.person in :person )")
     List<Duty> findAllDutyWithoutPerson(Person person);
 
-    @Query(value = "select d from Duty d join Person p where p.id <> :#{#person.id}")
+    @Query(value = "select d " +
+            " from Duty d " +
+            " left join d.peopleOnDuties pod " +
+            " where d not IN ( select pod2.duty from PeopleOnDuty pod2 where pod2.person in :person )")
     Page<Duty> findAllDutyWithoutPerson(Person person, Pageable pageable);
+    //endregion
 }

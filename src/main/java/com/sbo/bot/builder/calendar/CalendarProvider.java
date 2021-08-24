@@ -28,6 +28,7 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.nextOrSame;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
+import static java.util.Objects.isNull;
 
 /**
  * @author viktar hraskou
@@ -78,7 +79,7 @@ public class CalendarProvider {
     private Supplier<String> dayText = () -> "Choose date";
 
     public SendMessage handle(CallbackQuery callbackQuery, Person person) {
-        String text = callbackQuery.getData();
+        String text = isNull(callbackQuery) ? "" : callbackQuery.getData();
 
         LocalDate day = isCommand.test(text)
                 ? commandButtonParser.apply(text)

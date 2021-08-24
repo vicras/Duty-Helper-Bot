@@ -8,6 +8,7 @@ import com.sbo.bot.state.RequestOperator;
 import com.sbo.bot.state.State;
 import com.sbo.domain.postgres.entity.Duty;
 import com.sbo.provider.CurrentPersonProvider;
+import com.sbo.service.ChangeRequestService;
 import com.sbo.service.DutyService;
 import com.sbo.service.PersonService;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.sbo.bot.builder.pagination.DutyPagination.parseDutyId;
 import static com.sbo.bot.handler.impl.enums.ButtonCommands.BACK;
@@ -30,19 +32,23 @@ public class DutyState extends State {
 
     private final DutyMessagePrinter messagePrinter;
     private final DutyService dutyService;
+    private final Consumer<Update> backAction;
 
     public DutyState(CurrentPersonProvider personProvider, ApplicationEventPublisher publisher,
                      PersonService personService, DutyMessagePrinter messagePrinter,
-                     DutyService dutyService) {
+                     DutyService dutyService, ChangeRequestService changeRequestService) {
         super(personProvider, publisher, personService);
         this.messagePrinter = messagePrinter;
         this.dutyService = dutyService;
+
+        backAction = update -> changeRequestService.deleteDataForPerson(personProvider.getCurrentPerson());
     }
 
     @Override
     protected List<BaseHandler> getAvailableHandlers() {
         return List.of(
-                SwitchHandler.of(TimetableState.class, BACK),
+                SwitchHandler.of(TimetableState.class, BACK)
+                        .setAction(backAction),
                 SwitchHandler.of(getClass(), this::isContainsSwap),
                 SwitchHandler.of(TimeWaitingState.class, this::isContainsPersonOnDutyId)
         );

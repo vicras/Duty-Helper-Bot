@@ -36,7 +36,7 @@ public class TimeRangeHandler extends AbstractBaseHandler {
         if (isFullCommand(message)) {
             changeRequestService.useFullRange();
         } else {
-            Range<LocalTime> localTimeRange = parseTimeRange(extractCallbackData(message));
+            Range<LocalTime> localTimeRange = parseTimeRange(extractStringText(message));
             changeRequestService.updateChangeRequestWithSameDay(localTimeRange);
         }
 
@@ -44,8 +44,8 @@ public class TimeRangeHandler extends AbstractBaseHandler {
 
     @Override
     public boolean canProcessMessage(Update update) {
-        return isCallbackDataExist(update)
-                && (isFullCommand(update) || isTime(update));
+        return isFullCommand(update)
+                || isTime(update);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TimeRangeHandler extends AbstractBaseHandler {
     }
 
     private boolean isFullCommand(Update update) {
-        return FULL.name().equals(extractCallbackData(update));
+        return isCallbackDataExist(update) && FULL.name().equals(extractCallbackData(update));
     }
 
     private boolean isTime(Update update) {

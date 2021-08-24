@@ -10,6 +10,8 @@ import com.sbo.exception.EntityNotFoundException;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.ChangeRequestService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import static java.util.Objects.nonNull;
 /**
  * @author viktar hraskou
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChangeRequestServiceImpl implements ChangeRequestService {
@@ -35,6 +38,11 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
     //region update request logic
     @Override
     public void updateChangeRequest(PeopleOnDuty peopleOnDuty) {
+        // crutch
+        Hibernate.initialize(peopleOnDuty.getDuty());
+        Hibernate.initialize(peopleOnDuty.getDuty().getDutyTypes());
+        Hibernate.initialize(peopleOnDuty.getPerson());
+
         Person currentPerson = personProvider.getCurrentPerson();
         dutyChangeDataRepository.findDutyChangeData(currentPerson).ifPresentOrElse(
                 dutyChangeHolder -> updateRequestWith(peopleOnDuty, dutyChangeHolder),
@@ -96,6 +104,7 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
     @Override
     public void sendRequestIfComplete() {
 // TODO send request if full
+        deleteDataForPerson(personProvider.getCurrentPerson());
     }
 
     @Override
@@ -106,7 +115,7 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
                 .orElse(FALSE);
     }
 
-    void updateRequestWith(PeopleOnDuty peopleOnDuty, DutyChangeDataHolder holder) {
+    private void updateRequestWith(PeopleOnDuty peopleOnDuty, DutyChangeDataHolder holder) {
         if (isDataComplete(holder)) {
             throw new ChangeRequestCreationException("Request data is full");
         }
@@ -118,9 +127,10 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
             checkRange(peopleOnDuty, holder.getToRange());
             holder.setToPeopleOnDuty(peopleOnDuty);
         }
+        saveIncompleteDataForPerson(personProvider.getCurrentPerson(), holder);
     }
 
-    void updateRequestWith(Range<LocalDateTime> range, DutyChangeDataHolder holder) {
+    private void updateRequestWith(Range<LocalDateTime> range, DutyChangeDataHolder holder) {
         if (isDataComplete(holder)) {
             throw new ChangeRequestCreationException("Request data is full");
         }
@@ -132,13 +142,14 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
             checkRange(holder.getToPeopleOnDuty(), range);
             holder.setToRange(range);
         }
+        saveIncompleteDataForPerson(personProvider.getCurrentPerson(), holder);
     }
 
     void checkRange(PeopleOnDuty peopleOnDuty, Range<LocalDateTime> range) {
         if (isNull(peopleOnDuty) || isNull(range))
             return;
 
-        if (peopleOnDuty.getRange().encloses(range)) {
+        if (!peopleOnDuty.getRange().encloses(range)) {
             throw new ChangeRequestCreationException(
                     String.format("Wrong range! %s don't encloses %s", peopleOnDuty.getRange(), range)
             );
@@ -174,6 +185,7 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
     @Override
     public void deleteDataForPerson(Person person) {
         dutyChangeDataRepository.deleteDutyChangeData(person);
+        log.info("holder for person {} delete", person);
     }
 
     @Override
@@ -193,7 +205,9 @@ public class ChangeRequestServiceImpl implements ChangeRequestService {
     }
 
     private boolean isPersonFilled(Person person, DutyChangeDataHolder holder) {
-        return holder.getFromPeopleOnDuty().getPerson().getId().equals(person.getId()) ||
-                holder.getToPeopleOnDuty().getPerson().getId().equals(person.getId());
+        PeopleOnDuty fromPeopleOnDuty = holder.getFromPeopleOnDuty();
+        PeopleOnDuty toPeopleOnDuty = holder.getToPeopleOnDuty();
+        return nonNull(fromPeopleOnDuty) && fromPeopleOnDuty.getPerson().getId().equals(person.getId()) ||
+                nonNull(toPeopleOnDuty) && toPeopleOnDuty.getPerson().getId().equals(person.getId());
     }
 }

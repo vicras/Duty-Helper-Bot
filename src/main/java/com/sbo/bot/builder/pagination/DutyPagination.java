@@ -83,17 +83,17 @@ public class DutyPagination extends MessagePaginator<Duty> {
     }
 
     private Page<Duty> getAllDuties(LocalDate day, int page) {
-        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("dutyFrom"));
         return dutyService.getPageWithAllDutiesOnADay(day, personRequest);
     }
 
     private Page<Duty> getOnlyMyDuties(LocalDate day, int page) {
-        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("dutyFrom"));
         return dutyService.getPageWithOnlyMyDutiesOnADay(day, personRequest);
     }
 
     private Page<Duty> getWithoutMyDuties(LocalDate day, int page) {
-        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("duty_from"));
+        PageRequest personRequest = PageRequest.of(page, PAGINATION_SIZE, Sort.by("dutyFrom"));
         return dutyService.getPageWithoutMyDutiesOnADay(day, personRequest);
     }
 

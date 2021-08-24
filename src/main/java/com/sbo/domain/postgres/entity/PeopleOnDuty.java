@@ -1,6 +1,7 @@
 package com.sbo.domain.postgres.entity;
 
 import com.google.common.collect.Range;
+import com.sbo.domain.postgres.converter.RangeConverter;
 import com.sbo.domain.postgres.entity.enums.EntityStatus;
 import com.sbo.domain.postgres.entity.enums.PeopleOnDutyStatus;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
@@ -35,7 +37,7 @@ public class PeopleOnDuty extends BaseEntity {
     @ManyToOne(fetch = LAZY, optional = false)
     private Duty duty;
 
-    // TODO attribute converter
+    @Convert(converter = RangeConverter.class)
     @Column(name = "range", nullable = false)
     private Range<LocalDateTime> range;
 

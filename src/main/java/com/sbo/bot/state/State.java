@@ -76,8 +76,10 @@ public abstract class State {
     protected abstract RequestOperator getRequestOperator(Update update);
 
     protected void sendRequest(Update update) {
-        if (nonNull(getRequestOperator(update))) {
-            getRequestOperator(update).sendRequest();
+        // TODO huinua with 2 time invocation
+        RequestOperator requestOperator = getRequestOperator(update);
+        if (nonNull(requestOperator)) {
+            requestOperator.sendRequest();
         }
     }
 }

@@ -75,8 +75,7 @@ CREATE TABLE people_on_duty
     entity_status          VARCHAR(255),
     person_id              BIGINT       NOT NULL,
     duty_id                BIGINT       NOT NULL,
-    on_duty_from           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    on_duty_to             TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    range                  VARCHAR(255) NOT NULL,
     status                 VARCHAR(255) NOT NULL,
     is_people_could_change BOOLEAN      NOT NULL,
     CONSTRAINT pk_people_on_duty PRIMARY KEY (id)
@@ -142,3 +141,5 @@ ALTER TABLE notifications_to_notified_notified_users
 
 ALTER TABLE roles
     ADD CONSTRAINT fk_roles_on_person FOREIGN KEY (person_id) REFERENCES person (id);
+
+CREATE SEQUENCE hibernate_sequence;
