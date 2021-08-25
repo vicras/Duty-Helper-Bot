@@ -1,16 +1,16 @@
 package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.impl.settings.EmailHandler;
-import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.context.ApplicationEventPublisher;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author viktar hraskou

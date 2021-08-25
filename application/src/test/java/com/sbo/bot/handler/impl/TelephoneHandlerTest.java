@@ -1,9 +1,9 @@
 package com.sbo.bot.handler.impl;
 
 import com.sbo.bot.handler.impl.settings.TelephoneHandler;
-import com.sbo.service.impl.AuthorizationServiceImpl;
 import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
+import com.sbo.service.impl.AuthorizationServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

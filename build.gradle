@@ -1,113 +1,95 @@
 plugins {
-    id 'org.springframework.boot' version '2.5.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'com.palantir.docker' version '0.26.0'
-    id 'com.palantir.docker-run' version '0.26.0'
-    id 'java'
+    id 'org.springframework.boot' version '2.5.4'
 }
 
-group = 'com.sbo'
-version = '1.0-SNAPSHOT'
-description = 'DutyHelperTelegramBot'
-java.sourceCompatibility = JavaVersion.VERSION_11
-
-repositories {
-    mavenCentral()
+allprojects {
+    group = 'com.sbo'
+    version = '1.0-SNAPSHOT'
+    description = 'DutyHelperTelegramBot'
 }
-
-ext {
-    set('testcontainersVersion', "1.15.3")
-    set('activeProfile', "local")
-    set('commonMath3', "3.6.1")
-    set('commonLang3', "3.12.0")
-    set('dataRedis', "2.3.3.RELEASE")
-    set('jedis', "3.3.0")
-    set('telegram', "0.24")
-}
-
-dependencies {
-    //  Spring-starter
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    implementation "org.springframework.data:spring-data-redis:${dataRedis}"
-    implementation "com.github.xabgesagtx:telegram-spring-boot-starter:${telegram}"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-
-    //Database
-    implementation "org.flywaydb:flyway-core"
-    implementation "redis.clients:jedis:${jedis}"
-    runtimeOnly "org.postgresql:postgresql"
-    runtimeOnly "com.h2database:h2"
-
-    //Lombok
-    annotationProcessor "org.projectlombok:lombok"
-    compileOnly "org.projectlombok:lombok"
-
-    // Apache commons
-    implementation "org.apache.commons:commons-math3:${commonMath3}"
-    implementation "org.apache.commons:commons-lang3:${commonLang3}"
-
-    // Guava for Ranges
-    implementation "com.google.guava:guava:30.1.1-jre"
-
-    // Date parser
-    implementation "com.github.sisyphsu:dateparser:1.0.7"
-
-
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.1"
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    compileOnly "org.mapstruct:mapstruct-processor:1.4.2.Final"
-
-    implementation "org.mapstruct:mapstruct:1.4.2.Final"
-    implementation "org.springframework.boot:spring-boot-starter-batch"
-    implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive"
-    implementation "org.springframework.boot:spring-boot-starter-mail"
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-webflux"
-    implementation "org.apache.kafka:kafka-streams"
-    implementation "org.springframework.kafka:spring-kafka"
-    testImplementation "io.projectreactor:reactor-test"
-    testImplementation "org.springframework.batch:spring-batch-test"
-    testImplementation "org.springframework.kafka:spring-kafka-test"
-    testImplementation "org.testcontainers:kafka"
-    testImplementation "org.testcontainers:postgresql"
-    testImplementation "org.testcontainers:junit-jupiter"
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+subprojects {
+    ext {
+        set('testcontainersVersion', "1.15.3")
+        set('activeProfile', "local")
+        set('commonMath3', "3.6.1")
+        set('commonLang3', "3.12.0")
+        set('dataRedis', "2.3.3.RELEASE")
+        set('jedis', "3.3.0")
+        set('telegram', "0.24")
     }
-}
 
-dependencyManagement {
-    imports {
-        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    repositories {
+        mavenCentral()
     }
-}
 
-test {
-    useJUnitPlatform()
-    systemProperty "--spring.profiles.active", activeProfile
-}
+    dependencyManagement {
+        imports {
+            mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        }
+    }
 
-bootRun {
-    systemProperty "--spring.profiles.active", activeProfile
-}
+    compileJava {
+        sourceCompatibility = 11
+        targetCompatibility = 11
+    }
+
+    dependencies {
+        //  Spring-starter
+        implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        implementation "org.springframework.boot:spring-boot-starter-data-redis"
+        implementation "org.springframework.data:spring-data-redis:${dataRedis}"
+        implementation "com.github.xabgesagtx:telegram-spring-boot-starter:${telegram}"
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+        //Database
+        implementation "org.flywaydb:flyway-core"
+        implementation "redis.clients:jedis:${jedis}"
+        runtimeOnly "org.postgresql:postgresql"
+        runtimeOnly "com.h2database:h2"
+
+        //Lombok
+        annotationProcessor "org.projectlombok:lombok"
+        compileOnly "org.projectlombok:lombok"
+
+        // Apache commons
+        implementation "org.apache.commons:commons-math3:${commonMath3}"
+        implementation "org.apache.commons:commons-lang3:${commonLang3}"
+
+        // Guava for Ranges
+        implementation "com.google.guava:guava:30.1.1-jre"
+
+        // Date parser
+        implementation "com.github.sisyphsu:dateparser:1.0.7"
 
 
-String imageName = "$description:$version"
-docker {
-    name = imageName
+        implementation "com.squareup.retrofit2:retrofit:2.9.0"
+        implementation "com.squareup.okhttp3:okhttp:4.9.1"
+        implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+        compileOnly "org.mapstruct:mapstruct-processor:1.4.2.Final"
 
-    files( "build/libs/${bootJar.archiveFileName.get()}")
-    buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
-}
+        implementation "org.mapstruct:mapstruct:1.4.2.Final"
+        implementation "org.springframework.boot:spring-boot-starter-batch"
+        implementation "org.springframework.boot:spring-boot-starter-data-redis-reactive"
+        implementation "org.springframework.boot:spring-boot-starter-mail"
+        implementation "org.springframework.boot:spring-boot-starter-web"
+        implementation "org.springframework.boot:spring-boot-starter-webflux"
+        implementation "org.apache.kafka:kafka-streams"
+        implementation "org.springframework.kafka:spring-kafka"
+        testImplementation "io.projectreactor:reactor-test"
+        testImplementation "org.springframework.batch:spring-batch-test"
+        testImplementation "org.springframework.kafka:spring-kafka-test"
+        testImplementation "org.testcontainers:kafka"
+        testImplementation "org.testcontainers:postgresql"
+        testImplementation "org.testcontainers:junit-jupiter"
+    }
 
-dockerRun {
-    name = project.name
-    image = imageName
-    clean = true
+    test {
+        useJUnitPlatform()
+    }
 
 }
