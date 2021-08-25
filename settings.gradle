@@ -3,4 +3,5 @@
  */
 
 rootProject.name = 'DutyHelperTelegramBot'
+include 'bot'
 include 'application'

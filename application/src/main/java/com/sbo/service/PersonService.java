@@ -1,6 +1,5 @@
 package com.sbo.service;
 
-import com.sbo.bot.state.State;
 import com.sbo.domain.postgres.entity.Person;
 import com.sbo.domain.postgres.entity.enums.Language;
 import com.sbo.domain.postgres.entity.enums.PersonRole;
@@ -32,7 +31,7 @@ public interface PersonService {
 
     Person updatePersonHomeAddress(Long telegramID, String address);
 
-    Person updatePersonState(Long telegramId, State state);
+    Person updatePersonState(Long telegramId, String state);
 
     Person updatePersonLanguage(Long telegramId, Language language);
 

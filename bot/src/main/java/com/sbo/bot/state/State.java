@@ -30,7 +30,7 @@ public abstract class State {
 
     public void setNextState(State state, Update update) {
         state.sendRequest(update);
-        personService.updatePersonState(personProvider.getCurrentPersonId(), state);
+        personService.updatePersonState(personProvider.getCurrentPersonId(), state.getClass().toString());
     }
 
     public void process(Update update, Function<String, State> stateByName) {

@@ -1,6 +1,5 @@
 package com.sbo.domain.postgres.entity;
 
-import com.sbo.bot.state.impl.StartState;
 import com.sbo.domain.postgres.entity.enums.EntityStatus;
 import com.sbo.domain.postgres.entity.enums.Language;
 import com.sbo.domain.postgres.entity.enums.PersonRole;
@@ -76,7 +75,7 @@ public class Person extends BaseEntity {
 
     @NotEmpty
     @Column(name = "state")
-    private String state = StartState.class.toString();
+    private String state = "class com.sbo.bot.state.impl.StartState";
 
     @Builder
     public Person(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, EntityStatus entityStatus, String firstName, String lastName, String patronymic, Long telegramId, LocalDate birthDate, Long tel, String mail, String homeAddress, Set<PersonRole> roles) {

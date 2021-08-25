@@ -1,6 +1,5 @@
 package com.sbo.service.impl;
 
-import com.sbo.bot.state.State;
 import com.sbo.domain.postgres.entity.Person;
 import com.sbo.domain.postgres.entity.enums.Language;
 import com.sbo.domain.postgres.entity.enums.PersonRole;
@@ -116,9 +115,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person updatePersonState(Long telegramId, State state) {
+    public Person updatePersonState(Long telegramId, String state) {
         var person = getPersonByTelegramId(telegramId);
-        person.setState(state.getClass().toString());
+        person.setState(state);
 
         log.info("Set state={} for user with id={} ", state, telegramId);
         return personRepository.save(person);

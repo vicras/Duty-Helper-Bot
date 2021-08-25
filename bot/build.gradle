@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(":application")
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "--spring.profiles.active", activeProfile
+}
+
+bootRun {
+    systemProperty "--spring.profiles.active", activeProfile
+}

@@ -19,7 +19,7 @@ class EmailHandlerTest {
 // TODO negative result test
 
     @Test
-    void parseEmail(){
+    void parseEmail() {
 
         ///given
         Update update = Mockito.mock(Update.class);
@@ -34,7 +34,7 @@ class EmailHandlerTest {
         var personProvider = Mockito.mock(CurrentPersonProvider.class);
         var personService = Mockito.mock(PersonService.class);
 
-        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher,personProvider, personService);
+        EmailHandler emailHandler = new EmailHandler(authorizationService, publisher, personProvider, personService);
 
         //when
         boolean condition = emailHandler.canProcessMessage(update);
