@@ -3,13 +3,14 @@ package com.sbo.bot;
 import com.sbo.bot.events.CallbackChatEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.common.CreationEvent;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.abilitybots.api.bot.BaseAbilityBot;
+import org.telegram.abilitybots.api.objects.Reply;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -24,16 +25,31 @@ import static java.util.stream.Collectors.joining;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class DutyHelperBot extends TelegramLongPollingBot {
-
+public class DutyHelperBot extends AbilityBot {
     private final ApplicationEventPublisher publisher;
-    @Value("${telegram.bot.token}")
-    private String botToken;
+
+    private final int botCreator;
+
+    protected DutyHelperBot(
+            @Value("${telegram.bot.token}") String botToken,
+            @Value("${telegram.bot.name}") String botName,
+            @Value("${telegram.bot.creator}") int botCreator,
+            ApplicationEventPublisher publisher) {
+        super(botToken, botName);
+        this.publisher = publisher;
+        this.botCreator = botCreator;
+    }
 
     @Override
-    public void onUpdateReceived(Update update) {
+    public long creatorId() {
+        return botCreator;
+    }
+    public Reply messageReceived(){
+        return Reply.of(this::newUpdate, update -> true);
 
+    }
+
+    public void newUpdate(BaseAbilityBot bot,Update update) {
         printLogSeparator();
         log.info("Received {}", update);
         publisher.publishEvent(new UpdateCreationEvent(update));
@@ -72,16 +88,6 @@ public class DutyHelperBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             error.run();
         }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return null;
-    }
-
-    @Override
-    public String getBotToken() {
-        return botToken;
     }
 
     public void printLogSeparator() {

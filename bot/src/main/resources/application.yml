@@ -12,3 +12,4 @@ telegram:
     admin:
     name: ${BOT_NAME:Duty Helper Bot}
     token: ${BOT_TOKEN}
+    creator: ${BOT_CREATOR}

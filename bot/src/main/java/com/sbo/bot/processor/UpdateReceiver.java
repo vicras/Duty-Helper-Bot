@@ -1,4 +1,4 @@
-package com.sbo.bot;
+package com.sbo.bot.processor;
 
 import com.sbo.bot.builder.InlineMessageBuilder;
 import com.sbo.bot.events.ApiMethodsCreationEvent;
@@ -24,7 +24,7 @@ import static com.sbo.domain.postgres.entity.enums.EntityStatus.ACTIVE;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UpdateProcessor {
+public class UpdateReceiver {
 
     protected final ApplicationEventPublisher publisher;
     private final HandlerOrchestrator orchestrator;
