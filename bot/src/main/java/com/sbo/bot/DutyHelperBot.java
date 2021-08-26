@@ -1,5 +1,6 @@
 package com.sbo.bot;
 
+import com.sbo.ability.chain.UpdateProcessor;
 import com.sbo.bot.events.CallbackChatEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.common.CreationEvent;
@@ -16,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
@@ -33,16 +35,24 @@ public class DutyHelperBot extends AbilityBot {
     private final ApplicationEventPublisher publisher;
 
     private final int botCreator;
+    private final List<UpdateProcessor> globalProcessors;
 
     protected DutyHelperBot(
             @Value("${telegram.bot.token}") String botToken,
             @Value("${telegram.bot.name}") String botName,
             @Value("${telegram.bot.creator}") int botCreator,
+            List<UpdateProcessor> globalProcessors,
             ApplicationEventPublisher publisher) {
         super(botToken, botName);
         this.publisher = publisher;
         this.botCreator = botCreator;
+        this.globalProcessors = globalProcessors;
 
+    }
+
+    @Override
+    protected boolean checkGlobalFlags(Update update) {
+        return UpdateProcessor.updateProcessorAppender(globalProcessors).test(update);
     }
 
     @Override
