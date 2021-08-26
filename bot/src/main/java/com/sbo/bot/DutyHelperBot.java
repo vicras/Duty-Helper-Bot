@@ -9,16 +9,20 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.abilitybots.api.bot.BaseAbilityBot;
-import org.telegram.abilitybots.api.objects.Reply;
+import org.telegram.abilitybots.api.objects.Ability;
+import org.telegram.abilitybots.api.objects.MessageContext;
+import org.telegram.abilitybots.api.util.AbilityExtension;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
-import static java.util.stream.Collectors.joining;
+import static org.telegram.abilitybots.api.objects.Locality.USER;
+import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 /**
  * @author viktar hraskou
@@ -38,21 +42,35 @@ public class DutyHelperBot extends AbilityBot {
         super(botToken, botName);
         this.publisher = publisher;
         this.botCreator = botCreator;
+
     }
 
     @Override
     public long creatorId() {
         return botCreator;
     }
-    public Reply messageReceived(){
-        return Reply.of(this::newUpdate, update -> true);
 
+    public void addExtension(AbilityExtension extension){
+        super.addExtension(extension);
+        onRegister();
     }
 
-    public void newUpdate(BaseAbilityBot bot,Update update) {
-        printLogSeparator();
-        log.info("Received {}", update);
-        publisher.publishEvent(new UpdateCreationEvent(update));
+    @Override
+    public CompletableFuture<List<Message>> executeAsync(SendMediaGroup sendMediaGroup) {
+        return super.executeAsync(sendMediaGroup);
+    }
+
+    public Ability messageReceived(){
+        return Ability.builder()
+                .name(DEFAULT)
+                .locality(USER)
+                .privacy(PUBLIC)
+                .action(this::newUpdate)
+                .build();
+    }
+
+    public void newUpdate(MessageContext context) {
+        publisher.publishEvent(new UpdateCreationEvent(context.update()));
     }
 
     @EventListener
@@ -90,10 +108,4 @@ public class DutyHelperBot extends AbilityBot {
         }
     }
 
-    public void printLogSeparator() {
-        String stars = Stream.generate(() -> "*")
-                .limit(34)
-                .collect(joining());
-        log.info(stars + "NEW REQUEST" + stars);
-    }
 }
