@@ -16,23 +16,21 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 public interface AbilityStateCommand extends AbilityCommand {
     Class<? extends State> getFlagState();
 
-    default Ability defaultUserAbilityWithoutActions(DBContext db) {
+    default Ability.AbilityBuilder defaultUserAbilityWithoutActions(DBContext db) {
         return getAbilityBuilder(db)
-                .privacy(PUBLIC)
-                .build();
+                .privacy(PUBLIC);
     }
 
-    default Ability defaultAdminAbilityWithoutActions(DBContext db) {
+    default Ability.AbilityBuilder defaultAdminAbilityWithoutActions(DBContext db) {
         return getAbilityBuilder(db)
-                .privacy(ADMIN)
-                .build();
+                .privacy(ADMIN);
     }
 
     private Ability.AbilityBuilder getAbilityBuilder(DBContext db) {
         var stateFlag = getStateChecker(db,getFlagState());
         return Ability
                 .builder()
-                .name(name())
+                .name(name().toLowerCase())
                 .info(getInfo())
                 .input(argsAmounts())
                 .flag(add(getFlags(), stateFlag))

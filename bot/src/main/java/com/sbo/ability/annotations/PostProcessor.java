@@ -2,6 +2,7 @@ package com.sbo.ability.annotations;
 
 import com.sbo.ability.MessageSenders;
 import com.sbo.ability.State;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import static com.sbo.ability.State.stateSetter;
 /**
  * @author viktar hraskou
  */
+@Slf4j
 @Component
 public class PostProcessor {
 

@@ -28,25 +28,24 @@ public interface AbilityCommand {
         return 0;
     }
 
-    default Ability defaultUserAbilityWithoutActions() {
+    default Ability.AbilityBuilder defaultUserAbilityWithoutActions() {
         return getAbilityBuilder()
-                .privacy(PUBLIC)
-                .build();
+                .privacy(PUBLIC);
     }
 
-    default Ability defaultAdminAbilityWithoutActions() {
+    default Ability.AbilityBuilder defaultAdminAbilityWithoutActions() {
         return getAbilityBuilder()
-                .privacy(ADMIN)
-                .build();
+                .privacy(ADMIN);
     }
 
     private Ability.AbilityBuilder getAbilityBuilder() {
         return Ability
                 .builder()
-                .name(name())
+                .name(name().toLowerCase())
                 .info(getInfo())
                 .input(argsAmounts())
                 .flag(getFlags())
                 .locality(USER);
+
     }
 }

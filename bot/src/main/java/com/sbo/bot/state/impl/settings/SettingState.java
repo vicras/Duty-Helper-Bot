@@ -13,7 +13,6 @@ import com.sbo.service.PersonService;
 import com.sbo.service.impl.AuthorizationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -34,7 +33,7 @@ import static com.sbo.bot.handler.impl.enums.ButtonCommands.TELEPHONE;
  * @author viktar hraskou
  */
 @Slf4j
-@Component
+//@Component
 public class SettingState extends State {
 
     private List<BaseHandler> handlers;

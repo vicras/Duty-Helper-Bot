@@ -41,6 +41,7 @@ public class DutyHelperBot extends AbilityBot {
             @Value("${telegram.bot.token}") String botToken,
             @Value("${telegram.bot.name}") String botName,
             @Value("${telegram.bot.creator}") int botCreator,
+            List<AbilityExtension> abilityExtensions,
             List<UpdateProcessor> globalProcessors,
             ApplicationEventPublisher publisher) {
         super(botToken, botName);
@@ -48,11 +49,12 @@ public class DutyHelperBot extends AbilityBot {
         this.botCreator = botCreator;
         this.globalProcessors = globalProcessors;
 
+        addExtensions(abilityExtensions);
     }
 
     @Override
     protected boolean checkGlobalFlags(Update update) {
-        return UpdateProcessor.updateProcessorAppender(globalProcessors).test(update);
+        return UpdateProcessor.updateProcessorAppender(globalProcessors, this).test(update);
     }
 
     @Override
@@ -80,6 +82,7 @@ public class DutyHelperBot extends AbilityBot {
     }
 
     public void newUpdate(MessageContext context) {
+
         publisher.publishEvent(new UpdateCreationEvent(context.update()));
     }
 

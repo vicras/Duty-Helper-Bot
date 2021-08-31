@@ -1,7 +1,5 @@
 package com.sbo.bot.processor;
 
-import com.sbo.bot.builder.InlineMessageBuilder;
-import com.sbo.bot.events.ApiMethodsCreationEvent;
 import com.sbo.bot.events.UpdateCreationEvent;
 import com.sbo.bot.orchestrator.HandlerOrchestrator;
 import com.sbo.domain.postgres.entity.Person;
@@ -40,7 +38,7 @@ public class UpdateReceiver {
             recognisePerson(userId);
             orchestrator.operate(update);
         } catch (AuthenticationException ex) {
-            sendNotFoundMessage(userId);
+//            sendNotFoundMessage(userId);
         }
 
     }
@@ -81,26 +79,5 @@ public class UpdateReceiver {
         return !update.hasCallbackQuery() && update.hasMessage() && update.getMessage().hasText();
     }
 
-    private void sendNotFoundMessage(Long telegramId) {
-        var admins = personService.getActiveAdmins();
-        var messBuilder = InlineMessageBuilder.builder(telegramId)
-                .line("*Error!!!*")
-                .line("You do not have permission to use this bot.");
-
-        if (!admins.isEmpty()) {
-            messBuilder
-                    .line("Contact with:")
-                    .line();
-            admins.forEach(person -> addPersonLinkToMessage(person, messBuilder));
-        } else {
-            messBuilder
-                    .line("There are no people you can contact at the moment!");
-        }
-        this.publisher.publishEvent(ApiMethodsCreationEvent.of(messBuilder.build()));
-    }
-
-    private void addPersonLinkToMessage(Person person, InlineMessageBuilder builder) {
-        builder.line("- [%s](tg://user?id=%d)", person.getFirstName(), person.getTelegramId());
-    }
 
 }

@@ -11,7 +11,6 @@ import com.sbo.provider.CurrentPersonProvider;
 import com.sbo.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  * @author viktar hraskou
  */
 @Slf4j
-@Component
+//@Component
 public class StartState extends State {
 
     private final StartHandler startHandler;
